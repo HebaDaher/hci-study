@@ -70,7 +70,7 @@ a{color:var(--accent)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
-.mini > b{display:block;margin-bottom:2px}
+.mini > b:first-child,.mini > .tag + b,.mini > div + b{display:block;margin-bottom:2px}
 .mini.good{border-color:rgba(52,211,153,.5)}
 .mini.bad{border-color:rgba(248,113,113,.5)}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;margin-right:4px}
@@ -160,6 +160,15 @@ input.txt{background:var(--bg);border:1px solid var(--border2);color:var(--text)
 .legend-row{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-top:6px}
 
 /* ===== v2: flow + animation ===== */
+.st{opacity:0;transform:translateX(-18px);transition:opacity .5s ease,transform .5s ease}
+.st.on{opacity:1;transform:none}
+.replay{position:absolute;bottom:22px;left:24px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);border-radius:99px;font:600 11px var(--font-ui);padding:3px 10px;cursor:pointer}
+.replay:hover{color:var(--text);border-color:var(--yellow)}
+.topic{position:relative}
+.oneliner{transition:box-shadow .6s}
+.in .oneliner{animation:glow 1.4s ease .2s 1}
+@keyframes glow{40%{box-shadow:0 0 0 4px rgba(56,189,248,.35)}}
+.hl-key{background:#fde68a;border-radius:3px;transition:background .3s}
 .board p,.board li,.board b,.board td,.board span:not(.tag):not(.lbl):not(.board-lbl),.board h5{color:#1f2937}
 .board .muted{color:#475569}
 .word{color:#111}
@@ -531,7 +540,15 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <div class="mini"><b>👩 Value for users</b><ul><li>Faster performance</li><li>Reduce errors</li><li>Reduce training time</li><li>Better system utilisation</li><li>Improve satisfaction</li><li>Improve system acceptance</li><li>Reduce development and support costs</li></ul></div>
       <div class="mini"><b>👨‍💻 Value for developers</b><ul><li>Increase visibility of the human-computer interface</li><li>Simplify design</li><li>More programming &amp; design aids → less programming time</li><li>Reduce redundant effort</li><li>Reduce training time</li><li>Provide a benchmark for quality-control testing</li></ul></div>
     </div>
-    <div class="more"><span class="lbl">Real example</span><p>Every iPhone app puts “Back” at the top-left because Apple’s style guide says so → you learn it once and use every app faster (users). The app’s team doesn’t argue about where “Back” goes and testers can check it against the guide (developers).</p></div>
+    
+    <div class="board"><span class="board-lbl">animation</span>
+      <div style="display:grid;grid-template-columns:1fr 120px 1fr;gap:10px;align-items:start">
+        <div><div style="text-align:center;font-size:30px">👩</div><div style="text-align:center;font-weight:800">Users</div><ul class="order-list" id="valU"></ul></div>
+        <div style="text-align:center;padding-top:40px"><div style="font-size:42px" class="floaty">📘</div><b style="font-size:12px">Style guide</b><div id="valBoth" style="margin-top:14px"></div></div>
+        <div><div style="text-align:center;font-size:30px">👨‍💻</div><div style="text-align:center;font-weight:800">Developers</div><ul class="order-list" id="valD"></ul></div>
+      </div>
+      <div style="text-align:center;margin-top:8px"><button class="btn" id="valPlay">▶ Show the benefits</button></div></div>
+<div class="more"><span class="lbl">Real example</span><p>Every iPhone app puts “Back” at the top-left because Apple’s style guide says so → you learn it once and use every app faster (users). The app’s team doesn’t argue about where “Back” goes and testers can check it against the guide (developers).</p></div>
     <div class="hook"><span class="lbl">Memory hook</span><p>“<b>Reduce training time</b>” appears in <b>both</b> lists — a classic trick question.</p></div>
   </div>
 
@@ -551,8 +568,8 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
   <!-- 5 -->
   <div class="topic" id="c4-usability" data-title="System usability goals" data-grp="5 · Usability goals">
     <div class="topic-head"><span class="topic-num">5</span><h2>Establish system usability goals</h2><span class="slide-ref">slide 31</span></div>
-    <div class="oneliner"><b>In one line:</b> This activity appears in the Step 2 overview, but your slides have <b>no detail slide</b> for it — just remember it is one of the 7 activities.</div>
-    <div class="more"><span class="lbl">To understand it (extra)</span><p>A usability goal is a measurable target, e.g. “a new student can register for a course in under 3 minutes with no help” or “fewer than 2 errors per 100 orders”. It lets you test later whether the design is good enough.</p></div>
+    <div class="oneliner"><b>In one line:</b> “Establish system usability goals” is <b>activity 6 of the 7</b> in the Step 2 overview. Your slides list it but do not explain it further — just remember its place in the list.</div>
+    
   </div>
 
   <!-- 6.1 -->
@@ -563,7 +580,11 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <div class="mini"><b>Based on</b><ul><li>User needs</li><li>System conceptual design</li><li>System learning goals</li><li>System performance</li></ul></div>
       <div class="mini"><b>Kinds of training</b><ul><li>🎬 Formal or video training</li><li>📕 Manuals</li><li>💻 Online tutorials</li><li>📚 Reference manuals</li><li>🗒️ Quick reference guides</li><li>❓ Online help</li></ul></div>
     </div>
-    <div class="more"><span class="lbl">More examples</span><p>Video training: a YouTube onboarding video for a new POS. Quick reference guide: a one-page laminated card of keyboard shortcuts next to the cashier. Online help: the “?” button inside Excel. Online tutorial: Duolingo’s first-lesson walkthrough.</p></div>
+    
+    <div class="board"><span class="board-lbl">animation — slide 49</span>
+      <svg viewBox="0 0 620 230" width="100%" id="trainSvg"></svg>
+      <div style="text-align:center"><button class="btn" id="trainPlay">▶ Build the training</button></div></div>
+<div class="more"><span class="lbl">More examples</span><p>Video training: a YouTube onboarding video for a new POS. Quick reference guide: a one-page laminated card of keyboard shortcuts next to the cashier. Online help: the “?” button inside Excel. Online tutorial: Duolingo’s first-lesson walkthrough.</p></div>
     <div class="hook"><span class="lbl">Memory hook</span><p>“Based on” = <b>N-C-L-P</b> → “<b>N</b>ever <b>C</b>opy <b>L</b>ab <b>P</b>apers” (Needs, Conceptual design, Learning goals, Performance). The same 4 also appear for <b>documentation</b>!</p></div>
   </div>
 
@@ -747,7 +768,7 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
     </div>
     <div class="figure" style="max-width:560px;margin:10px auto"><img src="img/slide19.jpg" alt="Slide 19 aesthetic measures research"></div><div class="caption">Slide 19 — research on aesthetic measures for screens (Ngo, Samsudin &amp; Abdullah): an original crowded screen and a redesigned one.</div>
     <div class="more"><span class="lbl">More examples</span><p>Most websites put the <b>logo top-left</b> — your eye lands there first and you know where you are. In a form, the <b>first field is top-left</b> and the cursor starts there. On a dashboard, the most important number (e.g. today’s sales) goes top-left in big font.</p></div>
-    <div class="exam"><span class="lbl">Exam tip</span> Write the slide wording: “start in upper-left corner, scan in a counter-clockwise direction.” (Some textbooks describe the scan as clockwise — use what your lecture slide says.)</div>
+    <div class="exam"><span class="lbl">Exam tip</span> Write the slide wording: “start in upper-left corner, scan in a counter-clockwise direction.”</div>
   </div>
 
   <!-- g -->
@@ -802,7 +823,7 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <tr><td>Predictability</td><td>Spontaneity</td><td>Things are where you expect (menu at top, OK/Cancel at bottom)</td></tr>
       <tr><td>Sequentiality</td><td>Randomness</td><td>The eye moves in a clear order (top → bottom)</td></tr>
       <tr><td>Unity</td><td>Fragmentation</td><td>Elements close and similar → one whole</td></tr>
-      <tr><td>Proportion</td><td>Disproportion</td><td>Pleasing width:height ratios <span class="muted">(only listed on the slides)</span></td></tr>
+      <tr><td>Proportion</td><td>Disproportion</td><td>Elements are sized well relative to each other <span class="muted">(the slide only lists the word)</span></td></tr>
       <tr><td>Simplicity</td><td>Complexity</td><td>Few alignment points: simple form = <b>4</b>, complex = <b>9</b></td></tr>
       <tr><td>Groupings</td><td>No groups</td><td>Related items grouped by alignment, borders, background colour</td></tr>
     </table>
@@ -840,12 +861,11 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <tr><td><b>Visual lines</b></td><td>Lines the eye can follow</td><td>Fields aligned in a column</td></tr>
       <tr><td><b>Consistency</b></td><td>In appearance and procedural usage</td><td>OK always bottom-right</td></tr>
     </table>
-    <div class="board"><span class="board-lbl">legible vs readable</span>
-      <div class="grid2">
-        <div style="background:#fff;border-radius:8px;padding:10px"><span class="tag r">Not legible</span><p style="color:#d1d5db;font-size:11px;margin-top:6px">Your appointment is confirmed for Sunday at 10:00.</p><p style="font-size:12px;color:#475569">You can’t SEE it.</p></div>
-        <div style="background:#fff;border-radius:8px;padding:10px"><span class="tag y">Legible but not readable</span><p style="font-size:15px;margin-top:6px;color:#111">APPT CNF SUN 1000 RM#B12 REF4471X</p><p style="font-size:12px;color:#475569">You can see it, but can’t UNDERSTAND it.</p></div>
-      </div>
-    </div>
+    
+    <div class="board"><span class="board-lbl">fix it in 2 steps</span>
+      <div id="legMsg" style="background:#fff;border-radius:10px;padding:16px;text-align:center;max-width:460px;margin:auto;min-height:70px;transition:all .8s"></div>
+      <div class="timeline" id="legTl" style="max-width:460px;margin:10px auto"><div class="ts on"><div class="c">0</div><span>Start</span></div><div class="ts"><div class="c">1</div><span>Make it legible (can SEE)</span></div><div class="ts"><div class="c">2</div><span>Make it readable (can UNDERSTAND)</span></div></div>
+      <div style="text-align:center"><button class="btn" id="legPlay">▶ Fix the message</button></div></div>
     <h3>Typography (slides 37–41)</h3>
     <div class="grid2">
       <div class="mini"><b>A font’s characteristics can…</b><ul><li>Communicate the <b>organisation</b> of elements</li><li>Identify the most <b>important</b> elements</li><li>Establish a <b>reading order</b></li><li>Create a <b>mood</b></li></ul></div>
@@ -853,7 +873,12 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <div class="mini"><b>Font styles</b><ul><li><i>Italics</i> → call attention</li><li><b>Bold</b> → call attention or create hierarchy</li><li><u>Underline</u> → on the Web, <b>only</b> for navigation links</li></ul></div>
       <div class="mini"><b>Defaults &amp; consistency</b><ul><li>GUI: standard system fonts · Web: default browser fonts</li><li>The user may change the fonts</li><li>Consistent hierarchy: one font per level of importance</li><li>Show hierarchy with <b>size, weight, colour</b></li></ul></div>
     </div>
-    <div class="board"><span class="board-lbl">font size playground</span>
+    
+    <div class="board"><span class="board-lbl">what fonts can do — slide 37</span>
+      <div class="seg" id="typoSeg"><button class="on" data-t="0">1 · Organisation</button><button data-t="1">2 · Importance</button><button data-t="2">3 · Reading order</button><button data-t="3">4 · Mood</button></div>
+      <div id="typoCard" style="background:#fff;border-radius:10px;padding:14px;margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;transition:all .6s"></div>
+      <p id="typoText" style="text-align:center;font-size:14px;margin-top:6px"></p></div>
+<div class="board"><span class="board-lbl">font size playground</span>
       <div class="seg" id="fontSeg"><button class="on" data-f="menu">GUI menu</button><button data-f="win">GUI window</button><button data-f="body">Web body</button><button data-f="head">Web heading</button><button data-f="bad">Too many sizes ✘</button></div>
       <div id="fontDemo" style="margin-top:10px;min-height:100px;background:#fff;border-radius:8px;padding:12px;color:#111"></div>
     </div>
@@ -870,8 +895,21 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <div class="mini"><b>🪟 Window title</b><ul><li>Every window has a title <b>at the top</b> — <b>except message windows</b></li><li>Clearly and concisely describe the purpose</li><li>Spelled out fully, upper- or mixed-case</li></ul></div>
       <div class="mini"><b>🌐 Web page title</b><ul><li>In the <b>browser bar</b> and on the <b>content page</b> — consistent</li><li><b>Descriptive</b>, <b>Unique</b>, <b>Concise</b> (“DUC” 🦆)</li></ul></div>
     </div>
+    <div class="board"><span class="board-lbl">animation</span>
+      <div style="background:#fff;border-radius:10px;max-width:480px;margin:auto;overflow:hidden;border:1px solid #cbd5e1">
+        <div style="background:#e2e8f0;padding:6px 10px;font-size:12px;display:flex;gap:6px;align-items:center"><span style="background:#fff;border-radius:6px 6px 0 0;padding:3px 10px;min-width:220px">🗂️ <span id="tabTitle"></span><span class="blink">|</span></span></div>
+        <div style="padding:14px"><div id="pageTitle" style="font-size:20px;font-weight:800;min-height:28px"></div><div style="height:8px;background:#e2e8f0;margin:10px 0 6px"></div><div style="height:8px;background:#e2e8f0;width:70%"></div></div>
+      </div>
+      <div id="titleChecks" style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap"></div>
+      <div style="text-align:center;margin-top:8px"><button class="btn" id="titlePlay">▶ Write the titles</button></div></div>
+
 
     <h3>② Data fields (slides 44–45)</h3>
+    <div class="board"><span class="board-lbl">animation — break long data into pieces</span>
+      <div style="text-align:center;font-size:15px">Phone: <span id="splitBox" style="display:inline-flex;gap:8px;vertical-align:middle"></span></div>
+      <p id="splitText" style="text-align:center;font-size:13px;margin-top:8px"></p>
+      <div style="text-align:center"><button class="btn" id="splitPlay">▶ Break it up</button></div></div>
+
     <div class="board"><span class="board-lbl">entry vs read-only</span>
       <div class="grid2">
         <div style="background:#fff;border-radius:8px;padding:10px;color:#111"><b>Entry ✔</b><div style="margin-top:6px">Phone: <span style="border:1px solid #333;padding:1px 6px;font-family:var(--font-mono)">050</span> <span style="border:1px solid #333;padding:1px 6px;font-family:var(--font-mono)">123</span> <span style="border:1px solid #333;padding:1px 6px;font-family:var(--font-mono)">4567</span></div><div style="font-size:11px;color:#555;margin-top:4px">Box or light background · long data broken into pieces · length fits the data</div></div>
@@ -956,7 +994,12 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <div class="mini"><b>Characteristics</b><ul><li>The most important Web commodity is <b>content</b></li><li>Behaviour is often <b>goal-driven</b></li><li>Reading is <b>no longer linear</b></li><li>People <b>scan and select</b></li><li><b>Frequent switching</b> of purpose</li></ul></div>
       <div class="mini"><b>Interaction styles</b><ul><li><b>Browsing</b> — looking around without a specific target</li><li><b>Information finding</b> — looking for one specific thing</li><li><b>Information gathering</b> — collecting many pieces (research)</li></ul></div>
     </div>
-    <div class="example"><span class="lbl">Example</span><p>Scrolling Instagram’s explore page = <b>browsing</b>. Checking the opening hours of Dubai Mall = <b>information finding</b>. Comparing 5 laptops for a purchase = <b>information gathering</b>.</p></div>
+    
+    <div class="board"><span class="board-lbl">animation — people scan, they don’t read</span>
+      <div class="seg" id="scanSeg"><button class="on" data-m="read">📖 Reading (old way)</button><button data-m="scan">⚡ Scan &amp; select (Web way)</button></div>
+      <p id="scanPara" style="background:#fff;border-radius:10px;padding:14px;margin-top:10px;line-height:1.9;font-size:14px"></p>
+      <div style="text-align:center"><button class="btn" id="scanPlay">▶ Play</button></div></div>
+<div class="example"><span class="lbl">Example</span><p>Scrolling Instagram’s explore page = <b>browsing</b>. Checking the opening hours of Dubai Mall = <b>information finding</b>. Comparing 5 laptops for a purchase = <b>information gathering</b>.</p></div>
     <div class="hook"><span class="lbl">Memory hook</span><p>Characteristics = “<b>C</b>ontent, <b>G</b>oal, <b>N</b>on-linear, <b>S</b>can, <b>S</b>witch” → “<b>C</b>ats <b>G</b>et <b>N</b>aps, <b>S</b>leep, <b>S</b>nore”. Styles = <b>B · F · G</b>: Browse, Find, Gather.</p></div>
   </div>
 
@@ -982,10 +1025,10 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <li><b>Content headings — usage:</b> classify &amp; organise information · clearly describe the content · use as introductory links.</li>
       <li><b>Presentation:</b> establish a hierarchy of font styles, sizes and weights · as few sizes/styles as necessary · <b>do not randomly mix or skip heading levels</b>.</li>
     </ul>
-    <div class="grid2">
-      <div class="mini good"><span class="tag g">✔ Ordered levels</span><div style="font-family:var(--font-mono);font-size:13px;margin-top:4px">H1 Admissions<br>&nbsp;&nbsp;H2 Undergraduate<br>&nbsp;&nbsp;&nbsp;&nbsp;H3 Requirements<br>&nbsp;&nbsp;H2 Graduate</div></div>
-      <div class="mini bad"><span class="tag r">✘ Skipped / mixed</span><div style="font-family:var(--font-mono);font-size:13px;margin-top:4px">H1 Admissions<br>&nbsp;&nbsp;&nbsp;&nbsp;H4 Undergraduate<br>&nbsp;&nbsp;H2 Requirements<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H5 Graduate</div></div>
-    </div>
+    
+    <div class="board"><span class="board-lbl">animation</span>
+      <div class="seg" id="headSeg"><button class="on" data-m="good">✔ Ordered levels</button><button data-m="bad">✘ Mixed / skipped levels</button></div>
+      <div id="headBox" style="background:#fff;border-radius:10px;padding:12px;margin-top:10px;min-height:150px"></div></div>
     <h3>Also on slide 61</h3>
     <ul><li>Minimise downloading time</li><li>Provide Web applications as necessary</li><li>Design for accessibility</li><li>Provide assistance to users</li></ul>
   </div>
@@ -1021,7 +1064,13 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <tr><td>Works better for items <b>not specific and unique</b></td><td>Helps locate <b>specific and unique</b> items</td></tr>
     </table>
     <p><b>Research conclusion:</b> people seem to <b>prefer to browse</b>.</p>
-    <div class="grid2">
+    
+    <div class="board"><span class="board-lbl">animation — browsing vs searching</span>
+      <div class="seg" id="bsSeg"><button class="on" data-m="browse">🧭 Browsing</button><button data-m="search">🔎 Searching</button></div>
+      <svg viewBox="0 0 440 190" width="100%" id="bsSvg" style="max-width:520px;display:block;margin:10px auto;background:#fff;border-radius:8px"></svg>
+      <p id="bsText" style="text-align:center;font-size:14px"></p>
+      <div style="text-align:center"><button class="btn" id="bsPlay">▶ Find the item</button></div></div>
+<div class="grid2">
       <div class="mini"><b>⚠️ Search problems</b><ul><li>Not understanding the user</li><li>Difficulties formulating the search</li><li>Many users make many mistakes</li><li>Page titles with low search-engine visibility</li><li>Difficulties presenting meaningful results</li></ul></div>
       <div class="mini"><b>💡 Fixes</b><br><b>Remember the search:</b><ul><li>Save the search entries</li><li>Save the results automatically</li><li>Let the user save the results</li></ul><b>Destination pages:</b> describe how the page relates to the query — <b>page summary</b> + <b>highlight keywords</b>.</div>
     </div>
@@ -1091,7 +1140,7 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <p id="distText" style="text-align:center;font-size:14px"></p>
       <div style="text-align:center"><button class="btn" id="distBtn">⇄ Cut the axis (distort)</button></div>
     </div>
-    <div class="more"><span class="lbl">Which graph for which use?</span><ul><li><b>Comparison</b> → bar chart (sales per branch).</li><li><b>Change over time</b> → line chart (temperature this week).</li><li><b>Statistical analysis</b> → scatter plot (study hours vs grade).</li><li><b>Proportions</b> → pie chart (how your budget is split).</li></ul></div>
+    
     <div class="hook"><span class="lbl">Memory hook</span><p>Uses = “<b>C</b>ompare, <b>T</b>ime, <b>S</b>tats, <b>P</b>roportions” → “<b>C</b>hocolate <b>T</b>astes <b>S</b>uper <b>P</b>erfect”.</p></div>
   </div>
 
@@ -1135,7 +1184,12 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <tr><td>Colours</td><td>Colours that work across browsers/platforms — the <b>Web-safe palette of 216 colours</b></td></tr>
       <tr><td>Versions</td><td>Multiple versions for multiple browsers (universal access) · <b>always provide a text-only version</b> (good for small displays &amp; low bandwidth) · use <b>“browser sniffers”</b> on the server to detect browser type &amp; version</td></tr>
     </table>
-    <div class="hook"><span class="lbl">Memory hook</span><p>Numbers to remember: <b>216</b> web-safe colours · <b>56 Kbps → 1 Gbps</b> connection range. A “<b>sniffer</b>” 🐶 <i>smells</i> which browser you have.</p></div>
+    
+    <div class="board"><span class="board-lbl">animation — one site, many viewers</span>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end" id="brRow"></div>
+      <p id="brText" style="text-align:center;font-size:14px;margin-top:8px"></p>
+      <div style="text-align:center"><button class="btn" id="brPlay">▶ Open the site everywhere</button></div></div>
+<div class="hook"><span class="lbl">Memory hook</span><p>Numbers to remember: <b>216</b> web-safe colours · <b>56 Kbps → 1 Gbps</b> connection range. A “<b>sniffer</b>” 🐶 <i>smells</i> which browser you have.</p></div>
   </div>
 
   <!-- W11 -->
@@ -1219,7 +1273,12 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <div class="mini"><b>3. Devote most space to content</b></div>
       <div class="mini"><b>4. Put things where users expect them</b></div>
     </div>
-    <div class="hook"><span class="lbl">Memory hook</span><div class="big">E · H · C · E</div><p>“<b>E</b>yes, <b>H</b>ierarchy, <b>C</b>ontent, <b>E</b>xpectations” — “<b>E</b>very <b>H</b>appy <b>C</b>at <b>E</b>ats”.</p></div>
+    
+    <div class="board"><span class="board-lbl">animation — the 4 rules on one screen</span>
+      <div style="position:relative;max-width:460px;height:230px;margin:auto;background:#fff;border:2px solid #94a3b8;border-radius:8px" id="sumBox"></div>
+      <p id="sumText" style="text-align:center;font-size:14px;margin-top:6px;min-height:20px"></p>
+      <div style="text-align:center"><button class="btn" id="sumPlay">▶ Apply the 4 rules</button></div></div>
+<div class="hook"><span class="lbl">Memory hook</span><div class="big">E · H · C · E</div><p>“<b>E</b>yes, <b>H</b>ierarchy, <b>C</b>ontent, <b>E</b>xpectations” — “<b>E</b>very <b>H</b>appy <b>C</b>at <b>E</b>ats”.</p></div>
   </div>
 </main>
 </div>
@@ -1919,7 +1978,7 @@ function formSvg(F, opts={}){
     "Sequentiality":{good:[[180,10,200,20,'Membership Form'],[60,45,220,22,'Name: ▭▭▭▭'],[60,75,220,22,'Address: ▭▭▭▭▭'],[60,105,220,22,'City: ▭▭▭▭'],[60,135,220,22,'State: ▭▭'],[60,165,220,22,'Zip: ▭▭▭'],[330,165,70,22,'OK'],[410,165,80,22,'Cancel']],
                      bad:[[20,10,160,20,'Membership Form'],[300,40,200,22,'Name: ▭▭▭▭'],[40,80,220,22,'Address: ▭▭▭▭▭'],[330,150,170,22,'City: ▭▭▭▭'],[300,100,140,22,'State: ▭▭'],[40,150,180,22,'Zip: ▭▭▭'],[440,10,60,22,'OK'],[200,10,80,22,'Cancel']], gt:"Sequential: the eye moves in a clear order, top → bottom.", bt:"Random: fields scattered — the eye jumps around with no order."},
     "Unity":{good:[[150,50,125,50],[285,50,125,50],[150,110,125,50],[285,110,125,50]], bad:[[30,20,110,44],[420,20,110,44],[30,155,110,44],[420,155,110,44]], gt:"Unity: close together, similar size → one whole.", bt:"Fragmentation: pushed to the corners → four separate pieces."},
-    "Proportion":{good:[[30,60,80,80,'1 : 1'],[130,60,113,80,'1 : 1.414'],[263,60,130,80,'1 : 1.618'],[413,60,140,70,'1 : 2']], bad:[[30,20,16,180,''],[80,90,300,10,''],[400,30,140,170,''],[80,140,40,60,'']], gt:"Proportion: pleasing shapes — square, 1:1.414, golden 1:1.618, double square 1:2 (extra explanation; the slides only list the word).", bt:"Disproportion: thin slivers and odd shapes look awkward."},
+    "Proportion":{good:[[60,40,200,60],[300,40,200,60],[60,120,200,60],[300,120,200,60]], bad:[[30,20,16,180],[80,90,320,12],[420,20,120,180],[80,150,40,40]], gt:"Proportion: the elements are sized well relative to each other.", bt:"Disproportion: thin slivers next to huge blocks look awkward."},
     "Simplicity":{good:SIMPLE.fields.map(([x,y,w]) => [x*1.25,y*1.05,w*1.2,15]), bad:COMPLEX.fields.map(([x,y,w]) => [x*1.25,y*1.05,w*1.2,15]), gt:"Simple: fields lined up — only 4 alignment points.", bt:"Complex: every field starts somewhere different — 9 alignment points."},
     "Groupings":{good:[[40,40,90,24],[40,72,90,24],[40,104,90,24],[140,40,90,24],[140,72,90,24],[140,104,90,24],[330,60,90,24],[330,92,90,24]], bad:[[30,20,90,24],[180,60,90,24],[350,25,90,24],[90,150,90,24],[250,130,90,24],[420,110,90,24],[60,90,90,24],[300,180,90,24]], gt:"Grouped: related items sit together in clear clusters.", bt:"No grouping: items spread evenly — nothing tells you what belongs together."}
   };
@@ -2163,5 +2222,165 @@ $$('#eyeSvg .hot').forEach(h => { h.style.cursor = 'pointer'; const f = () => $(
 
 // start
 (function(){ const h = location.hash.slice(1); if(h && document.getElementById(h) && document.getElementById(h).classList.contains('section')) showSec(h); else observeAll(); })();
+
+// =====================================================================
+// v3: build-up animation for every topic + new animated boards
+// =====================================================================
+(function(){
+  const SEL = ':scope > ul > li, :scope > ol > li, :scope > p, :scope > h3, :scope > .grid2 > *, :scope > .grid3 > *, :scope > table.cmp tr, :scope > .mini, :scope > .example, :scope > .more, :scope > .hook, :scope > .exam, :scope > .figure, :scope > .board, :scope > ul > li > ul > li';
+  function items(t){ return $$(SEL, t).filter(e => !e.closest('.mark')); }
+  function build(t){ const it = items(t); it.forEach(e => { e.classList.add('st'); e.classList.remove('on'); }); it.forEach((e,i) => setTimeout(() => e.classList.add('on'), 120 + i*110)); }
+  $$('.topic[id]').forEach(t => {
+    items(t).forEach(e => e.classList.add('st'));
+    const r = document.createElement('button'); r.className = 'replay'; r.textContent = '🔁 Replay'; r.onclick = () => { build(t); const f = AUTO[t.id]; if(f) setTimeout(f, 300); };
+    t.appendChild(r);
+    const prev = AUTO[t.id];
+    AUTO[t.id] = () => { build(t); if(prev) setTimeout(prev, 250); };
+  });
+  // already-visible topics
+  setTimeout(() => $$('.section.active .topic.in').forEach(t => { if(!t.dataset.played){ t.dataset.played = 1; AUTO[t.id](); } }), 400);
+})();
+
+// typography purposes
+seg('typoSeg', b => {
+  const k = +b.dataset.t, card = $('#typoCard');
+  const V = [
+    [`<div style="font-size:12px;font-weight:800;color:#64748b;letter-spacing:.1em">NEWS</div><div style="font-size:15px;font-weight:700;margin:4px 0">Campus library extends hours</div><div style="font-size:13px">Open until midnight during exams.</div><div style="font-size:12px;font-weight:800;color:#64748b;letter-spacing:.1em;margin-top:10px">EVENTS</div><div style="font-size:15px;font-weight:700;margin:4px 0">Career fair on Thursday</div><div style="font-size:13px">40 companies, Hall A.</div>`,"Small capital headings (NEWS, EVENTS) show how the screen is <b>organised</b> into sections."],
+    [`<div style="font-size:26px;font-weight:900;color:#b91c1c" class="pop">⚠ Exam room changed</div><div style="font-size:13px;margin-top:6px">HCI final is now in Hall B, 9:00 AM.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px">Posted 2 hours ago</div>`,"The biggest, boldest text shouts “read me first” — it identifies the most <b>important</b> element."],
+    [`<div style="font-size:22px;font-weight:800"><span style="color:#2563eb">①</span> Course Registration</div><div style="font-size:16px;font-weight:700;margin-top:6px"><span style="color:#2563eb">②</span> Choose your courses</div><div style="font-size:13px;margin-top:6px"><span style="color:#2563eb">③</span> Then press Submit before 1 Dec.</div>`,"Big → medium → small: the sizes create a <b>reading order</b> (①→②→③)."],
+    [`<div style="display:flex;gap:10px"><div style="flex:1;font-family:Georgia,serif;border:1px solid #e2e8f0;border-radius:8px;padding:8px"><div style="font-size:16px">Law Firm</div><div style="font-size:12px">Trusted legal advice.</div><div style="font-size:10px;color:#64748b">serious mood</div></div><div style="flex:1;font-family:'Comic Sans MS','Chalkboard SE',cursive;border:1px solid #e2e8f0;border-radius:8px;padding:8px"><div style="font-size:16px;color:#db2777">Kids’ Party! 🎈</div><div style="font-size:12px">Balloons &amp; games.</div><div style="font-size:10px;color:#64748b">playful mood</div></div></div>`,"The same words in different fonts feel different — fonts create a <b>mood</b>."]
+  ][k];
+  card.style.opacity = 0; setTimeout(() => { card.innerHTML = V[0]; card.style.opacity = 1; }, 250); $('#typoText').innerHTML = V[1];
+});
+
+// legible -> readable
+(function(){
+  const S = [`<span style="color:#e5e7eb;font-size:10px">APPT CNF SUN 1000 RM#B12</span>`,`<span style="color:#111;font-size:17px;font-weight:700">APPT CNF SUN 1000 RM#B12</span>`,`<span style="color:#111;font-size:17px">✅ Your appointment is confirmed<br><b>Sunday, 10:00 AM — Room B12</b></span>`];
+  const T = ['Start: you can’t even SEE it (light grey, tiny).','Step 1 — legible: now you can SEE it… but what does it mean?','Step 2 — readable: now you can UNDERSTAND it at once.'];
+  const steps = $$('#legTl .ts'); let run = 0;
+  function set(i){ $('#legMsg').innerHTML = S[i] + `<div style="font-size:12px;color:#475569;margin-top:8px">${T[i]}</div>`; steps.forEach((s,k) => s.classList.toggle('on', k<=i)); }
+  async function play(){ const me = ++run; for(let i=0;i<3;i++){ if(me!==run) return; set(i); await sleep(1800); } }
+  set(0); $('#legPlay').onclick = play;
+})();
+
+// titles
+(function(){
+  let run = 0;
+  async function play(){ const me = ++run; const t = 'Course Registration — Spring 2026'; $('#tabTitle').textContent=''; $('#pageTitle').textContent=''; $('#titleChecks').innerHTML='';
+    for(let i=1;i<=t.length;i++){ if(me!==run) return; $('#tabTitle').textContent = t.slice(0,i); $('#pageTitle').textContent = t.slice(0,i); await sleep(45); }
+    for(const c of ['✔ Same in browser bar & page','✔ Descriptive','✔ Unique','✔ Concise']){ if(me!==run) return; const d = document.createElement('span'); d.className='tag g pop'; d.textContent = c; $('#titleChecks').appendChild(d); await sleep(400); } }
+  $('#titlePlay').onclick = play;
+})();
+
+// split data
+(function(){
+  let run = 0;
+  const one = () => `<span style="border:1px solid #333;background:#fff;padding:2px 8px;font-family:var(--font-mono);letter-spacing:1px">0501234567</span>`;
+  function reset(){ $('#splitBox').innerHTML = one(); $('#splitText').textContent = 'One long box: hard to read and easy to make a mistake.'; }
+  async function play(){ const me = ++run; reset(); await sleep(800); if(me!==run) return;
+    $('#splitBox').innerHTML = ['050','123','4567'].map((p,i) => `<span class="pop" style="border:1px solid #333;background:#fff;padding:2px 8px;font-family:var(--font-mono);letter-spacing:1px;animation-delay:${i*.25}s">${p}</span>`).join('');
+    $('#splitText').innerHTML = '✔ Broken into logical pieces, each box sized to its part — easy to check.'; }
+  reset(); $('#splitPlay').onclick = play;
+})();
+
+// scan & select
+(function(){
+  const words = 'The university library is open from 8 AM to 10 PM on weekdays. During the exam period the library stays open until midnight. Students can book a study room online using their student ID. Printing costs 10 fils per page.'.split(' ');
+  const keys = new Set(['library','8','AM','10','PM','midnight.','book','study','room','online']);
+  let mode = 'read', run = 0;
+  function base(){ $('#scanPara').innerHTML = words.map(w => `<span>${w}</span>`).join(' '); }
+  async function play(){ const me = ++run; base(); const sp = $$('#scanPara span');
+    if(mode === 'read'){ for(const s of sp){ if(me!==run) return; s.classList.add('hl-key'); await sleep(120); s.classList.remove('hl-key'); s.style.color = '#94a3b8'; } }
+    else { sp.forEach(s => s.style.color = '#cbd5e1'); for(const s of sp){ if(me!==run) return; if(keys.has(s.textContent)){ s.classList.add('hl-key'); s.style.color = '#111'; s.style.fontWeight = 700; await sleep(200); } } } }
+  seg('scanSeg', b => { mode = b.dataset.m; run++; base(); });
+  $('#scanPlay').onclick = play;
+})();
+
+// browse vs search
+(function(){
+  const pages = [[40,30],[140,30],[240,30],[340,30],[40,100],[140,100],[240,100],[340,100],[90,160],[290,160]];
+  const target = 7; let mode = 'browse', run = 0;
+  function base(){ let s = pages.map(([x,y],i) => `<rect x="${x}" y="${y}" width="70" height="40" rx="6" fill="${i===target?'#fef3c7':'#f1f5f9'}" stroke="${i===target?'#d97706':'#94a3b8'}"/><text x="${x+35}" y="${y+25}" text-anchor="middle" font-size="12">${i===target?'⭐ item':'page '+(i+1)}</text>`).join('');
+    if(mode==='search') s += `<rect x="150" y="2" width="140" height="22" rx="11" fill="#fff" stroke="#2563eb"/><text x="160" y="17" font-size="11" id="bsQ">🔎 </text>`;
+    s += `<circle id="bsDot" r="8" fill="#ef4444" cx="10" cy="10"/>`; $('#bsSvg').innerHTML = s; $('#bsText').textContent=''; }
+  const mv = async (x,y,me) => { const d=$('#bsDot'); const x0=+d.getAttribute('cx'), y0=+d.getAttribute('cy'); for(let k=1;k<=10;k++){ if(me!==run) return; d.setAttribute('cx',x0+(x-x0)*k/10); d.setAttribute('cy',y0+(y-y0)*k/10); await sleep(22); } };
+  async function play(){ const me = ++run; base();
+    if(mode==='browse'){ for(const i of [0,1,5,4,8,2,3,6,7]){ await mv(pages[i][0]+35,pages[i][1]+20,me); await sleep(150); }
+      if(me===run) $('#bsText').innerHTML = '🧭 Browsing: wandering and <b>recognising</b> things on the way — fine when you’re not looking for something specific (and people like it).'; }
+    else { await mv(220,13,me); for(const c of 'blue shoes 42'){ if(me!==run) return; $('#bsQ').textContent += c; await sleep(60); } await sleep(300); await mv(pages[target][0]+35,pages[target][1]+20,me);
+      if(me===run) $('#bsText').innerHTML = '🔎 Searching: type <b>keywords</b> → jump straight to a <b>specific, unique</b> item.'; } }
+  seg('bsSeg', b => { mode = b.dataset.m; run++; base(); });
+  $('#bsPlay').onclick = play;
+})();
+
+// headings
+seg('headSeg', async b => {
+  const good = b.dataset.m === 'good';
+  const H = good ? [[1,'Admissions',24],[2,'Undergraduate',18],[3,'Requirements',15],[3,'Fees',15],[2,'Graduate',18]] : [[1,'Admissions',24],[4,'Undergraduate',13],[2,'Requirements',20],[5,'Fees',11],[3,'Graduate',22]];
+  const box = $('#headBox'); box.innerHTML = '';
+  for(const [lv,t,fs] of H){ const d = document.createElement('div'); d.className = 'pop'; d.style.cssText = `margin-left:${(lv-1)*24}px;font-size:${fs}px;font-weight:${good?900-lv*150:[800,300,700,400,900][lv-1]};color:#111;margin-top:4px`; d.innerHTML = `<span style="font-size:10px;color:${good?'#16a34a':'#dc2626'};font-family:var(--font-mono);margin-right:6px">H${lv}</span>${t}`; box.appendChild(d); await sleep(260); }
+  const n = document.createElement('div'); n.className='pop'; n.style.cssText='font-size:12px;margin-top:8px;color:'+(good?'#15803d':'#b91c1c'); n.textContent = good ? '✔ Sizes and weights step down one level at a time — the hierarchy is clear.' : '✘ H1 → H4 → H2 → H5: skipped and mixed levels, random sizes — the structure is lost.'; box.appendChild(n);
+});
+
+// browsers
+(function(){
+  const V = [["Browser A","💻",130,'full'],["Browser B","🖥️",130,'full'],["Small screen","📱",70,'small'],["Text-only","📄",110,'text']];
+  $('#brRow').innerHTML = V.map(([n,ic,w,m],i) => `<div style="text-align:center"><div class="brv" data-i="${i}" style="opacity:.15;transition:all .6s;background:#fff;border:2px solid #94a3b8;border-radius:8px;height:${m==='small'?120:90}px;width:${w}px;margin:auto;padding:6px;overflow:hidden;font-size:10px;text-align:left">${m==='text'?'<div style="font-family:monospace">SITE NAME<br>- Courses<br>- Grades<br>- Fees</div>':`<div style="height:10px;background:#2563eb;border-radius:2px"></div><div style="height:30px;background:#e2e8f0;margin:5px 0"></div><div style="height:6px;background:#cbd5e1;margin:3px 0"></div><div style="height:6px;background:#cbd5e1;width:70%"></div>`}</div><div style="font-size:12px;margin-top:4px">${ic} ${n}</div></div>`).join('');
+  const T = ["Design for the most common browsers…","…don’t assume everyone has the same one.","Stay inside an image-safe area so it still fits small displays.","Always provide a text-only version — good for small displays and low bandwidth. A “browser sniffer” on the server detects which browser is visiting."];
+  let run = 0;
+  async function play(){ const me = ++run; $$('.brv').forEach(v => { v.style.opacity=.15; v.style.transform='scale(.9)'; }); for(let i=0;i<4;i++){ if(me!==run) return; const v = $$('.brv')[i]; v.style.opacity=1; v.style.transform='scale(1)'; $('#brText').textContent = T[i]; await sleep(1500); } }
+  $('#brPlay').onclick = play; const prev = AUTO['w-browsers']; AUTO['w-browsers'] = () => { if(prev) prev(); setTimeout(play, 600); };
+})();
+
+// summary
+(function(){
+  const box = $('#sumBox'); let run = 0;
+  const msy = [["1 · Minimise eye movement — related things close together, aligned."],["2 · Visual hierarchy — the title is biggest, then headings, then text."],["3 · Most space for content — not for decoration."],["4 · Put things where users expect them — logo top-left, buttons bottom-right."]];
+  function bad(){ box.innerHTML = `
+    <div class="sb" data-k="title" style="position:absolute;left:300px;top:180px;width:120px;height:14px;background:#94a3b8;transition:all .8s"></div>
+    <div class="sb" data-k="h" style="position:absolute;left:30px;top:120px;width:90px;height:10px;background:#94a3b8;transition:all .8s"></div>
+    <div class="sb" data-k="content" style="position:absolute;left:150px;top:60px;width:90px;height:40px;background:#e2e8f0;transition:all .8s"></div>
+    <div class="sb" data-k="deco" style="position:absolute;left:250px;top:20px;width:180px;height:140px;background:#fecaca;transition:all .8s;display:flex;align-items:center;justify-content:center;font-size:11px">🎉 big banner</div>
+    <div class="sb" data-k="logo" style="position:absolute;left:380px;top:190px;width:40px;height:22px;background:#2563eb;border-radius:4px;transition:all .8s;color:#fff;font-size:9px;text-align:center;line-height:22px">logo</div>
+    <div class="sb" data-k="btn" style="position:absolute;left:20px;top:20px;width:50px;height:18px;background:#16a34a;border-radius:4px;transition:all .8s;color:#fff;font-size:9px;text-align:center;line-height:18px">OK</div>`; $('#sumText').textContent = 'Before: elements everywhere, decoration takes the space.'; }
+  const set = (k, st) => Object.assign($(`.sb[data-k="${k}"]`, box).style, st);
+  async function play(){ const me = ++run; bad(); await sleep(900);
+    const steps = [() => { set('h',{left:'20px',top:'50px'}); set('content',{left:'20px',top:'70px'}); },
+                   () => { set('title',{left:'70px',top:'14px',width:'240px',height:'22px',background:'#1e293b'}); set('h',{height:'12px',background:'#475569'}); },
+                   () => { set('deco',{left:'330px',top:'50px',width:'110px',height:'40px',fontSize:'9px'}); set('content',{width:'300px',height:'130px'}); },
+                   () => { set('logo',{left:'14px',top:'12px'}); set('btn',{left:'380px',top:'200px'}); }];
+    for(let i=0;i<4;i++){ if(me!==run) return; steps[i](); $('#sumText').textContent = msy[i][0]; await sleep(1700); } }
+  bad(); $('#sumPlay').onclick = play;
+})();
+
+// training flow (ch4)
+(function(){
+  const ins = ['User needs','Conceptual design','Learning goals','System performance'];
+  const outs = ['🎬 Formal / video training','📕 Manuals','💻 Online tutorials','📚 Reference manuals','🗒️ Quick reference guides','❓ Online help'];
+  let run = 0;
+  async function play(){ const me = ++run; const svg = $('#trainSvg'); svg.innerHTML = '';
+    const add = h => { svg.insertAdjacentHTML('beforeend', h); };
+    for(let i=0;i<4;i++){ if(me!==run) return; const y = 25+i*50; add(`<g class="pop" style="transform-origin:80px ${y}px"><rect x="10" y="${y-16}" width="150" height="32" rx="8" fill="#dbeafe" stroke="#1d4ed8"/><text x="85" y="${y+5}" text-anchor="middle" font-size="12">${ins[i]}</text></g><path d="M160,${y} C200,${y} 210,115 245,115" stroke="#64748b" stroke-width="1.5" fill="none" class="draw" style="--len:120"/>`); svg.closest('.board').classList.add('go'); await sleep(350); }
+    add(`<g class="pop" style="transform-origin:310px 115px"><circle cx="310" cy="115" r="58" fill="#fef3c7" stroke="#b45309" stroke-width="2"/><text x="310" y="110" text-anchor="middle" font-size="22">🎓</text><text x="310" y="132" text-anchor="middle" font-size="14" font-weight="800">Training</text></g>`); await sleep(500);
+    for(let i=0;i<6;i++){ if(me!==run) return; const y = 18+i*38; add(`<path d="M368,115 C400,115 400,${y} 430,${y}" stroke="#64748b" stroke-width="1.5" fill="none" class="draw" style="--len:120"/><g class="pop" style="transform-origin:520px ${y}px"><rect x="430" y="${y-14}" width="185" height="28" rx="8" fill="#dcfce7" stroke="#15803d"/><text x="522" y="${y+5}" text-anchor="middle" font-size="11.5">${outs[i]}</text></g>`); await sleep(300); }
+  }
+  $('#trainPlay').onclick = play; const prev = AUTO['c4-training']; AUTO['c4-training'] = () => { if(prev) prev(); setTimeout(play, 500); };
+})();
+
+// style guide values (ch4)
+(function(){
+  const U = ['⚡ Faster performance','✖ Fewer errors','✔ Better utilisation','😊 More satisfaction','👍 More acceptance','💰 Lower dev & support costs'];
+  const D = ['👁 More visible HCI','✏️ Simpler design','🧰 More aids, less coding time','♻️ Less redundant effort','🧪 Quality-control benchmark'];
+  let run = 0;
+  async function play(){ const me = ++run; $('#valU').innerHTML=''; $('#valD').innerHTML=''; $('#valBoth').innerHTML='';
+    for(let i=0;i<Math.max(U.length,D.length);i++){ if(me!==run) return; if(U[i]) $('#valU').insertAdjacentHTML('beforeend',`<li class="pop" style="font-size:12.5px">${U[i]}</li>`); if(D[i]) $('#valD').insertAdjacentHTML('beforeend',`<li class="pop" style="font-size:12.5px">${D[i]}</li>`); await sleep(330); }
+    $('#valBoth').innerHTML = `<div class="pop pulse" style="background:#fde68a;border-radius:8px;padding:6px;font-size:12px;font-weight:800;color:#111">⏱ Reduce training time<br><span style="font-weight:400">— in BOTH lists!</span></div>`; }
+  $('#valPlay').onclick = play; const prev = AUTO['c4-value']; AUTO['c4-value'] = () => { if(prev) prev(); setTimeout(play, 500); };
+})();
+
+// auto-play a few existing boards on first view
+[['c5-j', () => $('#legPlay').click()],['c5-k', () => { $('#titlePlay').click(); setTimeout(() => $('#splitPlay').click(), 2600); setTimeout(() => $('#listBtn').click(), 4000); }],['w-char', () => { const b=$('#scanSeg button[data-m="scan"]'); b.click(); $('#scanPlay').click(); }],['w-search', () => $('#bsPlay').click()],['w-summary', () => $('#sumPlay').click()],['c5-l', () => setTimeout(() => $('#screenBtn').click(), 1200)],['w-graph', () => setTimeout(() => $('#distBtn').click(), 1200)],['w-eye', () => $('#eyePlay').click()],['c5-a', () => $('#doPlay').click()],['c5-k2', null]].forEach(([id,f]) => {
+  if(!f || !document.getElementById(id)) return; const prev = AUTO[id]; AUTO[id] = () => { if(prev) prev(); setTimeout(f, 700); };
+});
 </script>
 </body></html>
