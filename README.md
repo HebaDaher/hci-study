@@ -1,10 +1,10 @@
-# HCI Study Tool — Know Your User & Good Screen Design
+# HCI Study Tool — Chapter 4 (Step 2) & Chapter 5 (Step 3)
 
 Interactive study tool for Human–Computer Interaction:
 
-- **Step 1 – Know your user or client** (whole deck)
-- **Step 3 – Principles of good interface & screen design** (slides 30–87)
+- **Chapter 4 · Step 2 – Understand the business function** (slides 30–51)
+- **Chapter 5 · Step 3 – Principles of good interface & screen design** (whole deck, following the slides' a → l order)
 
-Short lessons with examples and pictures, interactive demos, memory tricks, flashcards and a quiz.
+Animated lessons with extra examples, memory tricks, flashcards and a quiz.
 
 **Open it:** https://hebadaher.github.io/hci-study/
