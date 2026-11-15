@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HCI Study Tool — Know Your User &amp; Good Screen Design</title>
+<style>
+:root{
+  --font-ui: system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  --font-mono: 'SF Mono','Cascadia Code',Consolas,Menlo,monospace;
+  --bg:#141a28; --bg2:#1b2236; --bg3:#232c45; --bg4:#2c3755;
+  --border:#36425f; --border2:#4a5878;
+  --text:#e9eef7; --text2:#b0bfd6; --text3:#7486a6;
+  --accent:#38bdf8; --accent2:#a78bfa; --green:#34d399; --red:#f87171;
+  --yellow:#fbbf24; --orange:#fb923c; --pink:#f472b6; --teal:#2dd4bf;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--accent)}
+/* header */
+.header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#141a28,#1b2236 55%,#24164a);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column}
+.brand small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text3)}
+.brand b{font-size:18px}
+.tabs{display:flex;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:4px;flex-wrap:wrap;margin-left:auto}
+.tab{border:0;background:transparent;color:var(--text2);padding:7px 13px;border-radius:7px;font:500 13px var(--font-ui);cursor:pointer;white-space:nowrap}
+.tab:hover{background:var(--bg4);color:var(--text)}
+.tab.active{background:var(--accent);color:#04121c;font-weight:700}
+.progress-pill{font-size:12px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:5px 10px;border-radius:99px}
+.progress-pill b{color:var(--green)}
+/* sections */
+.section{display:none}
+.section.active{display:block}
+.layout{display:grid;grid-template-columns:270px 1fr;min-height:calc(100vh - 62px)}
+.side{border-right:1px solid var(--border);background:var(--bg2);padding:16px 10px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto}
+.side h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin:14px 10px 6px}
+.side a{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text2);font-size:13px;padding:6px 10px;border-radius:7px}
+.side a:hover{background:var(--bg3);color:var(--text)}
+.side a .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--border2);flex:none}
+.side a.done .dot{background:var(--green);border-color:var(--green)}
+.content{padding:28px 36px 80px;max-width:1050px}
+.page-title{font-size:28px;font-weight:800;margin-bottom:4px}
+.page-sub{color:var(--text2);margin-bottom:22px}
+/* topic cards */
+.topic{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:22px;scroll-margin-top:80px}
+.topic-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.topic-num{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#071018;font-weight:800;font-size:13px;border-radius:8px;padding:3px 9px;flex:none;margin-top:3px}
+.topic h2{font-size:21px;line-height:1.3}
+.topic h3{font-size:15px;margin:16px 0 6px;color:var(--accent)}
+.slide-ref{font-size:11px;color:var(--text3);margin-left:auto;white-space:nowrap;margin-top:6px}
+.oneliner{background:rgba(56,189,248,.08);border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin:6px 0 12px;font-size:15px}
+.oneliner b{color:var(--accent)}
+.topic ul{padding-left:20px;margin:6px 0}
+.topic li{margin:3px 0;color:var(--text)}
+.topic li::marker{color:var(--accent2)}
+.topic p{margin:6px 0;color:var(--text)}
+.muted{color:var(--text2)}
+.example{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin:12px 0}
+.example .lbl,.hook .lbl,.exam .lbl{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:2px 8px;border-radius:5px;margin-bottom:6px}
+.example .lbl{background:rgba(52,211,153,.15);color:var(--green)}
+.hook{background:rgba(251,191,36,.08);border:1px dashed rgba(251,191,36,.5);border-radius:10px;padding:12px 16px;margin:12px 0}
+.hook .lbl{background:rgba(251,191,36,.18);color:var(--yellow)}
+.hook .big{font-size:20px;font-weight:800;letter-spacing:.06em;color:var(--yellow)}
+.exam{background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.35);border-radius:10px;padding:10px 14px;margin:12px 0}
+.exam .lbl{background:rgba(244,114,182,.18);color:var(--pink)}
+.mark{margin-top:14px;display:flex;justify-content:flex-end}
+.mark button{border:1px solid var(--border2);background:var(--bg3);color:var(--text2);border-radius:8px;padding:7px 14px;cursor:pointer;font:600 13px var(--font-ui)}
+.mark button.on{background:rgba(52,211,153,.15);border-color:var(--green);color:var(--green)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.mini b{display:block;margin-bottom:2px}
+.mini.good{border-color:rgba(52,211,153,.5)}
+.mini.bad{border-color:rgba(248,113,113,.5)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;margin-right:4px}
+.tag.g{background:rgba(52,211,153,.15);color:var(--green)}
+.tag.r{background:rgba(248,113,113,.15);color:var(--red)}
+.tag.y{background:rgba(251,191,36,.15);color:var(--yellow)}
+.tag.b{background:rgba(56,189,248,.15);color:var(--accent)}
+table.cmp{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+table.cmp th,table.cmp td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+table.cmp th{background:var(--bg4);color:var(--text)}
+table.cmp td{background:var(--bg3)}
+.btn{border:1px solid var(--accent);background:rgba(56,189,248,.12);color:var(--accent);border-radius:8px;padding:7px 14px;cursor:pointer;font:600 13px var(--font-ui)}
+.btn:hover{background:rgba(56,189,248,.25)}
+.btn.alt{border-color:var(--accent2);color:var(--accent2);background:rgba(167,139,250,.12)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;color:var(--text2);padding:6px 12px;border-radius:6px;cursor:pointer;font:600 12px var(--font-ui)}
+.seg button.on{background:var(--accent2);color:#120b26}
+svg text{font-family:var(--font-ui)}
+.figure{background:#f6f7fb;border-radius:10px;padding:10px;margin:10px 0;text-align:center}
+.figure img{max-width:100%;border-radius:6px}
+.caption{font-size:12px;color:var(--text3);text-align:center;margin-top:4px}
+.screen{background:#f4f6fb;color:#1d2433;border-radius:10px;padding:14px;font-size:13px}
+/* home */
+.hero{padding:40px 36px 10px;max-width:1100px;margin:0 auto}
+.hero h1{font-size:34px;line-height:1.2;margin-bottom:8px}
+.hero p{color:var(--text2);font-size:16px;max-width:760px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:20px 36px;max-width:1100px;margin:0 auto}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:.2s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .ic{font-size:26px}
+.card b{display:block;font-size:16px;margin:6px 0 4px}
+.card span{color:var(--text2);font-size:13px}
+.steps13{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}
+.steps13 div{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text2)}
+.steps13 div.here{border-color:var(--green);color:var(--text);background:rgba(52,211,153,.1)}
+.steps13 div b{color:var(--accent)}
+/* flashcards */
+.fc-wrap{max-width:720px;margin:30px auto;padding:0 20px}
+.fc-filter{display:flex;justify-content:center;margin-bottom:16px}
+.fc{perspective:1200px;height:320px;cursor:pointer}
+.fc-inner{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.fc.flip .fc-inner{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:28px;text-align:center}
+.fc-front{background:linear-gradient(135deg,var(--bg2),var(--bg3))}
+.fc-front .q{font-size:22px;font-weight:700}
+.fc-back{background:linear-gradient(135deg,#17323a,#1b2236);transform:rotateY(180deg);font-size:16px;overflow:auto}
+.fc-back .a{white-space:pre-line;text-align:left}
+.fc-meta{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);position:absolute;top:14px;left:18px}
+.fc-ctrl{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:8px;flex-wrap:wrap}
+.fc-count{color:var(--text2);font-size:14px}
+/* quiz */
+.qz{max-width:760px;margin:30px auto;padding:0 20px}
+.qz-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px}
+.qz-top{display:flex;justify-content:space-between;color:var(--text3);font-size:13px;margin-bottom:8px}
+.qz-bar{height:6px;background:var(--bg4);border-radius:9px;overflow:hidden;margin-bottom:18px}
+.qz-bar div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+.qz-q{font-size:19px;font-weight:700;margin-bottom:14px}
+.qz-opt{display:block;width:100%;text-align:left;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px 14px;margin:8px 0;cursor:pointer;font:15px var(--font-ui)}
+.qz-opt:hover:not(:disabled){border-color:var(--accent)}
+.qz-opt.right{border-color:var(--green);background:rgba(52,211,153,.13)}
+.qz-opt.wrong{border-color:var(--red);background:rgba(248,113,113,.13)}
+.qz-exp{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--bg3);border-left:4px solid var(--accent);display:none}
+.qz-exp.show{display:block}
+.score-big{font-size:54px;font-weight:800;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+/* demos */
+.demo-box{background:#f4f6fb;border-radius:10px;padding:14px;color:#1d2433}
+.form-demo{background:#fff;border:2px solid #8a93a8;border-radius:8px;padding:12px;position:relative;font-size:13px;color:#1d2433;max-width:440px;margin:auto}
+.form-demo .ttl{text-align:center;color:#555;font-family:Georgia,serif;margin-bottom:8px}
+.fld{display:flex;align-items:center;gap:6px;margin:4px 0}
+.fld label{width:60px;text-align:right;color:#0f766e;font-family:Georgia,serif}
+.fld .box{height:16px;border:1px solid #333;background:#fff}
+.mem-items{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-size:28px;font-weight:800;margin:14px 0;min-height:44px}
+.mem-items span{background:var(--bg4);padding:6px 14px;border-radius:8px}
+input.txt{background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 10px;font:15px var(--font-ui);width:100%}
+.sort-pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{background:var(--bg4);border:1px solid var(--border2);border-radius:99px;padding:6px 12px;font-size:13px;cursor:pointer;user-select:none}
+.chip.ok{border-color:var(--green);background:rgba(52,211,153,.15)}
+.chip.no{border-color:var(--red);background:rgba(248,113,113,.15);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bin{border:2px dashed var(--border2);border-radius:10px;padding:10px;min-height:90px}
+.bin h5{font-size:13px;margin-bottom:6px}
+.bin .chip{cursor:default}
+.tabform input{border:1px solid #333;border-radius:3px;padding:4px 6px;font:14px var(--font-mono);background:#fff;color:#111}
+.tabform input:focus{outline:3px solid #38bdf8}
+.legend-row{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-top:6px}
+@media (max-width:860px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .header{position:static}
+  .topic{padding:16px 14px}
+  .slide-ref{display:none}
+  table.cmp{font-size:12.5px}
+  .side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border);display:none}
+  .content{padding:18px 16px 60px}
+  .grid2,.grid3,.bins{grid-template-columns:1fr}
+  .tabs{margin-left:0}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="brand"><small>Human–Computer Interaction · Study Tool</small><b>Know Your User &amp; Screen Design</b></div>
+  <span class="progress-pill">Learned: <b id="progCount">0</b> / <span id="progTotal">0</span></span>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-sec="home">🏠 Start</button>
+    <button class="tab" data-sec="s1">👤 Step 1 · Know Your User</button>
+    <button class="tab" data-sec="s3">🖥️ Step 3 · Screen Design</button>
+    <button class="tab" data-sec="web">🌐 Step 3 · Web &amp; Tech</button>
+    <button class="tab" data-sec="tricks">🧠 Memory Tricks</button>
+    <button class="tab" data-sec="cards">🃏 Flashcards</button>
+    <button class="tab" data-sec="quiz">✅ Quiz</button>
+  </nav>
+</header>
+
+<!-- ================= HOME ================= -->
+<section class="section active" id="home">
+  <div class="hero">
+    <h1>Study the two lectures the easy way 👋</h1>
+    <p>This tool turns the two crowded slide decks into short lessons. Every topic has a <b style="color:var(--accent)">one-line summary</b>, the key points, a <b style="color:var(--green)">real example or picture</b>, a <b style="color:var(--yellow)">memory hook</b>, and an <b style="color:var(--pink)">exam tip</b>. When you finish a topic, press <i>“Mark as learned”</i> so you can see your progress.</p>
+  </div>
+  <div class="cards">
+    <div class="card" data-go="s1"><div class="ic">👤</div><b>Step 1 · Know Your User</b><span>Whole deck “Step 1 – Know your user or client” (slides 1–29): why people struggle, human characteristics, novice vs expert, physical characteristics.</span></div>
+    <div class="card" data-go="s3"><div class="ic">🖥️</div><b>Step 3 · Screen Design</b><span>Deck “Step 3 – Principles of good interface &amp; screen design”, slides 30–56: unity, simplicity, grouping, typography, screen elements, tabbing, screen organization.</span></div>
+    <div class="card" data-go="web"><div class="ic">🌐</div><b>Step 3 · Web &amp; Technology</b><span>Same deck, slides 57–87: the Web, home page, searching, intranet, weblogs, graphs, technology limits, downloading, eye movement.</span></div>
+    <div class="card" data-go="tricks"><div class="ic">🧠</div><b>Memory Tricks</b><span>All the lists turned into short codes and silly sentences so you can recall them in the exam.</span></div>
+    <div class="card" data-go="cards"><div class="ic">🃏</div><b>Flashcards</b><span>Flip cards for fast revision. Filter by step.</span></div>
+    <div class="card" data-go="quiz"><div class="ic">✅</div><b>Quiz</b><span>Multiple-choice questions with explanations, in exam style.</span></div>
+  </div>
+  <div class="hero" style="padding-top:10px">
+    <h3 style="margin-bottom:4px">Where these lectures fit — the steps for building a user interface</h3>
+    <p style="font-size:14px">The course follows these steps. The green ones are what this tool covers.</p>
+    <div class="steps13">
+      <div class="here"><b>Step 1</b> Know your user or client ✔</div>
+      <div><b>Step 2</b> Understand the business function</div>
+      <div class="here"><b>Step 3</b> Principles of good screen design ✔</div>
+      <div><b>Step 4</b> System menus &amp; navigation</div>
+      <div><b>Step 5</b> Kinds of windows</div>
+      <div><b>Step 6</b> Device-based controls</div>
+      <div><b>Step 7</b> Screen-based controls</div>
+      <div><b>Step 9</b> Messages, feedback &amp; guidance</div>
+      <div><b>Step 11</b> Meaningful icons</div>
+      <div><b>Step 12</b> Appropriate colors</div>
+      <div><b>Step 13</b> Organize &amp; lay out windows</div>
+    </div>
+    <div class="hook" style="margin-top:18px"><span class="lbl">How to study with this tool</span>
+      <ol style="padding-left:20px">
+        <li>Read one topic. Say the <b>one-line summary</b> out loud without looking.</li>
+        <li>Play with the example or demo — this is what makes it stick.</li>
+        <li>After each tab, open <b>Memory Tricks</b> and practise the codes.</li>
+        <li>Revise with <b>Flashcards</b>, then test yourself with the <b>Quiz</b>. Re-read any topic you got wrong.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STEP 1 ================= -->
+<section class="section" id="s1">
+<div class="layout">
+<aside class="side" data-side></aside>
+<main class="content">
+  <div class="page-title">Step 1 · Know Your User or Client</div>
+  <div class="page-sub">Whole deck (slides 1–29). Big idea: <b>you cannot design a usable system until you understand the people who will use it</b> — how they think, remember, see, feel and work.</div>
+
+  <!-- 1 -->
+  <div class="topic" id="s1-consider" data-title="What to consider">
+    <div class="topic-head"><span class="topic-num">1.1</span><h2>What should you consider to create a usable system?</h2><span class="slide-ref">slide 3</span></div>
+    <div class="oneliner"><b>In one line:</b> Step 1 is a checklist of 7 things to understand about people before designing.</div>
+    <ol style="padding-left:22px">
+      <li>Understand <b>how people interact</b> with computers.</li>
+      <li>Understand the <b>human characteristics</b> important in design.</li>
+      <li>Identify the user’s <b>level of knowledge and experience</b>.</li>
+      <li>Identify the characteristics of the user’s <b>needs, tasks and jobs</b>.</li>
+      <li>Identify the user’s <b>psychological</b> characteristics.</li>
+      <li>Identify the user’s <b>physical</b> characteristics.</li>
+      <li>Employ recommended <b>methods for gaining understanding</b> of users.</li>
+    </ol>
+    <div class="example"><span class="lbl">Example</span><p>Designing a banking app for a mall kiosk: Who uses it (elderly people? tourists?), what do they already know (smartphones?), what is their task (withdraw cash quickly), are they stressed (queue behind them), can they see small text, and how do we find all this out (visit the mall and watch people).</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Think of the 7 points as a <b>story about a person</b>: <i>How</i> does she use it → <i>What</i> is she like as a human → <i>What</i> does she know → <i>What</i> does she do → <i>How</i> does she feel → <i>What</i> is her body like → <i>How</i> do we find out.</p></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="topic" id="s1-cycle" data-title="Human Action Cycle">
+    <div class="topic-head"><span class="topic-num">1.2</span><h2>How people interact with computers — The Human Action Cycle</h2><span class="slide-ref">slide 4</span></div>
+    <div class="oneliner"><b>In one line:</b> Every interaction is a loop: <b>Goal → Execute → Evaluate</b>.</div>
+    <ul>
+      <li><b>A goal is formed</b> — what do I want to achieve?</li>
+      <li><b>An execution plan is created and implemented</b> — decide the actions, then do them.</li>
+      <li><b>The resulting actions taken are evaluated</b> — look at the result: did I reach my goal? If not, loop again.</li>
+    </ul>
+    <div class="example"><span class="lbl">Interactive example — click “Next stage”</span>
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:center" class="cyc-grid">
+        <svg viewBox="0 0 260 230" id="cycleSvg" width="260">
+          <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7486a6"/></marker></defs>
+          <path d="M150,40 A90,90 0 0,1 205,170" fill="none" stroke="#7486a6" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M175,200 A90,90 0 0,1 60,175" fill="none" stroke="#7486a6" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M40,150 A90,90 0 0,1 95,40" fill="none" stroke="#7486a6" stroke-width="2" marker-end="url(#arr)"/>
+          <g class="cyc-node" data-i="0"><circle cx="125" cy="35" r="30"/><text x="125" y="40" text-anchor="middle" font-size="13" font-weight="700">Goal</text></g>
+          <g class="cyc-node" data-i="1"><circle cx="210" cy="185" r="30"/><text x="210" y="190" text-anchor="middle" font-size="12" font-weight="700">Execute</text></g>
+          <g class="cyc-node" data-i="2"><circle cx="45" cy="185" r="30"/><text x="45" y="190" text-anchor="middle" font-size="12" font-weight="700">Evaluate</text></g>
+        </svg>
+        <div>
+          <div class="seg" id="cycScenario"><button class="on" data-s="0">Send an email</button><button data-s="1">Buy a ticket online</button></div>
+          <p id="cycText" style="margin-top:10px;min-height:70px"></p>
+          <button class="btn" id="cycNext">Next stage ▶</button>
+        </div>
+      </div>
+    </div>
+    <div class="exam"><span class="lbl">Exam tip</span> If asked “describe the Human Action Cycle”, write the 3 stages in order and give a one-line example for each.</div>
+  </div>
+
+  <!-- 3 -->
+  <div class="topic" id="s1-trouble" data-title="Why people have trouble">
+    <div class="topic-head"><span class="topic-num">1.3</span><h2>Why people have trouble with computers</h2><span class="slide-ref">slide 5</span></div>
+    <div class="oneliner"><b>In one line:</b> Five design faults confuse people.</div>
+    <div class="grid2">
+      <div class="mini"><b>1. Too much flexibility</b>Too many functions and options. <span class="muted">e.g. Word’s ribbon with 200 buttons for someone who only wants to type a letter.</span></div>
+      <div class="mini"><b>2. Non-obvious design</b>The design is complex; you can’t tell how it works. <span class="muted">e.g. a hidden gesture with no hint.</span></div>
+      <div class="mini"><b>3. Fine distinctions</b>Tiny differences between things. <span class="muted">e.g. “Save” vs “Save As” vs “Save a Copy”.</span></div>
+      <div class="mini"><b>4. Disparity in problem-solving strategies</b>Users are not at the same level; they solve problems differently. <span class="muted">e.g. an expert types a shortcut, a beginner looks for a menu.</span></div>
+      <div class="mini"><b>5. Design inconsistency</b>The same action has different names. <span class="muted">e.g. save, keep, list, write — all meaning “save”.</span></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">F · N · F · D · I</div><p>“<b>F</b>unny <b>N</b>erds <b>F</b>ind <b>D</b>ifficult <b>I</b>nterfaces” → Flexibility, Non-obvious, Fine distinctions, Disparity, Inconsistency.</p></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="topic" id="s1-psych" data-title="Psychological responses">
+    <div class="topic-head"><span class="topic-num">1.4</span><h2>Psychological responses to poor design (what the user <i>feels</i>)</h2><span class="slide-ref">slide 6</span></div>
+    <div class="oneliner"><b>In one line:</b> Bad design makes people feel 5 things — inside their head.</div>
+    <div class="grid3">
+      <div class="mini">😵 <b>Confusion</b>difficult patterns</div>
+      <div class="mini">😠 <b>Anger</b></div>
+      <div class="mini">😤 <b>Frustration</b>unexpected results</div>
+      <div class="mini">😰 <b>Panic or stress</b></div>
+      <div class="mini">🥱 <b>Boredom</b>slow response times or long download times</div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">C · A · F · P · B</div><p>“<b>C</b>an <b>A</b>ngry <b>F</b>olks <b>P</b>lease <b>B</b>ehave?” — Confusion, Anger, Frustration, Panic, Boredom. All are <b>feelings</b>.</p></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="topic" id="s1-phys" data-title="Physical responses">
+    <div class="topic-head"><span class="topic-num">1.5</span><h2>Physical responses to poor design (what the user <i>does</i>)</h2><span class="slide-ref">slide 7</span></div>
+    <div class="oneliner"><b>In one line:</b> Bad design makes people <b>act</b> differently — 7 behaviours you can see.</div>
+    <table class="cmp">
+      <tr><th>Response</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td><b>Abandonment</b></td><td>Leave the system</td><td>Close the shopping app and buy from another store.</td></tr>
+      <tr><td><b>Partial use</b></td><td>Use only some of the functions</td><td>Use Excel only as a table, never formulas.</td></tr>
+      <tr><td><b>Indirect use</b></td><td>Ask someone else to use it for you</td><td>Ask your son to book the flight.</td></tr>
+      <tr><td><b>Task modification</b></td><td>Change the task to meet the user’s capabilities</td><td>Send one long email instead of setting up the mailing feature.</td></tr>
+      <tr><td><b>Compensatory activity</b></td><td>Extra actions to make up for system weaknesses</td><td>Write data on paper first because the system loses it.</td></tr>
+      <tr><td><b>System misuse</b></td><td>Use the system in a way it was not meant for</td><td>Use the “notes” field to store passwords.</td></tr>
+      <tr><td><b>Reprogramming</b></td><td>Change/rewrite the system</td><td>A user writes a macro to bypass a bad screen.</td></tr>
+    </table>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">A · P · I · T · C · S · R</div><p>“<b>A</b> <b>P</b>irate <b>I</b>n <b>T</b>own <b>C</b>an <b>S</b>teal <b>R</b>um” — Abandonment, Partial, Indirect, Task modification, Compensatory, System misuse, Reprogramming.</p></div>
+    <div class="example"><span class="lbl">Game — Feeling or Action?</span>
+      <p class="muted">Click a chip, then click the box it belongs to. Psychological = inside the head. Physical = a behaviour you can see.</p>
+      <div class="sort-pool" id="sortPool"></div>
+      <div class="bins">
+        <div class="bin" data-bin="psy"><h5>🧠 Psychological (feels)</h5><div class="sort-pool"></div></div>
+        <div class="bin" data-bin="phy"><h5>🏃 Physical (does)</h5><div class="sort-pool"></div></div>
+      </div>
+      <div class="btn-row"><button class="btn alt" id="sortReset">Restart game</button><span id="sortMsg" class="muted" style="align-self:center"></span></div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="topic" id="s1-percep" data-title="A · Perception">
+    <div class="topic-head"><span class="topic-num">1.6</span><h2>Human characteristic A — Perception</h2><span class="slide-ref">slide 8</span></div>
+    <div class="oneliner"><b>In one line:</b> Perception = how our senses organise what we see. We automatically group things using 6 principles.</div>
+    <div class="seg" id="gestaltSeg">
+      <button class="on" data-g="0">Proximity</button><button data-g="1">Similarity</button><button data-g="2">Matching patterns</button><button data-g="3">Closure</button><button data-g="4">Unity</button><button data-g="5">Continuity</button>
+    </div>
+    <div class="grid2" style="margin-top:12px;align-items:center">
+      <div class="demo-box" style="text-align:center"><svg viewBox="0 0 300 170" width="100%" id="gestaltSvg"></svg></div>
+      <div><h3 id="gestaltName" style="margin-top:0"></h3><p id="gestaltDef"></p><p class="muted" id="gestaltUi"></p></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">P · S · M · C · U · C</div><p>“<b>P</b>lease <b>S</b>ave <b>M</b>y <b>C</b>ute <b>U</b>nicorn <b>C</b>ookie” — Proximity, Similarity, Matching patterns, Closure, Unity, Continuity.</p></div>
+    <div class="exam"><span class="lbl">Exam tip</span> These same principles come back in Step 3 (grouping on screens). Learn them once, use them twice.</div>
+  </div>
+
+  <!-- 7 -->
+  <div class="topic" id="s1-memory" data-title="B · Memory">
+    <div class="topic-head"><span class="topic-num">1.7</span><h2>Human characteristic B — Memory</h2><span class="slide-ref">slides 9–10</span></div>
+    <div class="oneliner"><b>In one line:</b> Short-term memory is tiny and fast to forget, so <b>design to minimise what users must remember</b>.</div>
+    <div class="grid2">
+      <div class="mini"><b>Short-term (working) memory</b>Lasts <b>10 to 30 seconds</b><br>Holds <b>3 to 4 items</b></div>
+      <div class="mini"><b>Long-term (knowledge) memory</b>Active vocabulary (words you can <b>recall</b>): <b>2,000–3,000</b> words<br>Passive vocabulary (words you can <b>recognise</b>): <b>10,000</b> words</div>
+    </div>
+    <p class="muted" style="margin-top:8px">Notice: we <b>recognise</b> far more than we can <b>recall</b> (10,000 vs 3,000). That is why menus (recognition) are easier than typing commands (recall).</p>
+    <h3>Guidelines (minimise the need for memory)</h3>
+    <ul>
+      <li>Present information in an <b>organised, structured, familiar and meaningful</b> way.</li>
+      <li>Place all information needed for the task in <b>close physical proximity</b>.</li>
+      <li>Give the user <b>control over the pace</b> of information presentation.</li>
+      <li><b>Do not require working memory</b> if reading speed is important.</li>
+      <li>Make important items <b>unique or distinct</b>.</li>
+    </ul>
+    <div class="example"><span class="lbl">Try it — test your short-term memory</span>
+      <p class="muted">Press start. A code appears for 4 seconds. Then type it.</p>
+      <div class="seg" id="memMode"><button class="on" data-m="raw">Hard: 9 random characters</button><button data-m="chunk">Easy: same length, chunked</button></div>
+      <div class="mem-items" id="memItems"></div>
+      <div class="btn-row"><button class="btn" id="memStart">Start</button></div>
+      <div id="memAnswer" style="display:none"><input class="txt" id="memInput" placeholder="Type what you saw, then press Enter"/></div>
+      <p id="memResult" style="margin-top:8px"></p>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Short-term: <b>“3–4 items, 10–30 seconds”</b> → like a tiny pocket that empties every half-minute. Long-term vocab: <b>“Active 3 thousand, Passive 10 thousand”</b> (2–3K / 10K).</p></div>
+  </div>
+
+  <!-- 8 -->
+  <div class="topic" id="s1-sensory" data-title="C · Sensory storage">
+    <div class="topic-head"><span class="topic-num">1.8</span><h2>Human characteristic C — Sensory storage</h2><span class="slide-ref">slide 11</span></div>
+    <div class="oneliner"><b>In one line:</b> A buffer that automatically processes what our senses collect — too much stimulation tires it out.</div>
+    <ul>
+      <li>A <b>buffer</b> where automatic processing of information from the senses takes place.</li>
+      <li><b>Repeated and excessive stimulation</b> can fatigue the sensory storage mechanism.</li>
+    </ul>
+    <h3>Guidelines</h3>
+    <ul><li>Every element on the interface must <b>serve a definite purpose</b>.</li><li><b>Eliminate interface noise</b> so important things are less likely to be missed.</li></ul>
+    <div class="grid2">
+      <div class="mini bad"><span class="tag r">Noisy</span><div style="margin-top:6px;font-size:12px;line-height:1.3">🔥 SALE! 🔔 New! ⭐⭐⭐ <span style="color:#f87171">BLINKING BANNER</span> 🎉 Chat now! 📣 Subscribe! → <u>Your exam result</u> ← 🎁 Win!</div><p class="muted" style="font-size:12px">The one thing that matters gets missed.</p></div>
+      <div class="mini good"><span class="tag g">Clean</span><div style="margin-top:6px;font-size:14px">Your exam result: <b>A</b></div><p class="muted" style="font-size:12px">Every element has a purpose.</p></div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="topic" id="s1-acuity" data-title="D · Visual acuity">
+    <div class="topic-head"><span class="topic-num">1.9</span><h2>Human characteristic D — Visual acuity (sharpness)</h2><span class="slide-ref">slides 12–13</span></div>
+    <div class="oneliner"><b>In one line:</b> The eye sees sharply only a small area at a time, so group the screen into <b>visual chunks</b>.</div>
+    <ul>
+      <li>Visual acuity = <b>the capacity of the eye to resolve detail</b>.</li>
+      <li>Guideline: provide <b>screen groupings that reflect visual chunks</b>.</li>
+      <li>Guideline: <b>patterns for fill-in areas</b> (bars, circles…) must be chosen carefully to avoid <b>visual distraction</b>.</li>
+    </ul>
+    <div class="example"><span class="lbl">Picture from the slide — explained</span>
+      <div class="grid2" style="align-items:center">
+        <pre style="font:15px/1.25 var(--font-mono);text-align:center;color:var(--text);background:var(--bg);padding:10px;border-radius:8px" id="acuityPre">      3213123
+    54321212345
+  6543211123456
+765432101234567
+  6543211123456
+    54321212345
+      3213123</pre>
+        <p>Stare at the <b style="color:var(--yellow)">0</b> in the centre. The numbers are how many characters away from your focus point each digit is. You only see a few characters around the 0 clearly — everything further away is blurry. So a screen should be built in <b>small groups</b> the eye can take in at one look, not one big block of text.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="topic" id="s1-info" data-title="E · Information processing">
+    <div class="topic-head"><span class="topic-num">1.10</span><h2>Human characteristic E — Information processing</h2><span class="slide-ref">slide 14</span></div>
+    <div class="oneliner"><b>In one line:</b> The brain has a slow “thinking” level and a fast “automatic” level — design so the fast level can do the work.</div>
+    <table class="cmp">
+      <tr><th>Higher level 🐢</th><th>Lower level ⚡</th></tr>
+      <tr><td>Identified with <b>working memory</b><br>Limited, slow and sequential (reading and understanding)<br>Performs reasoning and problem solving<br><b>Subject to interference</b></td>
+          <td>Processes <b>familiar</b> information <b>rapidly</b><br>Works <b>in parallel</b> with the higher level<br><b>Without effort</b></td></tr>
+    </table>
+    <h3>Guidelines</h3>
+    <ul><li>Provide <b>visually distinctive screens</b> to enhance lower-level processing.</li><li>Minimise interference — avoid designs that create <b>conflicting mental processes</b>.</li></ul>
+    <div class="example"><span class="lbl">Example — conflicting processes</span>
+      <p>Say the <b>colour</b> of each word (not the word):</p>
+      <p style="font-size:22px;font-weight:800;letter-spacing:.04em"><span style="color:#34d399">RED</span> &nbsp; <span style="color:#f87171">GREEN</span> &nbsp; <span style="color:#38bdf8">YELLOW</span> &nbsp; <span style="color:#fbbf24">BLUE</span></p>
+      <p class="muted">It feels slow because your fast level reads the word while your slow level tries to name the colour — they conflict. On a screen, a red “Continue” button or a green “Delete” button causes the same conflict.</p>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="topic" id="s1-mental" data-title="F · Mental models">
+    <div class="topic-head"><span class="topic-num">1.11</span><h2>Human characteristic F — Mental models (vs conceptual models)</h2><span class="slide-ref">slides 15–16</span></div>
+    <div class="oneliner"><b>In one line:</b> A mental model is what a person <b>believes</b> about how something works — design new systems to match what people already know.</div>
+    <div class="grid2">
+      <div class="mini"><b>🧠 Mental model</b>Captures ideas in a problem domain in a person’s head. A representation of a person’s <b>current understanding</b> of something.</div>
+      <div class="mini"><b>📐 Conceptual model</b>Represents “concepts” (entities) and the <b>relationships</b> between them. A known data-modelling technique, together with <b>logical</b> and <b>physical</b> modelling.</div>
+    </div>
+    <ul style="margin-top:10px">
+      <li>Mental models are <b>gradually developed</b> to understand, explain, make decisions, do, or interact.</li>
+      <li>Learned mental models are <b>applied to what is newly encountered</b>.</li>
+    </ul>
+    <h3>Guidelines</h3>
+    <ul><li>Design new systems <b>conforming to the user’s already learned mental models</b>.</li><li>Provide <b>design consistency and standards</b> to help mental model development.</li></ul>
+    <div class="example"><span class="lbl">Example</span><p>The 🗑️ <b>Trash/Recycle bin</b>: people know a real bin — you throw things in and can take them back out until it’s emptied. The computer bin works the same way, so nobody needs to be taught. A shopping-<b>cart</b> icon works for the same reason.</p></div>
+  </div>
+
+  <!-- 12 -->
+  <div class="topic" id="s1-learning" data-title="G · Learning & Skill">
+    <div class="topic-head"><span class="topic-num">1.12</span><h2>Human characteristic G — Learning, and Skill</h2><span class="slide-ref">slides 17–18</span></div>
+    <div class="oneliner"><b>In one line:</b> Learning moves info from short-term to long-term memory; skill is doing the right actions, in the right order, precisely, with little effort.</div>
+    <div class="grid2">
+      <div class="mini"><b>📚 Learning</b>The process of <b>encoding into long-term memory</b> what is in short-term memory.<br><br><b>Guidelines:</b><ul><li>Allow skills from one situation to be used in a similar one (transfer).</li><li>Provide <b>complete and prompt feedback</b>.</li><li>Provide <b>phased learning</b> — only what is needed at that stage.</li></ul></div>
+      <div class="mini"><b>🎯 Skill</b>Performance of actions in the <b>correct time sequence</b> with <b>adequate precision</b>.<br>Achieved by increasing mastery of a system; characterised by <b>economy of effort</b> for optimum efficiency.<br><br><b>Guideline:</b> permit development of <b>increasingly skilful performance</b>.</div>
+    </div>
+    <div class="example"><span class="lbl">Example</span><p><b>Learning:</b> Ctrl+C / Ctrl+V works in every app → transfer. Duolingo gives instant ✔/✘ → prompt feedback, and unlocks one unit at a time → phased learning.<br><b>Skill:</b> a beginner right-clicks → Copy; with practice they use Ctrl+C without thinking — same result, less effort.</p></div>
+  </div>
+
+  <!-- 13 -->
+  <div class="topic" id="s1-load" data-title="Performance load">
+    <div class="topic-head"><span class="topic-num">1.13</span><h2>Performance load</h2><span class="slide-ref">slide 19</span></div>
+    <div class="oneliner"><b>In one line:</b> The effort needed to do a task — reduce the <b>thinking load</b> and the <b>movement load</b>.</div>
+    <div class="grid2">
+      <div class="mini"><b>🧠 Reduce cognitive (thinking) load</b><ul><li>Eliminate noise / unnecessary information</li><li>Properly format and group information</li><li>Use powers of <b>recognition</b></li><li>Automate tasks that need extensive memory</li></ul></div>
+      <div class="mini"><b>✋ Reduce kinaesthetic (movement) load</b><ul><li>Minimise number of steps</li><li>Minimise control actions and movements</li><li>Avoid repetitive tasks</li></ul></div>
+    </div>
+    <div class="example"><span class="lbl">Example</span><p>Checkout page: the site <b>remembers your address</b> (automates memory → less cognitive load) and lets you pay with <b>one tap</b> (fewer steps → less kinaesthetic load).</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>Cognitive = brain</b>, <b>Kinaesthetic = body (kinetic = movement)</b>.</p></div>
+  </div>
+
+  <!-- 14 -->
+  <div class="topic" id="s1-indiv" data-title="Individual differences">
+    <div class="topic-head"><span class="topic-num">1.14</span><h2>Individual differences</h2><span class="slide-ref">slide 20</span></div>
+    <div class="oneliner"><b>In one line:</b> <b>There is no average user.</b> Tailor tasks to people with different needs and changing skill levels.</div>
+    <div class="example"><span class="lbl">Example</span><p>YouTube lets you change playback speed, turn on captions, and change text size — one design fits many different people.</p></div>
+  </div>
+
+  <!-- 15 -->
+  <div class="topic" id="s1-knowledge" data-title="Knowledge & experience">
+    <div class="topic-head"><span class="topic-num">1.15</span><h2>Human considerations — User’s knowledge and experience</h2><span class="slide-ref">slide 21</span></div>
+    <div class="oneliner"><b>In one line:</b> 9 things to find out about what the user already knows.</div>
+    <div class="grid3">
+      <div class="mini"><b>Computer literacy</b>How well they use computers in general</div>
+      <div class="mini"><b>System experience</b>Used this kind of system before?</div>
+      <div class="mini"><b>Application experience</b>Used this type of application?</div>
+      <div class="mini"><b>Task experience</b>Know the job/task itself?</div>
+      <div class="mini"><b>Other system use</b>What other systems they use</div>
+      <div class="mini"><b>Education</b>Level of schooling</div>
+      <div class="mini"><b>Reading level</b>How complex the wording can be</div>
+      <div class="mini"><b>Typing skill</b>Fast typist or hunt-and-peck?</div>
+      <div class="mini"><b>Native language &amp; culture</b>Language, right-to-left, symbols</div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Group them: <b>4 “experiences”</b> (Computer literacy, System, Application, Task) + <b>Other system use</b> + <b>4 “personal skills”</b> (Education, Reading, Typing, Language &amp; culture).</p></div>
+  </div>
+
+  <!-- 16 -->
+  <div class="topic" id="s1-novice" data-title="Novice vs Expert">
+    <div class="topic-head"><span class="topic-num">1.16</span><h2>Novice versus expert users</h2><span class="slide-ref">slide 22</span></div>
+    <div class="oneliner"><b>In one line:</b> Novices see the <b>surface</b> of the system in fragments; experts see an <b>integrated</b> picture organised around their task.</div>
+    <table class="cmp">
+      <tr><th>🐣 Novice (beginner)</th><th>🦉 Expert</th></tr>
+      <tr><td>Fragmented conceptual model of the system</td><td>Integrated conceptual model</td></tr>
+      <tr><td>Organise information less meaningfully — toward <b>surface features</b> of the system</td><td>Organise information more meaningfully — toward <b>their task</b></td></tr>
+      <tr><td>Structure information into <b>fewer categories</b></td><td>Structure information into <b>more categories</b></td></tr>
+      <tr><td>Difficulty generating inferences and relating new knowledge to goals</td><td>Better at making inferences and relating new knowledge to goals</td></tr>
+      <tr><td>More attention to <b>low-level details</b></td><td>Less attention to low-level details</td></tr>
+      <tr><td>More attention to <b>surface features</b></td><td>Less attention to surface features</td></tr>
+    </table>
+    <div class="example"><span class="lbl">Example</span><p>In Photoshop a novice thinks “the brush is the round icon on the left” (surface feature). An expert thinks “I need to retouch the skin → healing tools” (task).</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Everything flips: the expert is the <b>opposite</b> of the novice on every row. Remember just one side — <b>novice = fragmented, surface, fewer categories, details</b>.</p></div>
+  </div>
+
+  <!-- 17 -->
+  <div class="topic" id="s1-webneeds" data-title="Web page considerations">
+    <div class="topic-head"><span class="topic-num">1.17</span><h2>Web page considerations — Novice, Intermediate, Expert</h2><span class="slide-ref">slide 23</span></div>
+    <div class="oneliner"><b>In one line:</b> Beginners need <b>guidance</b>, intermediates need <b>structure and safety</b>, experts need <b>speed and control</b>.</div>
+    <div class="seg" id="levelSeg"><button class="on" data-l="0">🐣 Novice</button><button data-l="1">🙂 Intermediate</button><button data-l="2">🦉 Expert</button></div>
+    <div class="grid2" style="margin-top:12px;align-items:start">
+      <div id="levelList"></div>
+      <div class="demo-box" id="levelMock" style="min-height:170px"></div>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="topic" id="s1-tasks" data-title="Tasks & needs">
+    <div class="topic-head"><span class="topic-num">1.18</span><h2>User’s tasks and needs</h2><span class="slide-ref">slide 24</span></div>
+    <div class="oneliner"><b>In one line:</b> Must they use it? How often? How important is it? How much training?</div>
+    <ul>
+      <li><b>Mandatory use</b> — the computer is part of their job (they have no choice).</li>
+      <li><b>Frequency of use</b> — daily vs once a year.</li>
+      <li><b>Task or need importance</b> — how much time they’ll invest to learn.</li>
+      <li><b>Primary training</b> — how much training they get.</li>
+    </ul>
+    <div class="example"><span class="lbl">Example</span><p>A cashier’s POS system: <b>mandatory</b>, used <b>all day</b>, <b>important</b>, with <b>training</b> → can have shortcuts and dense screens. A yearly tax-refund website: optional, rare, no training → must be extremely simple.</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">M · F · I · T</div><p>“<b>M</b>y <b>F</b>riends <b>I</b>nvite <b>T</b>raining” — Mandatory, Frequency, Importance, Training. (Or: the user must be “<b>MFIT</b>” = fit.)</p></div>
+  </div>
+
+  <!-- 19 -->
+  <div class="topic" id="s1-physical" data-title="Physical characteristics">
+    <div class="topic-head"><span class="topic-num">1.19</span><h2>User’s physical characteristics &amp; older adults</h2><span class="slide-ref">slides 25–26</span></div>
+    <div class="oneliner"><b>In one line:</b> 7 physical factors — and older adults have specific patterns worth designing for.</div>
+    <div class="grid2">
+      <div class="mini"><b>Physical characteristics</b><ul>
+        <li><b>Age</b> — younger adult 18–36, older 64–81</li><li><b>Vision</b></li><li><b>Hearing</b></li><li><b>Cognitive processing</b> (brain processing)</li><li><b>Gender</b></li><li><b>Handedness</b> (left / right)</li><li><b>Disabilities</b> (blind, one hand, etc.)</li></ul></div>
+      <div class="mini"><b>Older adults…</b><ul>
+        <li>Are <b>more educated</b></li><li>Have <b>higher vocabulary</b> scores</li><li>Have more <b>recall difficulties</b></li><li>Have more problems with tasks needing <b>3 or more clicks</b></li><li>Are more likely to <b>scroll a page at a time</b></li><li>Respond better to <b>full pages</b> than continuously scrolled pages</li></ul></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">A · V · H · C · G · H · D</div><p>“<b>A</b> <b>V</b>e<b>H</b>i<b>C</b>le <b>G</b>oes <b>H</b>ere <b>D</b>aily” — Age, Vision, Hearing, Cognitive, Gender, Handedness, Disabilities.<br>Older adults: “<b>smart but forgetful</b>” — more educated, bigger vocabulary, but weaker recall and dislike many clicks.</p></div>
+  </div>
+
+  <!-- 20 -->
+  <div class="topic" id="s1-speeds" data-title="Interaction speeds">
+    <div class="topic-head"><span class="topic-num">1.20</span><h2>Human interaction speeds</h2><span class="slide-ref">slide 27</span></div>
+    <div class="oneliner"><b>In one line:</b> We read fastest, then listen; a fast typist reaches about the listening speed.</div>
+    <div id="speedChart"></div>
+    <p class="muted" style="font-size:13px">Speaking is also listed on the slide, but no number is given for it.</p>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Reading <b>250–300</b> · Listening <b>150–160</b> · Fast typing <b>150</b> (words per minute). Reading ≈ <b>double</b> listening.</p></div>
+  </div>
+
+  <!-- 21 -->
+  <div class="topic" id="s1-pref" data-title="Performance vs Preference">
+    <div class="topic-head"><span class="topic-num">1.21</span><h2>Performance versus preference</h2><span class="slide-ref">slide 28</span></div>
+    <div class="oneliner"><b>In one line:</b> What users <b>like</b> is not always what makes them <b>perform best</b>.</div>
+    <p>Preference is influenced by: <b>Familiarity</b>, <b>Aesthetics</b> (beauty), <b>Novelty</b>, <b>Perceived effort</b>.</p>
+    <div class="example"><span class="lbl">Example</span><p>Users may <b>prefer</b> a beautiful dark website with thin grey text (aesthetics, novelty) but <b>perform</b> faster and with fewer errors on a plain white page with black text.</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">F · A · N · P</div><p>Users are “<b>FAN</b>s of what they <b>P</b>refer” — Familiarity, Aesthetics, Novelty, Perceived effort.</p></div>
+  </div>
+
+  <!-- 22 -->
+  <div class="topic" id="s1-methods" data-title="Methods to understand users">
+    <div class="topic-head"><span class="topic-num">1.22</span><h2>Methods for gaining understanding of users</h2><span class="slide-ref">slide 29</span></div>
+    <div class="oneliner"><b>In one line:</b> Go there, talk, watch, learn the organisation, ask in writing.</div>
+    <ol style="padding-left:22px">
+      <li><b>Visit</b> user locations to understand the work environment.</li>
+      <li><b>Talk</b> directly with users about problems, difficulties, wishes, and what works well now.</li>
+      <li><b>Observe</b> users working or performing a task.</li>
+      <li><b>Learn</b> about the work organisation.</li>
+      <li>Prepare <b>surveys and questionnaires</b>.</li>
+    </ol>
+    <div class="example"><span class="lbl">Example — your HCI meal-planner project</span><p>Visit a family kitchen, talk to people with allergies or diabetes about how they check ingredients today, watch them read a food label in the supermarket, learn how a dietitian clinic works, and send a short Google Form survey.</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">V · T · O · L · S</div><p>“<b>V</b>ery <b>T</b>ired <b>O</b>wls <b>L</b>ove <b>S</b>leep” — Visit, Talk, Observe, Learn the organisation, Surveys.</p></div>
+  </div>
+</main>
+</div>
+</section>
+
+<!-- ================= STEP 3 SCREEN DESIGN ================= -->
+<section class="section" id="s3">
+<div class="layout">
+<aside class="side" data-side></aside>
+<main class="content">
+  <div class="page-title">Step 3 · Principles of Good Screen Design</div>
+  <div class="page-sub">Slides 30–56. Big idea: <b>a good screen is simple, grouped, aligned, readable and consistent</b> — so the eye finds things fast and the brain doesn’t have to work hard.</div>
+
+  <!-- 3.1 -->
+  <div class="topic" id="s3-unity" data-title="Unity vs Fragmentation">
+    <div class="topic-head"><span class="topic-num">3.1</span><h2>Unity vs Fragmentation</h2><span class="slide-ref">slide 30</span></div>
+    <div class="oneliner"><b>In one line:</b> Elements that are close together and similar in size look like <b>one unit</b>; elements spread far apart look <b>broken into pieces</b>.</div>
+    <div class="grid2">
+      <div class="demo-box" style="text-align:center">
+        <svg viewBox="0 0 220 110" width="100%"><rect x="10" y="10" width="200" height="90" rx="14" fill="none" stroke="#333" stroke-width="2"/>
+          <rect x="30" y="25" width="78" height="26" fill="#fff" stroke="#333"/><rect x="112" y="25" width="78" height="26" fill="#fff" stroke="#333"/>
+          <rect x="30" y="56" width="78" height="26" fill="#fff" stroke="#333"/><rect x="112" y="56" width="78" height="26" fill="#fff" stroke="#333"/></svg>
+        <div><span class="tag g">Unity ✔</span> close, same size → one whole</div>
+      </div>
+      <div class="demo-box" style="text-align:center">
+        <svg viewBox="0 0 220 110" width="100%"><rect x="10" y="10" width="200" height="90" rx="14" fill="none" stroke="#333" stroke-width="2"/>
+          <rect x="22" y="18" width="62" height="24" fill="#fff" stroke="#333"/><rect x="136" y="18" width="62" height="24" fill="#fff" stroke="#333"/>
+          <rect x="22" y="68" width="62" height="24" fill="#fff" stroke="#333"/><rect x="136" y="68" width="62" height="24" fill="#fff" stroke="#333"/></svg>
+        <div><span class="tag r">Fragmentation ✘</span> pushed to the edges → 4 separate pieces</div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:8px">These are part of the <b>aesthetic pairs</b> of screen design (the deck also shows Predictable vs Spontaneous and Sequential vs Random on the slides just before 30). The good side of each pair is the one to aim for.</p>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>Unity = united family</b> sitting together at one table. <b>Fragmentation = fragments</b> of a broken plate on the floor.</p></div>
+  </div>
+
+  <!-- 3.2 -->
+  <div class="topic" id="s3-simple" data-title="Simplicity vs Complexity">
+    <div class="topic-head"><span class="topic-num">3.2</span><h2>Simplicity vs Complexity — count the alignments</h2><span class="slide-ref">slides 31–32</span></div>
+    <div class="oneliner"><b>In one line:</b> A simple screen has <b>few alignment points</b> for the eye to process: the simple form has <b>4</b>, the complex form has <b>9</b>.</div>
+    <div class="btn-row"><div class="seg" id="alignSeg"><button class="on" data-a="simple">Simple form</button><button data-a="complex">Complex form</button></div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2)"><input type="checkbox" id="alignShow" checked> Show alignment lines</label></div>
+    <div class="demo-box" style="text-align:center"><svg viewBox="0 0 440 200" width="100%" id="alignSvg" style="max-width:560px"></svg>
+      <div id="alignCount" style="font-weight:800;font-size:16px"></div></div>
+    <div class="example"><span class="lbl">Why it matters</span><p>Each vertical line is a place where the eye has to “start again”. With 4 lines, the eye moves down neat columns. With 9, it zig-zags and the brain processes more. Same 8 fields + 2 buttons, very different effort.</p></div>
+    <div class="exam"><span class="lbl">Exam tip</span> Remember the numbers: <b>Simple = 4 alignments</b>, <b>Complex = 9 alignments</b>.</div>
+  </div>
+
+  <!-- 3.3 -->
+  <div class="topic" id="s3-group" data-title="Grouping techniques">
+    <div class="topic-head"><span class="topic-num">3.3</span><h2>Grouping elements — align, borders, background colour</h2><span class="slide-ref">slides 33–34</span></div>
+    <div class="oneliner"><b>In one line:</b> Make groups visible in 3 ways: <b>aligning elements</b>, <b>line borders</b>, and <b>background colour</b>.</div>
+    <div class="seg" id="groupSeg"><button data-gr="0">1 · Aligned only</button><button data-gr="1" class="on">2 · + Line borders</button><button data-gr="2">3 · + Background colour</button></div>
+    <div class="demo-box" style="text-align:center;margin-top:10px"><svg viewBox="0 0 440 200" width="100%" id="groupSvg" style="max-width:560px"></svg></div>
+    <p class="muted" style="margin-top:6px">Personal details (Name→Zip) form one group; payment (Dues, Pubs, Total) another; buttons sit below the payment group.</p>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>A-B-C of grouping</b>: <b>A</b>lign → <b>B</b>orders → <b>C</b>olour (background).</p></div>
+  </div>
+
+  <!-- 3.4 -->
+  <div class="topic" id="s3-percept" data-title="Perceptual principles & grouping">
+    <div class="topic-head"><span class="topic-num">3.4</span><h2>Perceptual principles and grouping</h2><span class="slide-ref">slide 35</span></div>
+    <div class="oneliner"><b>In one line:</b> Use the perception principles from Step 1 to build <b>functional groups</b> — combine them, but never let them fight.</div>
+    <ul>
+      <li>Use visual organisation to create functional groupings: <b>Proximity, Similarity, Closure, Matching patterns</b>.</li>
+      <li><b>Combine</b> principles in logical ways — e.g. <b>proximity &amp; similarity</b> together.</li>
+      <li><b>Avoid</b> principles that <b>conflict</b>.</li>
+    </ul>
+    <div class="grid2">
+      <div class="mini good"><span class="tag g">Combined ✔</span>
+        <svg viewBox="0 0 200 70" width="100%"><g fill="#38bdf8"><circle cx="20" cy="20" r="8"/><circle cx="42" cy="20" r="8"/><circle cx="20" cy="45" r="8"/><circle cx="42" cy="45" r="8"/></g><g fill="#f472b6"><rect x="120" y="12" width="16" height="16"/><rect x="142" y="12" width="16" height="16"/><rect x="120" y="37" width="16" height="16"/><rect x="142" y="37" width="16" height="16"/></g></svg>
+        <p style="font-size:13px">Close <b>and</b> same look → two obvious groups.</p></div>
+      <div class="mini bad"><span class="tag r">Conflict ✘</span>
+        <svg viewBox="0 0 200 70" width="100%"><circle cx="20" cy="20" r="8" fill="#38bdf8"/><rect x="34" y="12" width="16" height="16" fill="#f472b6"/><rect x="12" y="37" width="16" height="16" fill="#f472b6"/><circle cx="42" cy="45" r="8" fill="#38bdf8"/><rect x="120" y="12" width="16" height="16" fill="#f472b6"/><circle cx="150" cy="20" r="8" fill="#38bdf8"/><circle cx="128" cy="45" r="8" fill="#38bdf8"/><rect x="142" y="37" width="16" height="16" fill="#f472b6"/></svg>
+        <p style="font-size:13px">Proximity says “left / right”, similarity says “circles / squares” → the brain is confused.</p></div>
+    </div>
+  </div>
+
+  <!-- 3.5 -->
+  <div class="topic" id="s3-present" data-title="Present information simply">
+    <div class="topic-head"><span class="topic-num">3.5</span><h2>Presenting information simply and meaningfully</h2><span class="slide-ref">slide 36</span></div>
+    <div class="oneliner"><b>In one line:</b> Make information clear to see, easy to understand, usable, highlighted, lined up and consistent.</div>
+    <table class="cmp">
+      <tr><th>Guideline</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td><b>Legibility</b> (clearness)</td><td>Information is <b>noticeable and distinguishable</b> — you can physically see it</td><td>Dark text on light background, big enough font</td></tr>
+      <tr><td><b>Readability</b></td><td>Information is <b>identifiable, interpretable and attractive</b> — you can understand it</td><td>“Delivery: Tomorrow” instead of “ETA: 1d”</td></tr>
+      <tr><td><b>Usable form</b></td><td>Present information in a form you can use directly</td><td>“3:30 PM” instead of “15301100”</td></tr>
+      <tr><td><b>Contrasting features</b></td><td>Use contrast to attract attention to different elements</td><td>Bold red for an error message</td></tr>
+      <tr><td><b>Visual lines</b></td><td>Create lines the eye can follow</td><td>Fields aligned in a column</td></tr>
+      <tr><td><b>Consistency</b></td><td>Consistent in appearance and procedural usage</td><td>“OK” always bottom-right in every window</td></tr>
+    </table>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>Legibility = can I SEE it?</b> &nbsp; <b>Readability = can I UNDERSTAND it?</b> (This difference is a favourite exam question.)</p></div>
+  </div>
+
+  <!-- 3.6 -->
+  <div class="topic" id="s3-typo" data-title="Typography">
+    <div class="topic-head"><span class="topic-num">3.6</span><h2>Typography — purpose, size, style, defaults, consistency</h2><span class="slide-ref">slides 37–41</span></div>
+    <div class="oneliner"><b>In one line:</b> Fonts show <b>organisation, importance, reading order and mood</b> — use max 3 sizes, standard fonts, and a consistent hierarchy.</div>
+    <h3>What a font’s characteristics can do</h3>
+    <div class="grid2">
+      <div class="mini"><b>1. Communicate organisation</b> of screen elements</div>
+      <div class="mini"><b>2. Identify the most important</b> elements</div>
+      <div class="mini"><b>3. Establish a reading order</b></div>
+      <div class="mini"><b>4. Create a particular mood</b></div>
+    </div>
+    <h3>Font size rules</h3>
+    <ul>
+      <li>Use <b>no more than three sizes</b> (consider the “x” height).</li>
+      <li><b>Graphical systems:</b> <b>12 pt</b> for menus, <b>10 pt</b> for windows.</li>
+      <li><b>Web pages:</b> <b>12–14 pt</b> body text, <b>18–36 pt</b> titles and headings.</li>
+      <li><b>Line spacing:</b> 1 to 1½ times the font size.</li>
+      <li><b>Never</b> change established type sizes to squeeze in more text.</li>
+    </ul>
+    <div class="example"><span class="lbl">Playground — pick a use</span>
+      <div class="seg" id="fontSeg"><button class="on" data-f="menu">GUI menu</button><button data-f="win">GUI window</button><button data-f="body">Web body</button><button data-f="head">Web heading</button></div>
+      <div class="screen" id="fontDemo" style="margin-top:10px;min-height:90px"></div>
+    </div>
+    <h3>Font styles</h3>
+    <ul>
+      <li><i>Italics</i> → to call attention.</li>
+      <li><b>Bold</b> → to call attention <b>or create a hierarchy</b>.</li>
+      <li><u>Underline</u> → on Web pages, <b>only</b> to indicate a navigation link.</li>
+    </ul>
+    <h3>Defaults</h3>
+    <ul><li>Graphical OS: use the <b>standard system fonts</b>.</li><li>Web: use the <b>default browser fonts</b>.</li><li>Remember the <b>user may change the fonts</b>.</li></ul>
+    <h3>Consistency</h3>
+    <ul><li>Establish a consistent hierarchy and convention for typefaces, styles and sizes.</li><li>Decide on a font for each level of importance.</li><li>Communicate hierarchy with changes in <b>Size, Weight, Colour</b>.</li></ul>
+    <div class="grid2">
+      <div class="mini good"><span class="tag g">3 sizes ✔</span><div style="color:var(--text)"><div style="font-size:22px;font-weight:800">Course Results</div><div style="font-size:16px;font-weight:700">Semester 1</div><div style="font-size:13px">HCI — A, Algorithms — B+</div></div></div>
+      <div class="mini bad"><span class="tag r">Too many sizes & styles ✘</span><div><div style="font-size:24px;font-style:italic">Course</div><div style="font-size:11px;text-decoration:underline">Results</div><div style="font-size:19px;font-weight:300">Semester 1</div><div style="font-size:15px;font-style:italic;font-weight:800">HCI — A,</div><div style="font-size:9px">Algorithms — B+</div></div></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>“Menus 12, Windows 10”</b> → <b>menus are bigger</b> because you have to click them. <b>Web: body 12–14, heads 18–36.</b> Max <b>3</b> sizes. Hierarchy = <b>S-W-C</b> (Size, Weight, Colour).<br>Purposes = “<b>O</b>nly <b>I</b>mportant <b>R</b>eaders <b>M</b>atter”: Organisation, Importance, Reading order, Mood.</p></div>
+  </div>
+
+  <!-- 3.7 -->
+  <div class="topic" id="s3-titles" data-title="Window & web page titles">
+    <div class="topic-head"><span class="topic-num">3.7</span><h2>Application screen elements — Window title &amp; Web page title</h2><span class="slide-ref">slides 42–43</span></div>
+    <div class="oneliner"><b>In one line:</b> Every window and web page needs a clear title at the top.</div>
+    <div class="grid2">
+      <div class="mini"><b>🪟 Window title</b><ul><li>All windows must have a title <b>at the top</b>.</li><li><b>Exception:</b> windows containing <b>messages</b>.</li><li>Clearly and concisely describe the window’s purpose.</li><li>Spell out fully, in upper- or mixed-case.</li></ul></div>
+      <div class="mini"><b>🌐 Web page title</b><ul><li>Titles in the <b>browser bar</b> and on the <b>content page</b>.</li><li>Both titles must be <b>consistent</b>.</li><li>Titles must be: <b>Descriptive</b>, <b>Unique</b> (meaningfully different from other pages), <b>Concise</b>.</li></ul></div>
+    </div>
+    <div class="example"><span class="lbl">Example</span>
+      <div class="screen"><div style="background:#dfe3ec;border-radius:6px 6px 0 0;padding:4px 10px;font-size:12px">🗂️ <b>Course Registration — Spring 2026</b> | University Portal</div><div style="border:1px solid #dfe3ec;padding:10px"><div style="font-size:18px;font-weight:700">Course Registration — Spring 2026</div><div style="font-size:12px;color:#555">Browser tab title and page title match ✔ descriptive ✔ unique ✔ concise ✔</div></div></div>
+      <p class="muted" style="margin-top:6px">Bad: every page titled just “Home” or “Page 1”.</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Web title = <b>DUC</b> 🦆 — Descriptive, Unique, Concise.</p></div>
+  </div>
+
+  <!-- 3.8 -->
+  <div class="topic" id="s3-fields" data-title="Data fields">
+    <div class="topic-head"><span class="topic-num">3.8</span><h2>Data fields</h2><span class="slide-ref">slides 44–45</span></div>
+    <div class="oneliner"><b>In one line:</b> Fields you can <b>type in</b> get a box; fields you can only <b>read</b> sit on the normal background.</div>
+    <ul>
+      <li>For <b>entry / modifiable</b> fields, display data within a <b>line box</b> or a box with a <b>contrasting light-coloured background</b>.</li>
+      <li><b>Break long structured data</b> into logical pieces.</li>
+      <li>Give a <b>field length suitable</b> for the size of the entry.</li>
+      <li>For <b>inquiry / display / read-only</b> screens: display data on the <b>normal screen background</b> (no box).</li>
+    </ul>
+    <div class="grid2">
+      <div class="screen"><b>Entry ✔</b><div style="margin-top:6px">Phone: <span style="border:1px solid #333;background:#fff;padding:1px 6px;font-family:var(--font-mono)">050</span> <span style="border:1px solid #333;background:#fff;padding:1px 6px;font-family:var(--font-mono)">123</span> <span style="border:1px solid #333;background:#fff;padding:1px 6px;font-family:var(--font-mono)">4567</span></div><div style="font-size:11px;color:#555;margin-top:4px">Long number broken into logical pieces, box length fits the data.</div></div>
+      <div class="screen"><b>Display ✔</b><div style="margin-top:6px">Phone: <b>050 123 4567</b></div><div style="font-size:11px;color:#555;margin-top:4px">Read-only → no box, normal background.</div></div>
+    </div>
+    <div class="example"><span class="lbl">Slide 45 — use one heading instead of repeating a word</span>
+      <div class="grid2"><div class="screen"><span class="tag r">Repetitive</span><br>First amount: ▭<br>Last amount: ▭<br>This amount: ▭<br>That amount: ▭</div>
+      <div class="screen"><span class="tag g">Better</span><br><b>AMOUNT &gt;&gt;</b> First: ▭<br><span style="padding-left:78px">Last: ▭</span><br><span style="padding-left:78px">This: ▭</span><br><span style="padding-left:78px">That: ▭</span></div></div>
+    </div>
+  </div>
+
+  <!-- 3.9 -->
+  <div class="topic" id="s3-lists" data-title="Lists">
+    <div class="topic-head"><span class="topic-num">3.9</span><h2>Lists</h2><span class="slide-ref">slides 46–47</span></div>
+    <div class="oneliner"><b>In one line:</b> Put related items in a <b>vertical</b> list with a heading, in a <b>meaningful order</b>.</div>
+    <ul>
+      <li>Present a collection of related items in a list.</li>
+      <li>Use sentence or headline capitalisation <b>consistently</b>.</li>
+      <li>Provide a <b>heading</b> for each list.</li>
+      <li>Order lists meaningfully:
+        <ul><li>No equal value / no clear order → <b>alphabetical</b> or bullets.</li><li>Important or frequently chosen → put at the <b>top</b>.</li><li>Items with a particular order → <b>number them, starting at 1</b>.</li></ul></li>
+      <li>Format for easy identification and scanning.</li>
+    </ul>
+    <div class="grid2">
+      <div class="mini good"><span class="tag g">Array like this ✔</span><div style="font-family:var(--font-mono);margin-top:6px;line-height:1.5">Algiers<br>Cairo<br>Beirut<br>Amman<br>Damascus<br>Abu Dhabi<br>Kuwait<br>Doha</div></div>
+      <div class="mini bad"><span class="tag r">Not like this ✘</span><div style="font-family:var(--font-mono);margin-top:6px;font-size:13px">Algiers&nbsp; Cairo&nbsp; Beirut&nbsp; Amman<br>Damascus&nbsp; Abu Dhabi&nbsp; Kuwait&nbsp; Doha</div><p class="muted" style="font-size:12px;margin-top:6px">Horizontal rows are hard to scan.</p></div>
+    </div>
+    <div class="example"><span class="lbl">Which order? — click a situation</span>
+      <div class="seg" id="orderSeg"><button class="on" data-o="0">Countries in a sign-up form</button><button data-o="1">Payment methods</button><button data-o="2">Steps to reset a password</button></div>
+      <div class="screen" id="orderDemo" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- 3.10 -->
+  <div class="topic" id="s3-keying" data-title="Keying, tabbing & auto skip">
+    <div class="topic-head"><span class="topic-num">3.10</span><h2>Keying procedures — keystrokes, tabbing, manual tab vs auto skip</h2><span class="slide-ref">slides 48–51</span></div>
+    <div class="oneliner"><b>In one line:</b> Start the cursor in the first field, let users <b>Tab</b> manually; use <b>auto skip</b> only for experts, easy screens and always-full fields.</div>
+    <ul>
+      <li><b>Keystrokes:</b> don’t focus only on minimising keystrokes — also consider the <b>keying rhythm</b> and the <b>goals of the system</b>.</li>
+      <li><b>Tabbing:</b> initially position the cursor in the <b>first field</b> where information can be entered. (Type your name, press Tab → next box.)</li>
+      <li>Define fields to permit <b>manual tabbing</b>.</li>
+      <li>Consider <b>auto skip</b> for: <b>expert users</b>, <b>easily learned screens</b>, screens with fields <b>always completely filled</b>.</li>
+    </ul>
+    <div class="example"><span class="lbl">Try both — type a date</span>
+      <div class="grid2">
+        <div class="screen tabform"><b>Manual tabbing</b><div style="margin-top:8px">Date: <input id="mt1" maxlength="2" size="2" placeholder="DD"> / <input id="mt2" maxlength="2" size="2" placeholder="MM"> / <input id="mt3" maxlength="4" size="4" placeholder="YYYY"></div><div style="font-size:12px;color:#555;margin-top:6px">You must press <b>Tab</b> yourself to move.</div></div>
+        <div class="screen tabform"><b>Auto skip</b><div style="margin-top:8px">Date: <input id="as1" maxlength="2" size="2" placeholder="DD" data-auto> / <input id="as2" maxlength="2" size="2" placeholder="MM" data-auto> / <input id="as3" maxlength="4" size="4" placeholder="YYYY" data-auto></div><div style="font-size:12px;color:#555;margin-top:6px">When a box is <b>completely filled</b>, the cursor jumps to the next one.</div></div>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div class="demo-box" style="text-align:center"><svg viewBox="0 0 200 120" width="100%" style="max-width:220px">
+          <rect x="40" y="8" width="120" height="28" rx="5" fill="#dbeafe" stroke="#1e3a8a"/><text x="100" y="27" text-anchor="middle" font-size="11">Key data into text box</text>
+          <line x1="100" y1="36" x2="100" y2="72" stroke="#1e3a8a" stroke-width="1.5" marker-end="url(#arrB)"/>
+          <rect x="40" y="76" width="120" height="28" rx="5" fill="#dbeafe" stroke="#1e3a8a"/><text x="100" y="95" text-anchor="middle" font-size="11">Press Tab key</text>
+          <defs><marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1e3a8a"/></marker></defs></svg>
+          <div style="font-size:12px">Fig 3.63 Manual tabbing</div></div>
+        <div class="demo-box" style="text-align:center"><svg viewBox="0 0 300 175" width="100%">
+          <defs><marker id="arrC" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1e3a8a"/></marker></defs>
+          <rect x="90" y="4" width="120" height="24" rx="5" fill="#dbeafe" stroke="#1e3a8a"/><text x="150" y="20" text-anchor="middle" font-size="10">Key data into text box</text>
+          <line x1="150" y1="28" x2="150" y2="44" stroke="#1e3a8a" marker-end="url(#arrC)"/>
+          <polygon points="150,48 215,72 150,96 85,72" fill="#fef3c7" stroke="#92400e"/><text x="150" y="70" text-anchor="middle" font-size="9.5">Is box completely</text><text x="150" y="81" text-anchor="middle" font-size="9.5">filled?</text>
+          <line x1="215" y1="72" x2="235" y2="72" stroke="#1e3a8a"/><line x1="235" y1="72" x2="235" y2="118" stroke="#1e3a8a" marker-end="url(#arrC)"/><text x="225" y="66" font-size="9" fill="#166534">Yes</text>
+          <rect x="185" y="122" width="110" height="34" rx="5" fill="#dcfce7" stroke="#166534"/><text x="240" y="136" text-anchor="middle" font-size="9.5">Cursor is now in</text><text x="240" y="148" text-anchor="middle" font-size="9.5">next text box</text>
+          <line x1="85" y1="72" x2="60" y2="72" stroke="#1e3a8a"/><line x1="60" y1="72" x2="60" y2="118" stroke="#1e3a8a" marker-end="url(#arrC)"/><text x="64" y="66" font-size="9" fill="#991b1b">No</text>
+          <rect x="5" y="122" width="110" height="22" rx="5" fill="#fee2e2" stroke="#991b1b"/><text x="60" y="137" text-anchor="middle" font-size="9.5">Press Tab key</text>
+          <text x="60" y="162" text-anchor="middle" font-size="8.5" fill="#555">(otherwise cursor stays</text><text x="60" y="172" text-anchor="middle" font-size="8.5" fill="#555">in the box being keyed)</text></svg>
+          <div style="font-size:12px">Fig 3.62 Auto skip</div></div>
+      </div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">E · E · F</div><p>Auto skip only when “<b>E</b>very <b>E</b>ntry is <b>F</b>ull” → <b>E</b>xpert users, <b>E</b>asily learned screens, fields always <b>F</b>ully filled.</p></div>
+    <div class="exam"><span class="lbl">Exam tip</span> The default is <b>manual tabbing</b>. Auto skip is the exception. Why? A beginner who doesn’t notice the jump may keep typing into the wrong field.</div>
+  </div>
+
+  <!-- 3.11 -->
+  <div class="topic" id="s3-output" data-title="Data output: reports & tables">
+    <div class="topic-head"><span class="topic-num">3.11</span><h2>Data output — Reports vs Tables</h2><span class="slide-ref">slide 52</span></div>
+    <div class="oneliner"><b>In one line:</b> A <b>report</b> is a list of records designed to be printed; a <b>table</b> is a printout of records from a <b>database query</b>.</div>
+    <div class="grid2">
+      <div class="mini"><b>📄 Report</b>A list of records designed to be printed out. <span class="muted">e.g. monthly sales report.</span></div>
+      <div class="mini"><b>📊 Table</b>Printouts of a listing of records derived from database queries. <span class="muted">e.g. “all students with GPA &gt; 3.5”.</span></div>
+    </div>
+  </div>
+
+  <!-- 3.12 -->
+  <div class="topic" id="s3-screens" data-title="Entry vs Display screens">
+    <div class="topic-head"><span class="topic-num">3.12</span><h2>Organisation &amp; structure — Entry/Modification screens vs Display/Read-only screens</h2><span class="slide-ref">slides 53–56</span></div>
+    <div class="oneliner"><b>In one line:</b> Both screens share the same organisation rules; the differences are <b>boxes</b>, <b>instructions</b>, and <b>top-to-bottom completion vs scanning</b>.</div>
+    <div class="seg" id="screenSeg"><button class="on" data-sc="entry">✏️ Entry screen</button><button data-sc="display">👁️ Display screen</button></div>
+    <div class="screen" id="screenDemo" style="margin-top:10px"></div>
+    <table class="cmp" style="margin-top:12px">
+      <tr><th>Item</th><th>✏️ Entry &amp; modification (conversational)</th><th>👁️ Display / read-only</th></tr>
+      <tr><td>Organisation</td><td>Logical and clear</td><td>Logical and clear; <b>limit to what is necessary</b></td></tr>
+      <tr><td>Most frequently used info</td><td colspan="2" style="text-align:center">On the <b>earliest screens</b>, at the <b>top</b> of screens (entry: <b>required</b> info too)</td></tr>
+      <tr><td>Captions</td><td colspan="2" style="text-align:center">Meaningful, consistently positioned relative to data fields, left- or right-aligned</td></tr>
+      <tr><td>Text boxes</td><td><b>Designate by boxes</b></td><td><b>No</b> surrounding border or box</td></tr>
+      <tr><td>Spacing &amp; grouping</td><td colspan="2" style="text-align:center">Create logical groupings</td></tr>
+      <tr><td>Headings</td><td>Upper case or headline-style mixed case</td><td>Upper case or headline mixed case; <b>set off from related controls</b></td></tr>
+      <tr><td>Arrangement</td><td>Align into columns; organise for <b>top-to-bottom completion</b></td><td>Align into columns; organise for <b>top-to-bottom scanning</b></td></tr>
+      <tr><td>Extras</td><td><b>Instructions before</b> the controls they apply to; <b>completion aids to the right</b></td><td><b>Visually emphasise the data</b>; give data a meaningful structure; data justification</td></tr>
+    </table>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>Entry = boxes + help</b> (instructions <b>before</b> ⬅, aids to the <b>right</b> ➡). <b>Display = no boxes, the data is the star ⭐.</b> Entry = <i>completion</i>, Display = <i>scanning</i>.</p></div>
+  </div>
+</main>
+</div>
+</section>
+
+<!-- ================= STEP 3 WEB & TECH ================= -->
+<section class="section" id="web">
+<div class="layout">
+<aside class="side" data-side></aside>
+<main class="content">
+  <div class="page-title">Step 3 · The Web &amp; Technology</div>
+  <div class="page-sub">Slides 57–87. Big idea: <b>on the Web, content is king, people scan instead of read</b>, and your design is limited by the hardware, browsers and connection speed people actually have.</div>
+
+  <!-- W1 -->
+  <div class="topic" id="w-char" data-title="Web user characteristics">
+    <div class="topic-head"><span class="topic-num">W.1</span><h2>Web user interaction characteristics &amp; interaction styles</h2><span class="slide-ref">slides 57–58</span></div>
+    <div class="oneliner"><b>In one line:</b> Web users want <b>content</b>, have a <b>goal</b>, <b>scan</b> instead of reading line by line, and change purpose often.</div>
+    <div class="grid2">
+      <div class="mini"><b>Characteristics</b><ul><li>The most important Web commodity is <b>content</b></li><li>Behaviour is often <b>goal-driven</b></li><li>Reading is <b>no longer linear</b></li><li>People <b>scan and select</b></li><li><b>Frequent switching</b> of purpose</li></ul></div>
+      <div class="mini"><b>Interaction styles</b><ul><li><b>Browsing</b> — looking around without a specific target</li><li><b>Information finding</b> — looking for one specific thing</li><li><b>Information gathering</b> — collecting many pieces (research)</li></ul></div>
+    </div>
+    <div class="example"><span class="lbl">Example</span><p>Scrolling Instagram’s explore page = <b>browsing</b>. Checking the opening hours of Dubai Mall = <b>information finding</b>. Comparing 5 laptops for a purchase = <b>information gathering</b>.</p></div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Characteristics = “<b>C</b>ontent, <b>G</b>oal, <b>N</b>on-linear, <b>S</b>can, <b>S</b>witch” → “<b>C</b>ats <b>G</b>et <b>N</b>aps, <b>S</b>leep, <b>S</b>nore”. Styles = <b>B · F · G</b>: Browse, Find, Gather.</p></div>
+  </div>
+
+  <!-- W2 -->
+  <div class="topic" id="w-exp" data-title="The Web experience">
+    <div class="topic-head"><span class="topic-num">W.2</span><h2>The Web experience</h2><span class="slide-ref">slide 59</span></div>
+    <div class="oneliner"><b>In one line:</b> Four parts of a good Web experience: <b>Expectations, Tasks, Visual appearance, Information content</b>.</div>
+    <div class="grid2">
+      <div class="mini"><b>🎯 Expectations</b>Meet user expectations concerning <b>content, organisation and navigation</b>.</div>
+      <div class="mini"><b>✅ Tasks</b>Reflect user capabilities &amp; limitations · <b>standardise task sequences</b> · provide ease of use.</div>
+      <div class="mini"><b>🎨 Visual appearance</b>Attractive and <b>consistent</b>.</div>
+      <div class="mini"><b>📰 Information content</b>Meets all user needs · most important info <b>visible without scrolling</b> · <b>updated frequently</b>.</div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">E · T · V · I</div><p>“<b>E</b>very <b>T</b>ourist <b>V</b>isits <b>I</b>taly” — Expectations, Tasks, Visual appearance, Information content.</p></div>
+  </div>
+
+  <!-- W3 -->
+  <div class="topic" id="w-head" data-title="Web page headings">
+    <div class="topic-head"><span class="topic-num">W.3</span><h2>Web page headings (and other Web guidelines)</h2><span class="slide-ref">slides 60–61</span></div>
+    <div class="oneliner"><b>In one line:</b> Headings classify information — use a clear hierarchy, few sizes, and <b>never skip levels</b>.</div>
+    <ul>
+      <li><b>Control headings:</b> for groups of controls, follow the control-heading guidelines.</li>
+      <li><b>Content headings — usage:</b> classify &amp; organise information · clearly describe the content · use as introductory links.</li>
+      <li><b>Presentation:</b> establish a hierarchy of font styles, sizes and weights · as few sizes/styles as necessary · <b>do not randomly mix or skip heading levels</b>.</li>
+    </ul>
+    <div class="grid2">
+      <div class="mini good"><span class="tag g">✔ Ordered levels</span><div style="font-family:var(--font-mono);font-size:13px;margin-top:4px">H1 Admissions<br>&nbsp;&nbsp;H2 Undergraduate<br>&nbsp;&nbsp;&nbsp;&nbsp;H3 Requirements<br>&nbsp;&nbsp;H2 Graduate</div></div>
+      <div class="mini bad"><span class="tag r">✘ Skipped / mixed</span><div style="font-family:var(--font-mono);font-size:13px;margin-top:4px">H1 Admissions<br>&nbsp;&nbsp;&nbsp;&nbsp;H4 Undergraduate<br>&nbsp;&nbsp;H2 Requirements<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H5 Graduate</div></div>
+    </div>
+    <h3>Also on slide 61</h3>
+    <ul><li>Minimise downloading time</li><li>Provide Web applications as necessary</li><li>Design for accessibility</li><li>Provide assistance to users</li></ul>
+  </div>
+
+  <!-- W4 -->
+  <div class="topic" id="w-home" data-title="The Home page">
+    <div class="topic-head"><span class="topic-num">W.4</span><h2>The Home page</h2><span class="slide-ref">slides 62–63</span></div>
+    <div class="oneliner"><b>In one line:</b> One screen, all major options, little text, critical info at the top — reachable from every page.</div>
+    <div class="grid2" style="align-items:start">
+      <div>
+        <ul>
+          <li><b>Content:</b> show all major options · limit text</li>
+          <li><b>Size:</b> limit to <b>one screen</b></li>
+          <li><b>Organisation &amp; layout:</b> critical info at the <b>top</b> · rest by importance · reduce graphic complexity and text density <b>toward the bottom</b></li>
+          <li><b>Access:</b> reach the home page from <b>any other page</b></li>
+        </ul>
+        <h3>7 elements to include — click to add them to the page →</h3>
+        <div class="sort-pool" id="homeChips"></div>
+        <p id="homeMsg" class="muted" style="font-size:13px"></p>
+      </div>
+      <div class="demo-box" id="homeMock" style="min-height:280px;font-size:12px"></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>The 7 elements, from top to bottom of a page: <b>Logo → Site name → Description → Key content summary → Site map/links → News/promotions → Changes announcement</b>. Picture the page and read it top to bottom.</p></div>
+  </div>
+
+  <!-- W5 -->
+  <div class="topic" id="w-search" data-title="Browsing vs Searching">
+    <div class="topic-head"><span class="topic-num">W.5</span><h2>Browsing vs Searching</h2><span class="slide-ref">slides 64–66</span></div>
+    <div class="oneliner"><b>In one line:</b> Searching is better for <b>specific, unique</b> items; browsing for non-specific ones — and people <b>prefer to browse</b>.</div>
+    <table class="cmp">
+      <tr><th>🧭 Browsing</th><th>🔎 Searching</th></tr>
+      <tr><td>Non-specific Web surfing<br>Uses powers of <b>recognition</b></td><td>A more structured “find” mechanism<br>Often uses <b>keywords</b> in search fields</td></tr>
+      <tr><td>Works better for items <b>not specific and unique</b></td><td>Helps locate <b>specific and unique</b> items</td></tr>
+    </table>
+    <p><b>Research conclusion:</b> people seem to <b>prefer to browse</b>.</p>
+    <div class="grid2">
+      <div class="mini"><b>⚠️ Search problems</b><ul><li>Not understanding the user</li><li>Difficulties formulating the search</li><li>Many users make many mistakes</li><li>Page titles with low search-engine visibility</li><li>Difficulties presenting meaningful results</li></ul></div>
+      <div class="mini"><b>💡 Fixes</b><br><b>Remember the search:</b><ul><li>Save the search entries</li><li>Save the results automatically</li><li>Let the user save the results</li></ul><b>Destination pages:</b> describe how the page relates to the query — <b>page summary</b> + <b>highlight keywords</b>.</div>
+    </div>
+    <div class="example"><span class="lbl">Destination page example</span>
+      <div class="screen">Search: <i>“HCI exam date”</i><div style="margin-top:6px;border-left:3px solid #2563eb;padding-left:8px"><b style="color:#1d4ed8">Final Exam Schedule — Fall 2026</b><br><span style="font-size:12px">Summary: Dates for all final exams… <mark>HCI</mark> (CS 412) <mark>exam</mark>: Sunday 14 Dec, 9:00 AM, Hall B…</span></div><div style="font-size:11px;color:#555;margin-top:4px">Summary + highlighted keywords show <i>why</i> this page matches.</div></div></div>
+  </div>
+
+  <!-- W6 -->
+  <div class="topic" id="w-intranet" data-title="Intranet & Extranet">
+    <div class="topic-head"><span class="topic-num">W.6</span><h2>Intranet &amp; Extranet design guidelines</h2><span class="slide-ref">slides 67–68</span></div>
+    <div class="oneliner"><b>In one line:</b> Intranet (inside the company) = one home page with directory, search and news, a 4-area layout, and its own visual style.</div>
+    <div class="grid2" style="align-items:start">
+      <div>
+        <ul>
+          <li>Single home page with at least: <b>directory hierarchy</b>, <b>search facility</b>, <b>current news</b>.</li>
+          <li>Home page layout: <b>top horizontal bar, left column, middle area, right column</b>.</li>
+          <li>Visual style that is <b>different, distinguishing, unified</b>.</li>
+        </ul>
+      </div>
+      <div class="demo-box"><svg viewBox="0 0 300 180" width="100%">
+        <rect x="5" y="5" width="290" height="30" fill="#bfdbfe" stroke="#1e3a8a"/><text x="150" y="25" text-anchor="middle" font-size="11">Top horizontal bar (logo, search 🔎)</text>
+        <rect x="5" y="40" width="70" height="135" fill="#ddd6fe" stroke="#4c1d95"/><text x="40" y="100" text-anchor="middle" font-size="10">Left</text><text x="40" y="113" text-anchor="middle" font-size="10">column</text><text x="40" y="128" text-anchor="middle" font-size="8.5">(directory)</text>
+        <rect x="80" y="40" width="140" height="135" fill="#fff" stroke="#334155"/><text x="150" y="100" text-anchor="middle" font-size="11">Middle area</text><text x="150" y="115" text-anchor="middle" font-size="9">(current news)</text>
+        <rect x="225" y="40" width="70" height="135" fill="#fde68a" stroke="#92400e"/><text x="260" y="100" text-anchor="middle" font-size="10">Right</text><text x="260" y="113" text-anchor="middle" font-size="10">column</text></svg></div>
+    </div>
+    <h3>Extranet (slide 68 — site for partners/clients outside the company)</h3>
+    <ul>
+      <li>Orient the website toward <b>tasks</b>.</li>
+      <li>Include <b>many options and features</b>.</li>
+      <li>Develop a <b>strong navigational system</b>.</li>
+      <li>To distinguish the extranet from the Internet, use a <b>subtle difference</b> in <b>visual style</b> and <b>navigation</b>.</li>
+      <li>Provide <b>links to the public Internet site</b>.</li>
+    </ul>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Intranet home page must have “<b>D-S-N</b>” = <b>D</b>irectory, <b>S</b>earch, <b>N</b>ews (“<b>D</b>on’t <b>S</b>kip <b>N</b>ews”). Style = the <b>3 D/U words</b>: <b>D</b>ifferent, <b>D</b>istinguishing, <b>U</b>nified.</p></div>
+  </div>
+
+  <!-- W7 -->
+  <div class="topic" id="w-blog" data-title="Weblogs">
+    <div class="topic-head"><span class="topic-num">W.7</span><h2>Weblogs (blogs)</h2><span class="slide-ref">slide 69</span></div>
+    <div class="oneliner"><b>In one line:</b> 8 rules — 2 about the <b>author</b>, 3 about <b>reading &amp; links</b>, 3 about <b>posting</b>.</div>
+    <div class="grid3">
+      <div class="mini"><b>👩 Author</b><ul><li>Author biography</li><li>Author photo</li></ul></div>
+      <div class="mini"><b>👀 Reading</b><ul><li>Easy scanning</li><li>Meaningful links</li><li>Link to past important content</li></ul></div>
+      <div class="mini"><b>✍️ Posting</b><ul><li>Categorise postings</li><li>Publish regularly</li><li>Avoid mixing topics</li></ul></div>
+    </div>
+  </div>
+
+  <!-- W8 -->
+  <div class="topic" id="w-graph" data-title="Statistical graphics">
+    <div class="topic-head"><span class="topic-num">W.8</span><h2>Statistical graphics</h2><span class="slide-ref">slides 70–71</span></div>
+    <div class="oneliner"><b>In one line:</b> A graph must have an obvious purpose, a recognisable type, correct data for its audience — and <b>tell the truth</b>.</div>
+    <div class="grid2">
+      <div class="mini"><b>Qualities</b><ul><li>Objective and use are <b>obvious</b></li><li>Graph type is <b>recognisable</b> and helps understanding</li><li>Data formatted <b>correctly</b> and <b>for the audience</b></li><li><b>Avoid distortions</b> — tell the truth about the data</li></ul></div>
+      <div class="mini"><b>Graphs are used for</b><ul><li>Simple <b>comparisons</b> of data</li><li>Changes over <b>time</b></li><li><b>Statistical analysis</b></li><li>Illustration of <b>proportions</b></li></ul></div>
+    </div>
+    <div class="example"><span class="lbl">Distortion example — same data!</span>
+      <div class="grid2">
+        <div class="demo-box" style="text-align:center"><svg viewBox="0 0 200 130" width="100%"><line x1="25" y1="110" x2="190" y2="110" stroke="#333"/><line x1="25" y1="10" x2="25" y2="110" stroke="#333"/><text x="20" y="113" font-size="8" text-anchor="end">0</text><text x="20" y="18" font-size="8" text-anchor="end">100</text><rect x="50" y="20" width="40" height="90" fill="#2563eb"/><rect x="120" y="16" width="40" height="94" fill="#f97316"/><text x="70" y="124" font-size="9" text-anchor="middle">A: 90</text><text x="140" y="124" font-size="9" text-anchor="middle">B: 94</text></svg><span class="tag g">Truthful — axis from 0</span></div>
+        <div class="demo-box" style="text-align:center"><svg viewBox="0 0 200 130" width="100%"><line x1="25" y1="110" x2="190" y2="110" stroke="#333"/><line x1="25" y1="10" x2="25" y2="110" stroke="#333"/><text x="20" y="113" font-size="8" text-anchor="end">89</text><text x="20" y="18" font-size="8" text-anchor="end">95</text><rect x="50" y="94" width="40" height="16" fill="#2563eb"/><rect x="120" y="22" width="40" height="88" fill="#f97316"/><text x="70" y="124" font-size="9" text-anchor="middle">A: 90</text><text x="140" y="124" font-size="9" text-anchor="middle">B: 94</text></svg><span class="tag r">Distorted — axis starts at 89</span></div>
+      </div>
+      <p class="muted">The right chart makes B look 5× bigger than A. It does not tell the truth about the data.</p>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Uses = “<b>C</b>ompare, <b>T</b>ime, <b>S</b>tats, <b>P</b>roportions” → “<b>C</b>hocolate <b>T</b>astes <b>S</b>uper <b>P</b>erfect”.</p></div>
+  </div>
+
+  <!-- W9 -->
+  <div class="topic" id="w-tech" data-title="Graphical systems & platforms">
+    <div class="topic-head"><span class="topic-num">W.9</span><h2>Technological considerations — Graphical systems &amp; platforms</h2><span class="slide-ref">slides 72–74</span></div>
+    <div class="oneliner"><b>In one line:</b> Interface design is <b>constrained by the hardware</b> — the screen design must fit the system, the platform, the tools and the style guide.</div>
+    <div class="grid2" style="align-items:start">
+      <div>
+        <p>Screen design must be compatible with the <b>system’s capabilities</b>:</p>
+        <ul><li>System power</li><li>Screen size (e.g. 17, 21 inches)</li><li>Screen resolution</li><li>Display colours</li><li>Other display features</li></ul>
+        <p>…and with the:</p>
+        <ul><li><b>System platform</b> being used</li><li><b>Development &amp; implementation tools</b></li><li><b>Platform style guide</b></li></ul>
+        <p class="muted">A <b>platform</b> = an operating system, a computer architecture, or a combination of both.</p>
+      </div>
+      <div class="demo-box"><svg viewBox="0 0 260 210" width="100%">
+        <rect x="20" y="8" width="220" height="38" rx="6" fill="#bae6fd" stroke="#0c4a6e"/><text x="130" y="31" text-anchor="middle" font-size="12" font-weight="700">User Interface</text>
+        <rect x="20" y="56" width="220" height="38" rx="6" fill="#c7d2fe" stroke="#312e81"/><text x="130" y="79" text-anchor="middle" font-size="12" font-weight="700">Application software</text>
+        <rect x="20" y="104" width="220" height="44" rx="6" fill="#ddd6fe" stroke="#4c1d95"/><text x="130" y="122" text-anchor="middle" font-size="12" font-weight="700">Operating System</text><text x="130" y="139" text-anchor="middle" font-size="9.5">Windows, UNIX, Linux, Mac OS X</text>
+        <rect x="20" y="158" width="220" height="38" rx="6" fill="#e5e7eb" stroke="#374151"/><text x="130" y="181" text-anchor="middle" font-size="12" font-weight="700">Hardware</text>
+        <path d="M248,110 L255,110 L255,190 L248,190" fill="none" stroke="#b91c1c" stroke-width="2"/><text x="252" y="205" text-anchor="middle" font-size="9" fill="#b91c1c">platform</text></svg>
+        <div class="caption" style="color:#555">Slide 74 — layers between the end user and the computer</div></div>
+    </div>
+  </div>
+
+  <!-- W10 -->
+  <div class="topic" id="w-browsers" data-title="Web systems & browsers">
+    <div class="topic-head"><span class="topic-num">W.10</span><h2>Web systems &amp; browsers</h2><span class="slide-ref">slides 75–77</span></div>
+    <div class="oneliner"><b>In one line:</b> Design for the configuration <b>most users</b> have — and never assume everyone has the same browser.</div>
+    <ul>
+      <li>Understand the current level of Web technology; design for the system configuration used by <b>most users</b>.</li>
+    </ul>
+    <table class="cmp">
+      <tr><th>Browser issue</th><th>Guideline</th></tr>
+      <tr><td>Compatibility</td><td>Design for the <b>most common browsers</b>; don’t assume all users have the same one</td></tr>
+      <tr><td>Operating systems</td><td>Design for <b>popular</b> operating systems</td></tr>
+      <tr><td>Connection speed</td><td>Ranges from <b>56 Kbps to 1 Gbps</b></td></tr>
+      <tr><td>Monitor size &amp; resolution</td><td>Stay within an <b>image-safe area</b> for all browsers; design for commonly used resolutions</td></tr>
+      <tr><td>Fonts</td><td>Fonts that display on a variety of browsers</td></tr>
+      <tr><td>Colours</td><td>Colours that work across browsers/platforms — the <b>Web-safe palette of 216 colours</b></td></tr>
+      <tr><td>Versions</td><td>Multiple versions for multiple browsers (universal access) · <b>always provide a text-only version</b> (good for small displays &amp; low bandwidth) · use <b>“browser sniffers”</b> on the server to detect browser type &amp; version</td></tr>
+    </table>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Numbers to remember: <b>216</b> web-safe colours · <b>56 Kbps → 1 Gbps</b> connection range. A “<b>sniffer</b>” 🐶 <i>smells</i> which browser you have.</p></div>
+  </div>
+
+  <!-- W11 -->
+  <div class="topic" id="w-download" data-title="Downloading">
+    <div class="topic-head"><span class="topic-num">W.11</span><h2>Other Web considerations — Downloading</h2><span class="slide-ref">slides 78–79</span></div>
+    <div class="oneliner"><b>In one line:</b> A page should download in <b>no more than 8–10 seconds</b> (at 28.8 Kbps), and before a file download tell the user everything they need to decide.</div>
+    <div class="grid2">
+      <div class="mini"><b>🐢 Techniques that slow downloads (minimise them)</b><ul><li>Long pages</li><li>Large headings</li><li>Numerous or large graphics and images (GIF is smaller than JPEG — per the slide)</li><li>Animation</li><li>Excessive amount of colour</li><li>Excess use of frames</li></ul></div>
+      <div class="mini"><b>📦 Before a download, tell the user</b><ul><li>Program or document description</li><li>Type of download</li><li>Size of download</li><li>Download version</li><li>Estimated loading time</li><li>Special operating requirements</li></ul></div>
+    </div>
+    <div class="example"><span class="lbl">Calculator — will my page pass the 8–10 second rule at 28.8 Kbps?</span>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">Page size: <input type="range" id="dlSize" min="5" max="150" value="30" style="flex:1;min-width:160px"> <b id="dlKB">30 KB</b></div>
+      <p id="dlOut" style="margin-top:8px;font-size:16px"></p>
+      <p class="muted" style="font-size:12px">Time = size in KB × 8 ÷ 28.8 Kbps. So the 8–10 s limit means a page of roughly 29–36 KB on that connection.</p>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p><b>“8 to 10 at 28.8”</b>. Slow-downers: “<b>L</b>ong <b>L</b>azy <b>G</b>iraffes <b>A</b>te <b>C</b>olourful <b>F</b>ruit” — Long pages, Large headings, Graphics, Animation, Colour, Frames.<br>Download info: “<b>D-T-S-V-E-S</b>” — Description, Type, Size, Version, Estimated time, Special requirements.</p></div>
+  </div>
+
+  <!-- W12 -->
+  <div class="topic" id="w-currency" data-title="Currency, printing, maintainability">
+    <div class="topic-head"><span class="topic-num">W.12</span><h2>Currency, page printing, maintainability</h2><span class="slide-ref">slide 80</span></div>
+    <div class="oneliner"><b>In one line:</b> Keep the site <b>up to date</b>, let people <b>print</b> what they need, and make it <b>easy to maintain</b> so it stays current.</div>
+    <div class="grid3">
+      <div class="mini"><b>🕒 Currency (accuracy)</b>Keep website information updated.</div>
+      <div class="mini"><b>🖨️ Page printing</b>Provide a way to print: groups of related pages · individual pages · sections of pages.</div>
+      <div class="mini"><b>🔧 Maintainability</b>Easy to maintain, to sustain its currency.</div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>“Currency” here does <b>not</b> mean money 💵 — it means <b>current</b> (up to date).</p></div>
+  </div>
+
+  <!-- W13 -->
+  <div class="topic" id="w-eye" data-title="Eye movement examples">
+    <div class="topic-head"><span class="topic-num">W.13</span><h2>Examples of screens — eye movement</h2><span class="slide-ref">slides 81–86</span></div>
+    <div class="oneliner"><b>In one line:</b> Poor grouping and alignment make the eye <b>zig-zag</b> across the screen; good design gives a short, smooth path.</div>
+    <div class="grid2">
+      <div><div class="figure"><img src="img/slide81.jpg" alt="Slide 81: Screen 1.1 very poorly designed, red eye-movement path"></div><div class="caption">Screen 1.1 — very poorly designed: the red line shows the eye jumping all over.</div></div>
+      <div><div class="figure"><img src="img/slide82.jpg" alt="Slide 82: Screen 1.2 very poorly grouped"></div><div class="caption">Screen 1.2 — very poorly grouped.</div></div>
+    </div>
+    <div class="figure" style="max-width:520px;margin:12px auto"><img src="img/slide83.jpg" alt="Slide 83: Screen 2.1 poor alignment vs improved"></div><div class="caption">Screen 2.1 — top: poor alignment; bottom: eye movement improved by aligning and grouping.</div>
+    <h3>How to reduce eye movement</h3>
+    <ul><li>Don’t put distracting or eye-catching objects in areas that pull the eye away: <b>top right</b> and <b>bottom left</b>.</li><li>Eye-catching items might cause users to <b>miss important content</b>.</li></ul>
+    <div class="example"><span class="lbl">Hover / tap the zones</span>
+      <div class="demo-box"><svg viewBox="0 0 400 220" width="100%" id="eyeSvg" style="max-width:520px;display:block;margin:auto">
+        <rect x="2" y="2" width="396" height="216" fill="#fff" stroke="#333"/>
+        <rect x="2" y="2" width="396" height="24" fill="#e2e8f0"/><text x="12" y="18" font-size="11">Site name / navigation</text>
+        <rect class="hot" x="280" y="30" width="114" height="60" fill="#fecaca" stroke="#dc2626" stroke-dasharray="4"/><text x="337" y="58" text-anchor="middle" font-size="11" fill="#991b1b">TOP RIGHT</text><text x="337" y="73" text-anchor="middle" font-size="9" fill="#991b1b">no flashy ads here</text>
+        <rect class="hot" x="6" y="150" width="114" height="62" fill="#fecaca" stroke="#dc2626" stroke-dasharray="4"/><text x="63" y="178" text-anchor="middle" font-size="11" fill="#991b1b">BOTTOM LEFT</text><text x="63" y="193" text-anchor="middle" font-size="9" fill="#991b1b">no flashy ads here</text>
+        <rect x="20" y="40" width="240" height="100" fill="#dcfce7" stroke="#16a34a"/>
+<path d="M30,50 L250,50 L30,80 L250,80 L30,110 L250,110" fill="none" stroke="#2563eb" stroke-width="2" opacity=".35"/><text x="140" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">Important content</text><text x="140" y="102" text-anchor="middle" font-size="10" fill="#166534">(most space goes here)</text>
+      </svg></div>
+      <p class="muted" id="eyeMsg" style="font-size:13px">The blue path is the smooth reading path. Something blinking in a red zone would pull the eye off that path.</p>
+    </div>
+    <div class="grid2">
+      <div><div class="figure"><img src="img/slide85.jpg" alt="Slide 85: poor home page"></div><div class="caption"><span class="tag r">Poor</span> crowded columns, information spread out.</div></div>
+      <div><div class="figure"><img src="img/slide86.jpg" alt="Slide 86: better home page"></div><div class="caption"><span class="tag g">Better</span> clear headings (“The Latest”, “Quick Links”, “For”, “About”), grouped and aligned.</div></div>
+    </div>
+  </div>
+
+  <!-- W14 -->
+  <div class="topic" id="w-summary" data-title="Summary (slide 87)">
+    <div class="topic-head"><span class="topic-num">W.14</span><h2>Summary of the whole deck</h2><span class="slide-ref">slide 87</span></div>
+    <div class="oneliner"><b>In one line:</b> Four golden rules of screen design.</div>
+    <div class="grid2">
+      <div class="mini"><b>1. Minimise eye movement</b> across the page</div>
+      <div class="mini"><b>2. Create a visual hierarchy</b></div>
+      <div class="mini"><b>3. Devote most space to content</b></div>
+      <div class="mini"><b>4. Put things where users expect them</b></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><div class="big">E · H · C · E</div><p>“<b>E</b>yes, <b>H</b>ierarchy, <b>C</b>ontent, <b>E</b>xpectations” — “<b>E</b>very <b>H</b>appy <b>C</b>at <b>E</b>ats”.</p></div>
+  </div>
+</main>
+</div>
+</section>
+
+<!-- ================= TRICKS ================= -->
+<section class="section" id="tricks">
+  <div class="content" style="margin:0 auto">
+    <div class="page-title">🧠 Memory Tricks — all lists in one place</div>
+    <div class="page-sub">Test yourself: turn on <b>Self-test mode</b>, read the code, say the list out loud, then click the card to check.</div>
+    <div class="btn-row"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="trickTest"> Self-test mode (hide the answers)</label></div>
+    <div id="trickGrid" class="grid2" style="margin-top:12px"></div>
+    <div class="topic" style="margin-top:22px">
+      <h2>🔢 Numbers you must know</h2>
+      <table class="cmp">
+        <tr><th>Fact</th><th>Number</th></tr>
+        <tr><td>Short-term memory duration</td><td><b>10–30 seconds</b></td></tr>
+        <tr><td>Short-term memory capacity</td><td><b>3–4 items</b></td></tr>
+        <tr><td>Active vocabulary (recall)</td><td><b>2,000–3,000 words</b></td></tr>
+        <tr><td>Passive vocabulary (recognise)</td><td><b>10,000 words</b></td></tr>
+        <tr><td>Age groups</td><td>Younger adult <b>18–36</b>, older <b>64–81</b></td></tr>
+        <tr><td>Older adults struggle with tasks needing</td><td><b>3 or more clicks</b></td></tr>
+        <tr><td>Reading / Listening / Fast keying</td><td><b>250–300 / 150–160 / 150</b> words per minute</td></tr>
+        <tr><td>Simple vs complex form alignments</td><td><b>4 vs 9</b></td></tr>
+        <tr><td>Maximum number of font sizes</td><td><b>3</b></td></tr>
+        <tr><td>GUI menus / windows</td><td><b>12 pt / 10 pt</b></td></tr>
+        <tr><td>Web body / titles &amp; headings</td><td><b>12–14 pt / 18–36 pt</b></td></tr>
+        <tr><td>Line spacing</td><td><b>1 to 1½ ×</b> font size</td></tr>
+        <tr><td>Web-safe colour palette</td><td><b>216 colours</b></td></tr>
+        <tr><td>Connection speeds range</td><td><b>56 Kbps – 1 Gbps</b></td></tr>
+        <tr><td>Max page download time</td><td><b>8–10 seconds</b> per page (at 28.8 Kbps)</td></tr>
+        <tr><td>Home page size</td><td><b>1 screen</b></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FLASHCARDS ================= -->
+<section class="section" id="cards">
+  <div class="fc-wrap">
+    <div class="page-title" style="text-align:center">🃏 Flashcards</div>
+    <p class="page-sub" style="text-align:center">Click the card to flip. Use ← → keys or the buttons.</p>
+    <div class="fc-filter"><div class="seg" id="fcSeg"><button class="on" data-f="all">All</button><button data-f="1">Step 1</button><button data-f="3">Step 3 Screen</button><button data-f="w">Step 3 Web &amp; Tech</button></div></div>
+    <div class="fc" id="fc"><div class="fc-inner">
+      <div class="fc-face fc-front"><span class="fc-meta" id="fcTagF"></span><div class="q" id="fcQ"></div><p class="muted" style="margin-top:14px;font-size:13px">tap to see the answer</p></div>
+      <div class="fc-face fc-back"><span class="fc-meta" id="fcTagB"></span><div class="a" id="fcA"></div></div>
+    </div></div>
+    <div class="fc-ctrl"><button class="btn alt" id="fcPrev">← Previous</button><span class="fc-count" id="fcCount"></span><button class="btn alt" id="fcShuffle">🔀 Shuffle</button><button class="btn" id="fcNext">Next →</button></div>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="section" id="quiz">
+  <div class="qz">
+    <div class="page-title" style="text-align:center">✅ Quiz</div>
+    <p class="page-sub" style="text-align:center">Exam-style questions. Read the explanation after every answer — that’s where the learning happens.</p>
+    <div class="fc-filter"><div class="seg" id="qzSeg"><button class="on" data-f="all">All</button><button data-f="1">Step 1</button><button data-f="3">Step 3 Screen</button><button data-f="w">Step 3 Web &amp; Tech</button></div></div>
+    <div class="qz-card" id="qzCard"></div>
+  </div>
+</section>
+<script>
+
+const TRICKS = [
+ {t:"Step 1", title:"Why people have trouble with computers", code:"F·N·F·D·I", s:"Funny Nerds Find Difficult Interfaces", a:"Too much Flexibility · Non-obvious design · Fine distinctions · Disparity in problem-solving strategies · Design Inconsistency"},
+ {t:"Step 1", title:"Psychological responses (feel)", code:"C·A·F·P·B", s:"Can Angry Folks Please Behave?", a:"Confusion · Anger · Frustration · Panic/stress · Boredom"},
+ {t:"Step 1", title:"Physical responses (do)", code:"A·P·I·T·C·S·R", s:"A Pirate In Town Can Steal Rum", a:"Abandonment · Partial use · Indirect use · Task modification · Compensatory activity · System misuse · Reprogramming"},
+ {t:"Step 1", title:"Perception principles", code:"P·S·M·C·U·C", s:"Please Save My Cute Unicorn Cookie", a:"Proximity · Similarity · Matching patterns · Closure · Unity · Continuity"},
+ {t:"Step 1", title:"Human characteristics A→G", code:"P·M·S·V·I·M·L", s:"Please Make Smart Visual Interfaces More Learnable", a:"A Perception · B Memory · C Sensory storage · D Visual acuity · E Information processing · F Mental models · G Learning (then: Skill, Performance load, Individual differences)"},
+ {t:"Step 1", title:"Performance load", code:"Brain + Body", s:"Cognitive = brain, Kinaesthetic = movement", a:"Cognitive: remove noise, format & group, use recognition, automate memory tasks · Kinaesthetic: fewer steps, fewer control actions, avoid repetition"},
+ {t:"Step 1", title:"User’s tasks & needs", code:"M·F·I·T", s:"My Friends Invite Training", a:"Mandatory use · Frequency of use · Task/need Importance · Primary Training"},
+ {t:"Step 1", title:"Physical characteristics", code:"A·V·H·C·G·H·D", s:"A VeHiCle Goes Here Daily", a:"Age · Vision · Hearing · Cognitive processing · Gender · Handedness · Disabilities"},
+ {t:"Step 1", title:"Preference is influenced by", code:"F·A·N·P", s:"Users are FANs of what they Prefer", a:"Familiarity · Aesthetics · Novelty · Perceived effort"},
+ {t:"Step 1", title:"Methods to understand users", code:"V·T·O·L·S", s:"Very Tired Owls Love Sleep", a:"Visit locations · Talk to users · Observe them · Learn the work organisation · Surveys & questionnaires"},
+ {t:"Step 1", title:"Web page needs by level", code:"Guide · Structure · Speed", s:"Novice needs a guide, intermediate needs structure & safety, expert needs speed & control", a:"Novice: overviews, buttons, guided tours · Intermediate: orderly structure, obvious landmarks, reversibility, safety · Expert: smooth navigation, compact in-depth info, fast downloads, extensive services, rearrange interface"},
+ {t:"Step 3", title:"Grouping techniques", code:"A·B·C", s:"Align → Borders → Colour", a:"Aligning elements · Line borders · Background colour"},
+ {t:"Step 3", title:"Legibility vs Readability", code:"SEE vs UNDERSTAND", s:"Legibility = can I see it? Readability = can I understand it?", a:"Legibility: noticeable & distinguishable · Readability: identifiable, interpretable & attractive"},
+ {t:"Step 3", title:"What typography does", code:"O·I·R·M", s:"Only Important Readers Matter", a:"Organisation of elements · Identify Important elements · Reading order · Mood"},
+ {t:"Step 3", title:"Typographic hierarchy", code:"S·W·C", s:"Size, Weight, Colour", a:"Communicate hierarchy with changes in size, weight and colour"},
+ {t:"Step 3", title:"Web page title", code:"D·U·C 🦆", s:"A duck title", a:"Descriptive · Unique · Concise (and consistent between browser bar and page)"},
+ {t:"Step 3", title:"When to use auto skip", code:"E·E·F", s:"Every Entry is Full", a:"Expert users · Easily learned screens · Fields always completely Filled"},
+ {t:"Step 3", title:"Entry vs Display screen", code:"Boxes vs Star", s:"Entry = boxes + help; Display = no boxes, data is the star", a:"Entry: boxes, instructions before controls, aids to the right, top-to-bottom completion · Display: no boxes, emphasise data, top-to-bottom scanning, limit to what’s necessary"},
+ {t:"Web", title:"Web user characteristics", code:"C·G·N·S·S", s:"Cats Get Naps, Sleep, Snore", a:"Content is king · Goal-driven · Non-linear reading · Scan & select · Switching purpose"},
+ {t:"Web", title:"Interaction styles", code:"B·F·G", s:"Browse, Find, Gather", a:"Browsing · Information finding · Information gathering"},
+ {t:"Web", title:"Web experience", code:"E·T·V·I", s:"Every Tourist Visits Italy", a:"Expectations · Tasks · Visual appearance · Information content"},
+ {t:"Web", title:"Intranet home page must have", code:"D·S·N", s:"Don’t Skip News", a:"Directory hierarchy · Search facility · Current news. Layout: top bar, left column, middle, right column. Style: different, distinguishing, unified"},
+ {t:"Web", title:"Statistical graphics are used for", code:"C·T·S·P", s:"Chocolate Tastes Super Perfect", a:"Comparisons · changes over Time · Statistical analysis · Proportions"},
+ {t:"Web", title:"Things that slow downloads", code:"L·L·G·A·C·F", s:"Long Lazy Giraffes Ate Colourful Fruit", a:"Long pages · Large headings · Graphics/images · Animation · excessive Colour · Frames"},
+ {t:"Web", title:"Tell the user before a download", code:"D·T·S·V·E·S", s:"Description, Type, Size, Version, Estimated time, Special requirements", a:"Program/document description · Type · Size · Version · Estimated loading time · Special operating requirements"},
+ {t:"Web", title:"Final summary", code:"E·H·C·E", s:"Every Happy Cat Eats", a:"Minimise Eye movement · visual Hierarchy · most space to Content · put things where users Expect them"}
+];
+
+const CARDS = [
+ // Step 1
+ {g:"1",q:"What are the 3 stages of the Human Action Cycle?",a:"1. A goal is formed\n2. An execution plan is created and implemented\n3. The resulting actions are evaluated"},
+ {g:"1",q:"5 reasons people have trouble with computers",a:"Too much flexibility · Non-obvious design · Fine distinctions · Disparity in problem-solving strategies · Design inconsistency\n(Funny Nerds Find Difficult Interfaces)"},
+ {g:"1",q:"5 psychological responses to poor design",a:"Confusion · Anger · Frustration · Panic or stress · Boredom\n(Can Angry Folks Please Behave?)"},
+ {g:"1",q:"7 physical responses to poor design",a:"Abandonment · Partial use · Indirect use · Task modification · Compensatory activity · System misuse · Reprogramming\n(A Pirate In Town Can Steal Rum)"},
+ {g:"1",q:"What is “task modification”?",a:"Changing the task to meet the user’s capabilities (the user changes what they do because the system is too hard)."},
+ {g:"1",q:"What is “compensatory activity”?",a:"Additional actions used to compensate for the system’s inadequacies (e.g. writing data on paper first)."},
+ {g:"1",q:"6 principles of perception",a:"Proximity · Similarity · Matching patterns · Closure · Unity · Continuity"},
+ {g:"1",q:"Short-term (working) memory: how long and how much?",a:"10 to 30 seconds\n3 to 4 items"},
+ {g:"1",q:"Active vs passive vocabulary",a:"Active (recall): 2,000–3,000 words\nPassive (recognise): 10,000 words"},
+ {g:"1",q:"Memory guidelines (minimise need for memory)",a:"Organised, structured, familiar, meaningful info · all needed info close together · user controls the pace · no working memory if reading speed matters · make important items distinct"},
+ {g:"1",q:"What is sensory storage? Guidelines?",a:"A buffer where automatic processing of information from the senses takes place; excessive stimulation fatigues it.\nGuidelines: every element serves a purpose; eliminate interface noise."},
+ {g:"1",q:"What is visual acuity? Guideline?",a:"The capacity of the eye to resolve detail.\nProvide screen groupings reflecting visual chunks; choose fill-in patterns carefully to avoid distraction."},
+ {g:"1",q:"Higher vs lower level information processing",a:"Higher: working memory, limited, slow, sequential, reasoning, subject to interference.\nLower: familiar info, rapid, parallel, effortless.\nGuidelines: visually distinctive screens; avoid conflicting mental processes."},
+ {g:"1",q:"Mental model vs conceptual model",a:"Mental model: a person’s current understanding of something (ideas in a problem domain).\nConceptual model: concepts (entities) and the relationships between them."},
+ {g:"1",q:"Mental model guidelines",a:"Design new systems to conform to users’ already-learned mental models; provide consistency and standards."},
+ {g:"1",q:"Define learning + 3 guidelines",a:"Encoding into long-term memory what is in short-term memory.\n· Transfer skills to similar situations\n· Complete & prompt feedback\n· Phased learning"},
+ {g:"1",q:"Define skill",a:"Performance of actions in the correct time sequence with adequate precision; achieved by mastery; economy of effort. Guideline: permit increasingly skilful performance."},
+ {g:"1",q:"How to reduce cognitive load?",a:"Eliminate noise · format & group info · use recognition · automate tasks needing extensive memory"},
+ {g:"1",q:"How to reduce kinaesthetic load?",a:"Minimise steps · minimise control actions & movements · avoid repetitive tasks"},
+ {g:"1",q:"Individual differences — key sentence",a:"There is no average user. Tailor tasks to people with varying needs and changing skill levels."},
+ {g:"1",q:"9 items of user’s knowledge & experience",a:"Computer literacy · System experience · Application experience · Task experience · Other system use · Education · Reading level · Typing skill · Native language & culture"},
+ {g:"1",q:"Novice vs expert: conceptual model & categories",a:"Novice: fragmented model, fewer categories, surface features, low-level details.\nExpert: integrated model, more categories, task-oriented, better inferences."},
+ {g:"1",q:"Web page needs of intermediate users",a:"Orderly structure · Obvious landmarks · Reversibility · Safety"},
+ {g:"1",q:"Web page needs of expert users",a:"Smooth navigation paths · Compact but in-depth info · Fast downloads · Extensive services · Ability to rearrange the interface"},
+ {g:"1",q:"4 user tasks & needs",a:"Mandatory use · Frequency of use · Task/need importance · Primary training"},
+ {g:"1",q:"7 physical characteristics",a:"Age (18–36 younger, 64–81 older) · Vision · Hearing · Cognitive processing · Gender · Handedness · Disabilities"},
+ {g:"1",q:"Older adults — 6 facts",a:"More educated · higher vocabulary · more recall difficulty · trouble with 3+ clicks · scroll a page at a time · prefer full pages to continuous scrolling"},
+ {g:"1",q:"Human interaction speeds",a:"Reading 250–300 wpm · Listening 150–160 wpm · Fast typist keying 150 wpm · (Speaking — no number given)"},
+ {g:"1",q:"What influences preference?",a:"Familiarity · Aesthetics · Novelty · Perceived effort. (Performance and preference do not always agree.)"},
+ {g:"1",q:"5 methods for gaining understanding of users",a:"Visit locations · Talk with users · Observe users · Learn the work organisation · Surveys & questionnaires"},
+ // Step 3
+ {g:"3",q:"Unity vs fragmentation",a:"Unity: elements close and similar → seen as one whole.\nFragmentation: elements scattered → seen as separate pieces."},
+ {g:"3",q:"Simple vs complex membership form — how many alignments?",a:"Simple: 4 alignments\nComplex: 9 alignments"},
+ {g:"3",q:"3 ways to show groups",a:"Aligning elements · Line borders · Background colour"},
+ {g:"3",q:"Perceptual principles for grouping — 3 rules",a:"Use visual organisation (proximity, similarity, closure, matching patterns) for functional groups · combine them logically (e.g. proximity & similarity) · avoid principles that conflict"},
+ {g:"3",q:"Legibility vs readability",a:"Legibility = noticeable & distinguishable (can I see it?)\nReadability = identifiable, interpretable & attractive (can I understand it?)"},
+ {g:"3",q:"4 things a font’s characteristics can do",a:"Communicate organisation · Identify most important elements · Establish reading order · Create a mood"},
+ {g:"3",q:"Font size rules",a:"Max 3 sizes · GUI: 12 pt menus, 10 pt windows · Web: 12–14 pt body, 18–36 pt headings · line spacing 1–1½× · never shrink sizes to squeeze text"},
+ {g:"3",q:"When to use italics, bold, underline?",a:"Italics: call attention · Bold: attention or hierarchy · Underline (Web): only for navigation links"},
+ {g:"3",q:"Window title rules",a:"Every window has a title at the top (exception: message windows) · clearly & concisely describe purpose · spelled out fully, upper- or mixed-case"},
+ {g:"3",q:"Web page title rules",a:"In browser bar and on page, consistent · Descriptive · Unique · Concise"},
+ {g:"3",q:"Entry fields vs read-only fields",a:"Entry: line box or light contrasting background, break long data into pieces, suitable length.\nRead-only: normal screen background."},
+ {g:"3",q:"How to order a list?",a:"No order → alphabetical or bullets · important/frequent → top · particular order → number from 1"},
+ {g:"3",q:"Where should the cursor start?",a:"In the first field or control where information can be entered."},
+ {g:"3",q:"When to consider auto skip?",a:"Expert users · easily learned screens · fields always completely filled. (Default: manual tabbing.)"},
+ {g:"3",q:"Report vs table",a:"Report: list of records designed to be printed.\nTable: printout of records derived from database queries."},
+ {g:"3",q:"Entry screen: where do instructions and completion aids go?",a:"Instructions BEFORE the controls they apply to; completion aids to the RIGHT of the controls."},
+ {g:"3",q:"Display screen: text boxes and arrangement?",a:"No surrounding border/box · visually emphasise the data · align in columns for top-to-bottom scanning · limit to what is necessary"},
+ // Web
+ {g:"w",q:"5 Web user interaction characteristics",a:"Content is the most important commodity · goal-driven · non-linear reading · scan & select · frequent switching of purpose"},
+ {g:"w",q:"3 Web interaction styles",a:"Browsing · Information finding · Information gathering"},
+ {g:"w",q:"4 parts of the Web experience",a:"Expectations · Tasks · Visual appearance · Information content"},
+ {g:"w",q:"Web headings — presentation rules",a:"Hierarchy of styles, sizes, weights · as few sizes/styles as necessary · don’t randomly mix or skip heading levels"},
+ {g:"w",q:"Home page: content, size, access",a:"Show all major options, limit text · limit to one screen · reachable from every other page"},
+ {g:"w",q:"7 elements of a home page",a:"Owner name/logo · site name · brief description · summary of key content · site map & links to major sections · latest news/promotions · announcement of changes"},
+ {g:"w",q:"Home page layout",a:"Critical info at the top · rest by importance · reduce graphic complexity & text density toward the bottom"},
+ {g:"w",q:"Browsing vs searching — research conclusion",a:"Searching helps find specific & unique items; browsing works better for non-specific items; people prefer to browse."},
+ {g:"w",q:"Search problems",a:"Not understanding the user · difficulty formulating the search · many mistakes · page titles with low search-engine visibility · difficulty presenting meaningful results"},
+ {g:"w",q:"Remember the search + destination pages",a:"Save entries · save results automatically · let users save results.\nDestination page: page summary + highlight keywords."},
+ {g:"w",q:"Intranet home page",a:"Directory hierarchy, search facility, current news · layout: top bar, left column, middle, right column · style: different, distinguishing, unified"},
+ {g:"w",q:"Extranet guidelines",a:"Task-oriented · many options & features · strong navigation · subtle difference in visual style & navigation from the Internet site · links to the public Internet site"},
+ {g:"w",q:"8 weblog guidelines",a:"Author bio · author photo · easy scanning · meaningful links · link to past important content · categorise postings · publish regularly · avoid mixing topics"},
+ {g:"w",q:"Qualities of statistical graphics",a:"Obvious objective · recognisable type that aids understanding · correct data for the audience · no distortion — tell the truth"},
+ {g:"w",q:"Graphical systems: screen design must be compatible with…",a:"System power, screen size, resolution, display colours, other features · the platform, the development tools, the platform style guide"},
+ {g:"w",q:"What is a platform?",a:"An operating system, a computer architecture, or a combination of both. Layers: User interface → Application software → Operating system → Hardware."},
+ {g:"w",q:"Web-safe colour palette size",a:"216 colours"},
+ {g:"w",q:"Why provide a text-only version? What is a browser sniffer?",a:"Text-only: good for small displays and low bandwidth.\nBrowser sniffer: server program that detects the user’s browser type and version."},
+ {g:"w",q:"Max download time per page",a:"No more than 8–10 seconds per page (at 28.8 Kbps)"},
+ {g:"w",q:"Design techniques that cause long downloads",a:"Long pages · large headings · numerous/large graphics · animation · excessive colour · excess frames"},
+ {g:"w",q:"Information to give before a download",a:"Description · type · size · version · estimated loading time · special operating requirements"},
+ {g:"w",q:"Currency, page printing, maintainability",a:"Currency: keep info updated · Printing: groups of pages, individual pages, sections · Maintainability: easy to maintain to stay current"},
+ {g:"w",q:"Where NOT to put eye-catching objects?",a:"Top right and bottom left — they pull the eye away and users may miss important content."},
+ {g:"w",q:"4-point summary of screen design",a:"Minimise eye movement · create a visual hierarchy · devote most space to content · put things where users expect them"}
+];
+
+const QUIZ = [
+ {g:"1",q:"Which is the correct order of the Human Action Cycle?",o:["Execute → Goal → Evaluate","Goal → Execute → Evaluate","Evaluate → Goal → Execute","Goal → Evaluate → Execute"],a:1,e:"First a goal is formed, then an execution plan is created and implemented, then the results are evaluated."},
+ {g:"1",q:"A system uses “Save”, “Keep”, “Write” and “Store” for the same action. Which problem is this?",o:["Too much flexibility","Fine distinctions","Design inconsistency","Non-obvious design"],a:2,e:"The same action having different names is design inconsistency (slide 5)."},
+ {g:"1",q:"Which of these is a PSYCHOLOGICAL response to poor design?",o:["Abandonment","Boredom","Partial use","System misuse"],a:1,e:"Boredom is a feeling (psychological). The others are behaviours (physical responses)."},
+ {g:"1",q:"A manager asks his assistant to use the system for him. This physical response is called:",o:["Indirect use","Task modification","Compensatory activity","Partial use"],a:0,e:"Getting someone else to use the system for you is indirect use."},
+ {g:"1",q:"A user writes everything on paper first because the system loses data. This is:",o:["Reprogramming","System misuse","Compensatory activity","Abandonment"],a:2,e:"Compensatory activity = additional actions used to compensate for the system’s inadequacies."},
+ {g:"1",q:"Slow response times or long download times mainly cause:",o:["Panic","Boredom","Confusion","Anger"],a:1,e:"The slide links boredom to slow response times or long download times."},
+ {g:"1",q:"Short-term (working) memory holds about ___ items for ___.",o:["7 items, 1 minute","3–4 items, 10–30 seconds","10 items, 30–60 seconds","2 items, 5 seconds"],a:1,e:"Slide 9: short-term memory lasts 10 to 30 seconds and holds 3 to 4 items."},
+ {g:"1",q:"Passive vocabulary (words we can recognise) is about:",o:["2,000 words","3,000 words","10,000 words","100,000 words"],a:2,e:"Active (recall) is 2,000–3,000 words; passive (recognition) is about 10,000 words."},
+ {g:"1",q:"“Eliminating interface noise ensures important things are less likely to be missed.” This guideline belongs to:",o:["Visual acuity","Sensory storage","Mental models","Learning"],a:1,e:"Sensory storage can be fatigued by excessive stimulation, so every element should serve a purpose and noise should be removed."},
+ {g:"1",q:"The capacity of the eye to resolve detail is called:",o:["Perception","Visual acuity","Sensory storage","Closure"],a:1,e:"Visual acuity (sharpness) = the capacity of the eye to resolve detail."},
+ {g:"1",q:"Which level of information processing is rapid, parallel and effortless for familiar information?",o:["Higher level","Lower level","Working memory","Long-term memory"],a:1,e:"The lower level processes familiar information rapidly, in parallel with the higher level, and without effort."},
+ {g:"1",q:"Designing a computer “Recycle Bin” that works like a real bin follows which guideline?",o:["Phased learning","Conform to users’ learned mental models","Reduce kinaesthetic load","Individual differences"],a:1,e:"Mental models guideline: design new systems conforming to the user’s already learned mental models."},
+ {g:"1",q:"“Provide phased learning” means:",o:["Teach everything at once","Require only the information needed at that stage","Remove all feedback","Use auto skip"],a:1,e:"Phased learning requires a person to know only the information needed at that stage of the learning process."},
+ {g:"1",q:"Which reduces KINAESTHETIC load?",o:["Using powers of recognition","Eliminating noise","Minimising the number of steps","Grouping information"],a:2,e:"Kinaesthetic = movement load: minimise steps, control actions and repetitive tasks. The others reduce cognitive load."},
+ {g:"1",q:"Which statement is TRUE about novice users?",o:["They have an integrated conceptual model","They structure information into more categories","They pay more attention to surface features","They are better at making inferences"],a:2,e:"Novices pay more attention to surface features and low-level details; the other options describe experts."},
+ {g:"1",q:"“Reversibility” and “Safety” are Web page needs of:",o:["Novice users","Intermediate users","Expert users","Older adults only"],a:1,e:"Intermediate needs: orderly structure, obvious landmarks, reversibility, safety."},
+ {g:"1",q:"“Ability to rearrange the interface” is a need of:",o:["Novices","Intermediates","Experts","Everyone equally"],a:2,e:"Experts need smooth navigation, compact in-depth info, fast downloads, extensive services and the ability to rearrange the interface."},
+ {g:"1",q:"Which is NOT one of the user’s tasks and needs?",o:["Mandatory use","Frequency of use","Handedness","Primary training"],a:2,e:"Handedness is a physical characteristic. Tasks & needs = mandatory use, frequency, importance, primary training."},
+ {g:"1",q:"According to the slides, older adults:",o:["Have lower vocabulary scores","Prefer continuously scrolled pages","Have more problems with tasks requiring three or more clicks","Are less educated"],a:2,e:"Older adults are more educated, have higher vocabulary, more recall difficulty, trouble with 3+ clicks, and prefer full pages."},
+ {g:"1",q:"Typical reading speed is:",o:["150–160 words/min","250–300 words/min","50–60 words/min","500 words/min"],a:1,e:"Reading 250–300 wpm; listening 150–160 wpm; fast typist about 150 wpm."},
+ {g:"1",q:"Which does NOT influence user preference (slide 28)?",o:["Familiarity","Aesthetics","Novelty","Screen resolution"],a:3,e:"Preference is influenced by familiarity, aesthetics, novelty and perceived effort."},
+ {g:"1",q:"Which is a recommended method for gaining understanding of users?",o:["Guess based on your own habits","Observe users working or performing a task","Copy a competitor","Use auto skip"],a:1,e:"Methods: visit locations, talk with users, observe users, learn the organisation, surveys and questionnaires."},
+ {g:"3",q:"How many alignment points does the SIMPLE membership form need?",o:["2","4","9","12"],a:1,e:"Simple form: only four alignments; complex form: nine alignments."},
+ {g:"3",q:"Which are the three techniques shown for grouping screen elements?",o:["Aligning, line borders, background colour","Bold, italics, underline","Sound, animation, colour","Tabs, menus, icons"],a:0,e:"Slides 33–34: aligning elements, using line borders, and background colour grouping."},
+ {g:"3",q:"“Avoid visual organisation principles that conflict” means:",o:["Use only one principle ever","Don’t let e.g. proximity and similarity suggest different groups","Never use colour","Always use closure"],a:1,e:"Combine principles logically (e.g. proximity & similarity) and avoid ones that conflict."},
+ {g:"3",q:"Information that is “noticeable and distinguishable” is:",o:["Readable","Legible","Usable","Consistent"],a:1,e:"Legibility = noticeable and distinguishable. Readability = identifiable, interpretable and attractive."},
+ {g:"3",q:"Maximum number of font sizes on a screen:",o:["2","3","5","No limit"],a:1,e:"Use no more than three sizes."},
+ {g:"3",q:"In graphical systems, menus and windows should use:",o:["10 pt menus, 12 pt windows","12 pt menus, 10 pt windows","14 pt both","18 pt menus, 12 pt windows"],a:1,e:"12 point for menus and 10 point for windows."},
+ {g:"3",q:"Recommended font size for Web page body text:",o:["8–10 pt","12–14 pt","18–36 pt","40 pt"],a:1,e:"Web: 12–14 pt body text, 18–36 pt titles and headings."},
+ {g:"3",q:"On Web pages, underline should be used:",o:["For emphasis","For headings","Only to indicate a navigation link","Never"],a:2,e:"In Web pages, use an underline only to indicate a navigation link."},
+ {g:"3",q:"Which windows do NOT need a title?",o:["Dialog windows","Windows containing messages","Main windows","Web pages"],a:1,e:"All windows must have a title at the top — exception: windows containing messages."},
+ {g:"3",q:"How should data on a display/read-only screen be shown?",o:["In a line box","On the normal screen background","In a bright red box","Underlined"],a:1,e:"Entry fields get a box or light contrasting background; inquiry/read-only data goes on the normal screen background."},
+ {g:"3",q:"Items in a list have no particular order or equal value. You should:",o:["Number them from 0","List them alphabetically or use bullets","Put the longest first","Arrange them horizontally"],a:1,e:"No equal value or discernible order → alphabetical or bullets. Particular order → numbers starting at 1."},
+ {g:"3",q:"Auto skip should be considered for all EXCEPT:",o:["Expert users","Easily learned screens","Fields that are always completely filled","Novice users on complex screens"],a:3,e:"Auto skip is for experts, easily learned screens, and fields always completely filled. Manual tabbing is the default."},
+ {g:"3",q:"On an entry screen, completion aids should be placed:",o:["Before the controls","To the right of the controls","At the bottom of the screen","In a separate window"],a:1,e:"Instructions go before the controls they apply to; completion aids go to the right."},
+ {g:"3",q:"A printout of records derived from a database query is a:",o:["Report","Table","Window","List box"],a:1,e:"Report = list of records designed to be printed; Table = printout of records derived from database queries."},
+ {g:"3",q:"Display/read-only screens should be organised for:",o:["Top-to-bottom completion","Top-to-bottom scanning","Left-to-right typing","Random access"],a:1,e:"Entry screens: top-to-bottom completion. Display screens: top-to-bottom scanning."},
+ {g:"w",q:"The most important Web commodity is:",o:["Graphics","Content","Animation","Speed"],a:1,e:"Slide 57: the most important Web commodity is content."},
+ {g:"w",q:"Comparing several laptops before buying is which interaction style?",o:["Browsing","Information finding","Information gathering","Searching only"],a:2,e:"Collecting many pieces of information = information gathering. Looking for one specific fact = information finding."},
+ {g:"w",q:"Which is NOT one of the 4 parts of the Web experience?",o:["Expectations","Tasks","Visual appearance","Hardware"],a:3,e:"Web experience = Expectations, Tasks, Visual appearance, Information content."},
+ {g:"w",q:"The home page should be limited to:",o:["One screen","Two screens","Five screens","No limit"],a:0,e:"Home page size: limit to one screen."},
+ {g:"w",q:"On a home page, graphic complexity and text density should:",o:["Increase toward the bottom","Decrease toward the bottom","Be the same everywhere","Be highest at the top"],a:1,e:"Place critical information at the top and reduce graphic complexity and textual density toward the page bottom."},
+ {g:"w",q:"According to research, people seem to prefer:",o:["Searching","Browsing","Typing commands","Sitemaps"],a:1,e:"Searching aids locating specific, unique items; browsing works better for non-specific items; people prefer to browse."},
+ {g:"w",q:"A good search destination page should:",o:["Hide the keywords","Provide a page summary and highlight keywords","Open in a new window","Play a sound"],a:1,e:"Describe how the page relates to the query: provide a page summary and highlight keywords."},
+ {g:"w",q:"An intranet home page should contain at least:",o:["Directory hierarchy, search facility, current news","Ads, videos, games","Login only","Weather and stocks"],a:0,e:"Slide 67: a directory hierarchy, a search facility and current news."},
+ {g:"w",q:"To distinguish an extranet from the Internet site you should:",o:["Use a totally different design","Use a subtle difference in visual style and navigation","Use no navigation","Remove links to the public site"],a:1,e:"Provide a subtle difference in visual style and navigation, and provide links to the public Internet site."},
+ {g:"w",q:"Which is a weblog guideline?",o:["Hide the author","Mix many topics in one post","Publish regularly","Avoid links"],a:2,e:"Weblogs: author bio & photo, easy scanning, meaningful links, link to past content, categorise, publish regularly, avoid mixing topics."},
+ {g:"w",q:"A bar chart whose axis starts at 89 instead of 0 breaks which quality?",o:["Recognisable type","Avoid distortions — tell the truth","Obvious objective","Correct audience"],a:1,e:"The graph should avoid distortions by telling the truth about the data."},
+ {g:"w",q:"The Web-safe colour palette has:",o:["16 colours","216 colours","256 colours","16 million colours"],a:1,e:"A Web-safe colour palette of 216 colours."},
+ {g:"w",q:"A server program that detects the user’s browser type and version is a:",o:["Browser sniffer","Search engine","Platform","Style guide"],a:0,e:"“Browser sniffers” on the server detect browser type and version."},
+ {g:"w",q:"Page download time should be no more than:",o:["2–3 seconds","8–10 seconds","30 seconds","1 minute"],a:1,e:"Provide fast page download times — no more than 8 to 10 seconds per page (at 28.8 Kbps)."},
+ {g:"w",q:"Which does NOT cause longer download times?",o:["Animation","Excess use of frames","Large headings","Meaningful page titles"],a:3,e:"Long pages, large headings, many/large graphics, animation, excessive colour and frames slow downloads."},
+ {g:"w",q:"“Currency” of a website means:",o:["The money used to pay","Keeping information up to date","The site’s colour scheme","Download speed"],a:1,e:"Currency (accuracy): keep website information updated."},
+ {g:"w",q:"To reduce eye movement, avoid eye-catching objects in the:",o:["Top left and bottom right","Top right and bottom left","Centre","Header"],a:1,e:"Don’t put distracting or eye-catching objects at the top right or bottom left."},
+ {g:"w",q:"A platform can be described as:",o:["Only the hardware","An operating system, a computer architecture, or both","The web browser only","The user interface"],a:1,e:"Slide 73: a platform is an operating system or computer architecture, or a combination of both."},
+ {g:"w",q:"Which is part of the final summary (slide 87)?",o:["Use as many fonts as possible","Devote most space to content","Put ads in the top right","Use auto skip everywhere"],a:1,e:"Summary: minimise eye movement, create a visual hierarchy, devote most space to content, put things where users expect them."}
+];
+
+// ---------- storage ----------
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+// ---------- tabs ----------
+function showSec(id){
+  $$('.section').forEach(s => s.classList.toggle('active', s.id === id));
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.sec === id));
+  window.scrollTo(0,0);
+  try{ history.replaceState(null,'','#'+id); }catch(e){}
+}
+$$('.tab').forEach(t => t.onclick = () => showSec(t.dataset.sec));
+$$('[data-go]').forEach(c => c.onclick = () => showSec(c.dataset.go));
+
+// ---------- sidebar + learned ----------
+let learned = store.get('hci_learned', {});
+function refreshProgress(){
+  const topics = $$('.topic[id]');
+  $('#progTotal').textContent = topics.length;
+  $('#progCount').textContent = topics.filter(t => learned[t.id]).length;
+  $$('.side a').forEach(a => a.classList.toggle('done', !!learned[a.dataset.t]));
+  $$('.mark button').forEach(b => { const on = !!learned[b.dataset.t]; b.classList.toggle('on', on); b.textContent = on ? '✔ Learned' : 'Mark as learned'; });
+}
+$$('.section').forEach(sec => {
+  const side = $('[data-side]', sec); if(!side) return;
+  side.innerHTML = '<h4>Topics</h4>';
+  $$('.topic[id]', sec).forEach(t => {
+    const a = document.createElement('a');
+    a.href = '#'; a.dataset.t = t.id;
+    a.innerHTML = '<span class="dot"></span>' + ($('.topic-num', t)?.textContent || '') + ' · ' + t.dataset.title;
+    a.onclick = e => { e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); };
+    side.appendChild(a);
+    const m = document.createElement('div'); m.className = 'mark';
+    m.innerHTML = '<button data-t="'+t.id+'">Mark as learned</button>';
+    m.firstChild.onclick = () => { learned[t.id] = !learned[t.id]; store.set('hci_learned', learned); refreshProgress(); };
+    t.appendChild(m);
+  });
+});
+refreshProgress();
+
+function seg(id, cb){
+  const el = document.getElementById(id); if(!el) return;
+  $$('button', el).forEach(b => b.onclick = () => { $$('button', el).forEach(x => x.classList.remove('on')); b.classList.add('on'); cb(b); });
+  cb($('button.on', el));
+}
+
+// ---------- Human action cycle ----------
+(function(){
+  const S = [
+    ["🎯 Goal: “I want to tell my teacher I will miss class.”","⚙️ Execute: plan — open Gmail → Compose → type the address and message → click Send. Then do it.","🔍 Evaluate: look at the screen — “Message sent” appears and the email is in the Sent folder. Goal reached ✔ (if not, form a new plan and loop again)."],
+    ["🎯 Goal: “I want a cinema ticket for Friday 8 PM.”","⚙️ Execute: plan — open the cinema site → choose the film → pick Friday 8 PM → choose a seat → pay. Then do it.","🔍 Evaluate: a confirmation page with a QR code appears. Goal reached ✔. If payment failed, you evaluate the error and start a new loop."]
+  ];
+  let sc = 0, st = 0;
+  const nodes = $$('#cycleSvg .cyc-node');
+  function draw(){
+    nodes.forEach((n,i) => { $('circle', n).setAttribute('fill', i===st ? '#38bdf8' : '#2c3755'); $('circle', n).setAttribute('stroke', '#7486a6'); $('text', n).setAttribute('fill', i===st ? '#04121c' : '#e9eef7'); });
+    $('#cycText').textContent = S[sc][st];
+  }
+  seg('cycScenario', b => { sc = +b.dataset.s; st = 0; draw(); });
+  $('#cycNext').onclick = () => { st = (st+1)%3; draw(); };
+})();
+
+// ---------- sort game ----------
+(function(){
+  const items = [["Confusion","psy"],["Anger","psy"],["Frustration","psy"],["Panic or stress","psy"],["Boredom","psy"],["Abandonment","phy"],["Partial use","phy"],["Indirect use","phy"],["Task modification","phy"],["Compensatory activity","phy"],["System misuse","phy"],["Reprogramming","phy"]];
+  let sel = null, done = 0;
+  function reset(){
+    sel = null; done = 0; $('#sortMsg').textContent = '';
+    $$('.bin .sort-pool').forEach(p => p.innerHTML = '');
+    const pool = $('#sortPool'); pool.innerHTML = '';
+    [...items].sort(() => Math.random()-.5).forEach(([n,c]) => {
+      const ch = document.createElement('span'); ch.className = 'chip'; ch.textContent = n; ch.dataset.c = c;
+      ch.onclick = () => { $$('#sortPool .chip').forEach(x => x.style.outline=''); sel = ch; ch.style.outline = '2px solid #38bdf8'; };
+      pool.appendChild(ch);
+    });
+  }
+  $$('.bin').forEach(bin => bin.onclick = () => {
+    if(!sel) { $('#sortMsg').textContent = 'First click a chip above.'; return; }
+    if(sel.dataset.c === bin.dataset.bin){
+      sel.classList.add('ok'); sel.style.outline=''; sel.onclick = null; $('.sort-pool', bin).appendChild(sel); sel = null; done++;
+      $('#sortMsg').textContent = done === items.length ? '🎉 Perfect! All 12 sorted.' : '✔ Correct!';
+    } else {
+      const s = sel; s.classList.add('no'); setTimeout(() => s.classList.remove('no'), 400);
+      $('#sortMsg').textContent = '✘ Not quite — is it a feeling or something they do?';
+    }
+  });
+  $('#sortReset').onclick = reset; reset();
+})();
+
+// ---------- Gestalt ----------
+(function(){
+  const B = '#2563eb', P = '#db2777';
+  const circ = (x,y,r=10,f=B) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${f}"/>`;
+  const G = [
+    {n:"Proximity", d:"Things that are close to each other are seen as one group.", u:"On screens: put each caption right next to its field, and leave white space between different groups.",
+     svg:(()=>{let s='';for(let r=0;r<3;r++)for(let c=0;c<3;c++){s+=circ(40+c*26,40+r*30);s+=circ(190+c*26,40+r*30);}return s;})()},
+    {n:"Similarity", d:"Things that look the same (colour, shape, size) are seen as belonging together.", u:"On screens: make all links the same colour and all buttons the same shape, so users know they behave the same.",
+     svg:(()=>{let s='';for(let r=0;r<4;r++)for(let c=0;c<7;c++){s+=c%2?`<rect x="${32+c*36}" y="${22+r*34}" width="20" height="20" fill="${P}"/>`:circ(42+c*36,32+r*34);}return s;})()},
+    {n:"Matching patterns", d:"We respond the same way to the same shape even in different sizes — matching shapes are recognised as related.", u:"On screens: the same icon at small and large size is recognised as the same command; matching shapes link related items.",
+     svg:`<polygon points="40,130 70,70 100,130" fill="${B}"/><polygon points="130,130 145,100 160,130" fill="${B}"/><polygon points="190,130 215,80 240,130" fill="${B}"/><rect x="40" y="20" width="30" height="30" fill="${P}"/><rect x="140" y="30" width="16" height="16" fill="${P}"/><rect x="205" y="16" width="38" height="38" fill="${P}"/>`},
+    {n:"Closure", d:"Our mind completes incomplete shapes — we see a whole even when parts are missing.", u:"On screens: a group marked only by corner lines or a partial border is still seen as one closed area.",
+     svg:`<circle cx="85" cy="85" r="50" fill="none" stroke="${B}" stroke-width="6" stroke-dasharray="30 14"/><path d="M180,40 h30 M180,40 v30 M270,40 h-30 M270,40 v30 M180,130 h30 M180,130 v-30 M270,130 h-30 M270,130 v-30" stroke="${P}" stroke-width="6" fill="none"/>`},
+    {n:"Unity", d:"Elements that are enclosed together or connected are seen as one unit.", u:"On screens: a border or shared background around related fields makes them read as one unit (like the grouped membership form).",
+     svg:`<rect x="20" y="40" width="120" height="90" rx="12" fill="#dbeafe" stroke="${B}" stroke-width="2"/>${circ(55,85)}${circ(105,85)}${circ(190,85)}${circ(250,85)}<line x1="190" y1="85" x2="250" y2="85" stroke="${P}" stroke-width="4"/>`},
+    {n:"Continuity", d:"The eye follows smooth lines and continuous paths, and sees items on that path as related.", u:"On screens: aligned fields form a line the eye follows easily from top to bottom.",
+     svg:(()=>{let s='';for(let i=0;i<14;i++){const x=20+i*20;s+=circ(x,140-i*9,6,B);s+=circ(x,20+i*9,6,P);}return s;})()}
+  ];
+  seg('gestaltSeg', b => { const g = G[+b.dataset.g]; $('#gestaltSvg').innerHTML = g.svg; $('#gestaltName').textContent = g.n; $('#gestaltDef').textContent = g.d; $('#gestaltUi').textContent = g.u; });
+})();
+
+// ---------- memory test ----------
+(function(){
+  let mode = 'raw', code = '';
+  seg('memMode', b => { mode = b.dataset.m; });
+  const rnd = s => s[Math.floor(Math.random()*s.length)];
+  $('#memStart').onclick = () => {
+    $('#memResult').textContent = ''; $('#memAnswer').style.display = 'none';
+    let parts;
+    if(mode === 'raw'){ const ch='BKQXZTRPMWG7394'; code=''; for(let i=0;i<9;i++) code+=rnd(ch); parts = code.split(''); }
+    else { const opts = [['050','123','456'],['UAE','HCI','CSE'],['911','999','112'],['ABC','123','XYZ']]; parts = rnd(opts); code = parts.join(''); }
+    $('#memItems').innerHTML = parts.map(p => `<span>${p}</span>`).join('');
+    setTimeout(() => {
+      $('#memItems').innerHTML = '<span style="background:none;color:var(--text3)">? ? ?</span>';
+      $('#memAnswer').style.display = 'block'; $('#memInput').value=''; $('#memInput').focus();
+    }, 4000);
+  };
+  $('#memInput').addEventListener('keydown', e => {
+    if(e.key !== 'Enter') return;
+    const v = e.target.value.toUpperCase().replace(/\s|-/g,'');
+    const ok = v === code;
+    $('#memResult').innerHTML = (ok ? '✔ Correct! ' : '✘ It was <b>'+code+'</b>. ') +
+      (mode === 'raw' ? '9 separate items is far more than the <b>3–4 items</b> short-term memory can hold — that’s why it’s hard.' : 'The same 9 characters became just <b>3 meaningful chunks</b> — that fits in 3–4 items, so it’s easy. This is why we organise information in a familiar, meaningful way.');
+  });
+})();
+
+// ---------- web page levels ----------
+(function(){
+  const L = [
+    {list:["Overviews","Buttons to select actions","Guided tours"], mock:`<b>Welcome! 👋</b><div style="font-size:12px;color:#555;margin:4px 0 8px">Here’s what you can do on this site (overview)</div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="background:#2563eb;color:#fff;padding:6px 10px;border-radius:6px">Book a class</span><span style="background:#2563eb;color:#fff;padding:6px 10px;border-radius:6px">See prices</span></div><div style="margin-top:10px;background:#fef3c7;padding:6px;border-radius:6px">▶ Take the 1-minute guided tour</div>`},
+    {list:["Orderly structure","Obvious landmarks","Reversibility","Safety"], mock:`<div style="font-size:12px;color:#555">Home › Classes › Yoga <i>(landmarks)</i></div><div style="margin:6px 0;border:1px solid #ccc;padding:6px;border-radius:6px">1. Choose class &nbsp; 2. Choose time &nbsp; 3. Pay <i>(orderly)</i></div><div style="background:#dcfce7;padding:6px;border-radius:6px">Class removed. <u>Undo</u> <i>(reversibility)</i></div><div style="margin-top:6px;font-size:12px">“Are you sure you want to cancel?” <i>(safety)</i></div>`},
+    {list:["Smooth navigation paths","Compact but in-depth information","Fast page downloads","Extensive services to satisfy varied needs","Ability to rearrange the interface"], mock:`<div style="font-family:var(--font-mono);font-size:12px;background:#111;color:#4ade80;padding:6px;border-radius:6px">Ctrl+K → “yoga fri 8pm” ⏎</div><table style="width:100%;font-size:11px;margin-top:6px;border-collapse:collapse"><tr><td>Fri 20:00</td><td>Yoga</td><td>12/20</td><td>AED 60</td></tr><tr><td>Fri 21:00</td><td>Pilates</td><td>5/15</td><td>AED 70</td></tr></table><div style="margin-top:6px;font-size:12px">⚙️ Drag widgets to rearrange your dashboard</div>`}
+  ];
+  seg('levelSeg', b => { const l = L[+b.dataset.l]; $('#levelList').innerHTML = '<ul>'+l.list.map(x=>'<li><b>'+x+'</b></li>').join('')+'</ul>'; $('#levelMock').innerHTML = l.mock; });
+})();
+
+// ---------- speeds ----------
+(function(){
+  const d = [["Reading",250,300,'#38bdf8'],["Listening",150,160,'#a78bfa'],["Keying (fast typist)",150,150,'#34d399']];
+  $('#speedChart').innerHTML = d.map(([n,lo,hi,c]) => `<div style="display:grid;grid-template-columns:150px 1fr;align-items:center;gap:10px;margin:8px 0"><span style="font-size:14px">${n}</span><div style="background:var(--bg4);border-radius:6px;height:26px;position:relative"><div style="width:${hi/3.2}%;background:${c};height:100%;border-radius:6px;opacity:.85"></div><span style="position:absolute;left:8px;top:3px;font-size:13px;font-weight:700;color:#071018">${lo===hi?lo:lo+'–'+hi} words/min</span></div></div>`).join('');
+})();
+
+// ---------- alignment demo ----------
+const SIMPLE = {
+  caps:[["Name:",88,50],["Address:",88,72],["City:",88,94],["State:",88,116],["Zip:",88,138],["Dues:",300,50],["Pubs:",300,72],["Total:",300,94]],
+  fields:[[94,40,80],[94,62,130],[94,84,130],[94,106,30],[94,128,60],[306,40,80],[306,62,80],[306,84,80]],
+  btns:[[306,152,"OK"],[352,152,"Cancel"]], lines:[[88,'#dc2626'],[94,'#2563eb'],[300,'#dc2626'],[306,'#2563eb']]
+};
+function formSvg(F, opts={}){
+  let s = (opts.under||'') + `<text x="220" y="22" text-anchor="middle" font-family="Georgia" font-size="14" fill="#555">Membership Form</text>`;
+  F.caps.forEach(([t,x,y]) => s += `<text x="${x-3}" y="${y}" text-anchor="end" font-family="Georgia" font-size="12" fill="#0f766e">${t}</text>`);
+  F.fields.forEach(([x,y,w]) => s += `<rect x="${x}" y="${y}" width="${w}" height="13" fill="#fff" stroke="#333"/>`);
+  F.btns.forEach(([x,y,t]) => s += `<rect x="${x}" y="${y}" width="${t.length*7+10}" height="16" fill="#fff" stroke="#16a34a"/><text x="${x+5}" y="${y+12}" font-size="11" fill="#16a34a">${t}</text>`);
+  if(opts.lines) F.lines.forEach(([x,c]) => s += `<line x1="${x}" y1="30" x2="${x}" y2="190" stroke="${c}" stroke-width="1.5" stroke-dasharray="4 3" opacity=".8"/>`);
+  return `<rect x="2" y="2" width="436" height="196" rx="10" fill="#fff" stroke="#8a93a8" stroke-width="2"/>` + s;
+}
+(function(){
+  const COMPLEX = {
+    caps:[["Name:",70,50],["Dues:",230,50],["Address:",96,72],["Pubs:",275,72],["City:",60,94],["State:",112,116],["Total:",255,116],["Zip:",85,138]],
+    fields:[[70,40,80],[230,40,80],[96,62,110],[275,62,80],[60,84,120],[112,106,30],[255,106,70],[85,128,70]],
+    btns:[[340,140,"OK"],[340,164,"Cancel"]],
+    lines:[[60,'#dc2626'],[70,'#dc2626'],[85,'#dc2626'],[96,'#dc2626'],[112,'#dc2626'],[230,'#dc2626'],[255,'#dc2626'],[275,'#dc2626'],[340,'#dc2626']]
+  };
+  let which = 'simple';
+  function draw(){
+    const F = which === 'simple' ? SIMPLE : COMPLEX, show = $('#alignShow').checked;
+    $('#alignSvg').innerHTML = formSvg(F, {lines:show});
+    $('#alignCount').innerHTML = which === 'simple' ? '<span style="color:#15803d">Simple: 4 alignment lines ✔</span>' : '<span style="color:#b91c1c">Complex: 9 alignment lines ✘</span>';
+  }
+  seg('alignSeg', b => { which = b.dataset.a; draw(); });
+  $('#alignShow').onchange = draw;
+})();
+
+// ---------- grouping demo ----------
+seg('groupSeg', b => {
+  const st = +b.dataset.gr; let under = '';
+  if(st >= 1){
+    const f1 = st===2 ? '#c7c9f5' : 'none', f2 = st===2 ? '#86efac' : 'none';
+    under = (st===2 ? `<rect x="6" y="6" width="428" height="188" rx="10" fill="#fef08a"/>` : '') +
+      `<rect x="14" y="32" width="230" height="114" fill="${f1}" stroke="#333"/><rect x="254" y="32" width="150" height="72" fill="${f2}" stroke="#333"/>`;
+  }
+  $('#groupSvg').innerHTML = formSvg(SIMPLE, {under});
+});
+
+// ---------- font demo ----------
+seg('fontSeg', b => {
+  const m = {
+    menu:`<div style="font-size:12pt;background:#e5e7eb;padding:4px 8px;border-radius:4px">File &nbsp; Edit &nbsp; View &nbsp; Insert &nbsp; Help</div><p style="font-size:12px;color:#555;margin-top:6px"><b>12 pt</b> — menus in graphical systems.</p>`,
+    win:`<div style="border:1px solid #999;border-radius:4px"><div style="background:#cbd5e1;padding:3px 8px;font-size:10pt;font-weight:700">Print Settings</div><div style="padding:8px;font-size:10pt">Copies: ▭ &nbsp; Pages: ▭ &nbsp; ☐ Double-sided</div></div><p style="font-size:12px;color:#555;margin-top:6px"><b>10 pt</b> — text inside windows.</p>`,
+    body:`<p style="font-size:13pt;line-height:1.4">Our library offers study rooms for all ages every weekend. Book a room online in under a minute.</p><p style="font-size:12px;color:#555;margin-top:6px"><b>12–14 pt</b> body text, line spacing 1–1½× the font size.</p>`,
+    head:`<div style="font-size:28pt;font-weight:800;line-height:1.1">Summer Camp 2026</div><div style="font-size:18pt;font-weight:600">Registration is open</div><p style="font-size:12px;color:#555;margin-top:6px"><b>18–36 pt</b> titles and headings.</p>`
+  };
+  $('#fontDemo').innerHTML = m[b.dataset.f];
+});
+
+// ---------- list order demo ----------
+seg('orderSeg', b => {
+  const D = [
+    `<b>Choose your city</b> <span style="font-size:12px;color:#555">(no order of importance → alphabetical)</span><div style="margin-top:4px;line-height:1.6">Abu Dhabi<br>Ajman<br>Al Ain<br>Dubai<br>Fujairah<br>Sharjah</div>`,
+    `<b>Payment method</b> <span style="font-size:12px;color:#555">(most frequently chosen → at the top)</span><div style="margin-top:4px;line-height:1.6">● Card (Visa / Mastercard) — chosen by most users<br>○ Apple Pay<br>○ Cash on delivery<br>○ Bank transfer</div>`,
+    `<b>Reset your password</b> <span style="font-size:12px;color:#555">(particular order → numbered from 1)</span><ol style="margin:4px 0 0 20px;line-height:1.6"><li>Click “Forgot password”</li><li>Enter your email</li><li>Open the link we send you</li><li>Choose a new password</li></ol>`
+  ];
+  $('#orderDemo').innerHTML = D[+b.dataset.o];
+});
+
+// ---------- auto skip ----------
+$$('[data-auto]').forEach((inp, i, arr) => inp.addEventListener('input', () => {
+  inp.value = inp.value.replace(/\D/g,'');
+  if(inp.value.length >= +inp.maxLength && arr[i+1]) arr[i+1].focus();
+}));
+['mt1','mt2','mt3'].forEach(id => { const el = document.getElementById(id); el.addEventListener('input', () => el.value = el.value.replace(/\D/g,'')); });
+
+// ---------- entry vs display screen ----------
+seg('screenSeg', b => {
+  const box = (v,w) => `<span style="display:inline-block;min-width:${w}px;border:1px solid #333;background:#fff;padding:1px 6px">${v}</span>`;
+  const entry = `<div style="font-weight:800;letter-spacing:.05em">STUDENT REGISTRATION</div>
+    <div style="font-size:12px;color:#1d4ed8;margin:4px 0 8px">ℹ️ Fill in all fields, then press Save. <i>(instruction BEFORE the controls)</i></div>
+    <div style="display:grid;grid-template-columns:110px auto;gap:6px 8px;align-items:center">
+      <span style="text-align:right">Student ID:</span><span>${box('&nbsp;',90)} <span style="font-size:11px;color:#555">e.g. 202312345 <i>(aid on the RIGHT)</i></span></span>
+      <span style="text-align:right">Name:</span><span>${box('&nbsp;',200)}</span>
+      <span style="text-align:right">Date of birth:</span><span>${box('&nbsp;',90)} <span style="font-size:11px;color:#555">DD/MM/YYYY</span></span>
+      <span style="text-align:right">Major:</span><span>${box('&nbsp;',140)}</span>
+    </div><div style="font-size:11px;color:#555;margin-top:8px">Boxes show where to type · columns · filled top-to-bottom</div>`;
+  const display = `<div style="font-weight:800;letter-spacing:.05em;border-bottom:2px solid #1d2433;padding-bottom:3px;margin-bottom:8px">STUDENT RECORD</div>
+    <div style="display:grid;grid-template-columns:110px auto;gap:6px 8px">
+      <span style="text-align:right;color:#555">Student ID:</span><b style="font-size:15px">202312345</b>
+      <span style="text-align:right;color:#555">Name:</span><b style="font-size:15px">Sara Ahmed</b>
+      <span style="text-align:right;color:#555">Date of birth:</span><b style="font-size:15px">12/03/2003</b>
+      <span style="text-align:right;color:#555">Major:</span><b style="font-size:15px">Computer Science</b>
+    </div><div style="font-size:11px;color:#555;margin-top:8px">No boxes · data emphasised (bold) · heading set off · scanned top-to-bottom</div>`;
+  $('#screenDemo').innerHTML = b.dataset.sc === 'entry' ? entry : display;
+});
+
+// ---------- home page builder ----------
+(function(){
+  const E = [
+    ["logo","Name or logo of site owner",`<div style="font-weight:800;color:#1d4ed8">🏫 Gulf University</div>`],
+    ["name","Web site name",`<div style="font-size:15px;font-weight:700">Student Portal</div>`],
+    ["desc","Brief description of site",`<div style="color:#555">Register for courses, check grades and pay fees online.</div>`],
+    ["key","Summary of key content",`<div style="display:flex;gap:6px;margin-top:4px"><span style="background:#e0e7ff;padding:3px 6px;border-radius:4px">Courses</span><span style="background:#e0e7ff;padding:3px 6px;border-radius:4px">Grades</span><span style="background:#e0e7ff;padding:3px 6px;border-radius:4px">Fees</span></div>`],
+    ["map","Site overview map & links to major sections",`<div style="color:#1d4ed8;text-decoration:underline">Site map · Admissions · Library · Contact</div>`],
+    ["news","Summary of latest news or promotions",`<div style="background:#fef3c7;padding:4px;border-radius:4px">📰 Spring registration opens 1 Dec</div>`],
+    ["chg","Announcement of changes to site",`<div style="font-size:11px;color:#555">🆕 New: pay fees with Apple Pay</div>`]
+  ];
+  const on = {};
+  function draw(){
+    $('#homeMock').innerHTML = '<div style="font-size:10px;color:#888;border-bottom:1px dashed #bbb;margin-bottom:6px">🖥️ one screen only</div>' +
+      (E.filter(e => on[e[0]]).map(e => `<div style="margin:6px 0">${e[2]}</div>`).join('') || '<div style="color:#999">Empty home page — click the elements on the left.</div>');
+    const n = Object.values(on).filter(Boolean).length;
+    $('#homeMsg').textContent = n === 7 ? '🎉 All 7 elements in place — critical info on top, less dense toward the bottom.' : n + ' / 7 elements added';
+  }
+  E.forEach(([k,label]) => { const c = document.createElement('span'); c.className='chip'; c.textContent = label;
+    c.onclick = () => { on[k] = !on[k]; c.classList.toggle('ok', on[k]); draw(); }; $('#homeChips').appendChild(c); });
+  draw();
+})();
+
+// ---------- download calculator ----------
+(function(){
+  const r = $('#dlSize');
+  function upd(){ const kb = +r.value, t = kb*8/28.8; $('#dlKB').textContent = kb+' KB';
+    const ok = t <= 10;
+    $('#dlOut').innerHTML = `≈ <b>${t.toFixed(1)} seconds</b> at 28.8 Kbps — ` + (ok ? '<span style="color:var(--green)">✔ within the 8–10 s limit</span>' : '<span style="color:var(--red)">✘ too slow (over 10 s) — reduce graphics, animation, page length…</span>'); }
+  r.oninput = upd; upd();
+})();
+
+// ---------- eye zones ----------
+$$('#eyeSvg .hot').forEach(h => {
+  h.style.cursor = 'pointer';
+  const f = () => $('#eyeMsg').innerHTML = '⚠️ A blinking ad here pulls the eye <b>away</b> from the reading path, so users may <b>miss important content</b>. Keep the top-right and bottom-left calm.';
+  h.addEventListener('mouseenter', f); h.addEventListener('click', f);
+});
+
+// ---------- tricks ----------
+(function(){
+  const g = $('#trickGrid');
+  g.innerHTML = TRICKS.map((t,i) => `<div class="mini trick" data-i="${i}" style="cursor:pointer"><span class="tag ${t.t==='Step 1'?'b':t.t==='Web'?'y':'g'}">${t.t}</span><b style="margin-top:4px">${t.title}</b><div style="font-size:20px;font-weight:800;color:var(--yellow);letter-spacing:.05em">${t.code}</div><div class="ans"><div style="color:var(--text2);font-style:italic">“${t.s}”</div><div style="margin-top:4px;font-size:14px">${t.a}</div></div></div>`).join('');
+  function apply(){ const test = $('#trickTest').checked; $$('.trick').forEach(c => { c.dataset.open = ''; $('.ans', c).style.display = test ? 'none' : 'block'; }); }
+  $$('.trick').forEach(c => c.onclick = () => { if(!$('#trickTest').checked) return; const a = $('.ans', c); a.style.display = a.style.display === 'none' ? 'block' : 'none'; });
+  $('#trickTest').onchange = apply; apply();
+})();
+
+// ---------- flashcards ----------
+(function(){
+  let deck = [], i = 0;
+  const label = {"1":"Step 1 · Know your user","3":"Step 3 · Screen design","w":"Step 3 · Web & tech"};
+  function build(f){ deck = CARDS.filter(c => f==='all' || c.g===f); i = 0; show(); }
+  function show(){ const c = deck[i]; $('#fc').classList.remove('flip');
+    setTimeout(() => { $('#fcQ').textContent = c.q; $('#fcA').textContent = c.a; $('#fcTagF').textContent = $('#fcTagB').textContent = label[c.g]; }, 150);
+    $('#fcCount').textContent = (i+1)+' / '+deck.length; }
+  $('#fc').onclick = () => $('#fc').classList.toggle('flip');
+  $('#fcNext').onclick = () => { i = (i+1)%deck.length; show(); };
+  $('#fcPrev').onclick = () => { i = (i-1+deck.length)%deck.length; show(); };
+  $('#fcShuffle').onclick = () => { deck.sort(() => Math.random()-.5); i = 0; show(); };
+  document.addEventListener('keydown', e => { if(!$('#cards').classList.contains('active')) return;
+    if(e.key==='ArrowRight') $('#fcNext').click(); if(e.key==='ArrowLeft') $('#fcPrev').click(); if(e.key===' '){ e.preventDefault(); $('#fc').click(); } });
+  seg('fcSeg', b => build(b.dataset.f));
+})();
+
+// ---------- quiz ----------
+(function(){
+  let qs = [], i = 0, score = 0, wrong = [];
+  function start(f){ qs = QUIZ.filter(q => f==='all' || q.g===f).map(q => ({...q})).sort(() => Math.random()-.5); i = 0; score = 0; wrong = []; render(); }
+  function render(){
+    const card = $('#qzCard');
+    if(i >= qs.length){
+      const pct = Math.round(score/qs.length*100);
+      card.innerHTML = `<div style="text-align:center"><div class="score-big">${score} / ${qs.length}</div><p style="font-size:18px;margin:6px 0 14px">${pct>=85?'🌟 Excellent — you are exam-ready!':pct>=65?'👍 Good — review the ones you missed.':'📚 Keep going — re-read the topics below, then try again.'}</p></div>` +
+        (wrong.length ? '<h3 style="margin:10px 0 6px">Review these:</h3>' + wrong.map(q => `<div class="qz-exp show" style="margin-bottom:8px"><b>${q.q}</b><br>✔ ${q.o[q.a]}<br><span class="muted">${q.e}</span></div>`).join('') : '') +
+        `<div style="text-align:center;margin-top:14px"><button class="btn" id="qzAgain">Try again</button></div>`;
+      $('#qzAgain').onclick = () => start($('#qzSeg button.on').dataset.f); return;
+    }
+    const q = qs[i];
+    card.innerHTML = `<div class="qz-top"><span>Question ${i+1} of ${qs.length}</span><span>Score: ${score}</span></div><div class="qz-bar"><div style="width:${i/qs.length*100}%"></div></div>
+      <div class="qz-q">${q.q}</div>${q.o.map((o,k) => `<button class="qz-opt" data-k="${k}">${String.fromCharCode(65+k)}. ${o}</button>`).join('')}
+      <div class="qz-exp" id="qzExp"></div><div style="text-align:right;margin-top:12px"><button class="btn" id="qzNext" style="display:none">Next →</button></div>`;
+    $$('.qz-opt', card).forEach(b => b.onclick = () => {
+      const k = +b.dataset.k; $$('.qz-opt', card).forEach(x => x.disabled = true);
+      $$('.qz-opt', card)[q.a].classList.add('right');
+      if(k === q.a){ score++; } else { b.classList.add('wrong'); wrong.push(q); }
+      $('#qzExp').innerHTML = (k===q.a ? '✔ <b>Correct.</b> ' : '✘ <b>Not quite.</b> ') + q.e; $('#qzExp').classList.add('show');
+      $('#qzNext').style.display = 'inline-block';
+    });
+    $('#qzNext').onclick = () => { i++; render(); };
+  }
+  seg('qzSeg', b => start(b.dataset.f));
+})();
+
+// open from hash
+(function(){ const h = location.hash.slice(1); if(h && document.getElementById(h) && document.getElementById(h).classList.contains('section')) showSec(h); })();
+</script>
+</body></html>
