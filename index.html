@@ -439,17 +439,26 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
   <!-- 2.4 -->
   <div class="topic" id="c4-objects5" data-title="Performing a task analysis">
     <div class="topic-head"><span class="topic-num">3.3</span><h2>Performing a task analysis — 5 kinds of things to look for</h2><span class="slide-ref">slide 39</span></div>
-    <div class="oneliner"><b>In one line:</b> When you describe the work in sentences, pick out the <b>concrete objects, people (subject &amp; object), forms/journals, and abstract objects</b>.</div>
+    <div class="oneliner"><b>In one line:</b> To perform a task analysis, you <b>write down how the work is done today in plain sentences</b>, then pick out <b>5 kinds of “things”</b> in them. Those things tell you <b>what the new system must deal with</b>.</div>
+    <h3>Why do we do this?</h3>
+    <p>Remember the goal of task analysis (slide 37): understand <b>why and how</b> people do the work that will be automated. Users describe their work in normal words, and every important word is a clue. Sorting the words into the 5 kinds turns a messy interview into a <b>clear list of what the system needs</b>: who uses it, what they handle, who they serve, what records they keep. This list is what you later use for <b>defining objects</b> (slide 43).</p>
+    <h3>How is it used? — watch it step by step</h3>
+    <div class="board"><span class="board-lbl">animation · library example</span>
+      <div class="timeline" id="taxTl"><div class="ts"><div class="c">1</div><span>Write the work as sentences</span></div><div class="ts"><div class="c">2</div><span>Spot the important words</span></div><div class="ts"><div class="c">3</div><span>Sort them into the 5 kinds</span></div><div class="ts"><div class="c">4</div><span>What each kind tells the designer</span></div></div>
+      <div id="taxStage" style="background:#fff;border-radius:10px;padding:14px;min-height:190px;font-size:15px;line-height:2"></div>
+      <p class="hand" id="taxText" style="text-align:center;font-size:15px;min-height:24px"></p>
+      <div style="text-align:center"><button class="btn" id="taxPlay">▶ Play the walkthrough</button></div>
+    </div>
     <table class="cmp">
-      <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
-      <tr><td><span class="word c1">Concrete objects</span></td><td>Things that can be touched</td><td>book, card, receipt</td></tr>
-      <tr><td><span class="word c2">People — object of sentences</span></td><td>Normally organisation employees or customers</td><td>“…serves <u>the customer</u>”</td></tr>
-      <tr><td><span class="word c3">People — subject of sentences</span></td><td>Normally the users of the system</td><td>“<u>The cashier</u> scans…”</td></tr>
-      <tr><td><span class="word c4">Forms or journals</span></td><td>Things that keep track of information</td><td>invoice, register, log</td></tr>
-      <tr><td><span class="word c5">Abstract objects</span></td><td>Anything not included above</td><td>loan, discount, due date</td></tr>
+      <tr><th>Kind</th><th>Slide 39 says</th><th>How to spot it</th><th>Library example</th><th>What it tells the designer</th></tr>
+      <tr><td><span class="word c1">Concrete objects</span></td><td>Things that can be touched</td><td>Ask: “can I hold it in my hand?”</td><td>book, library card</td><td>The real items the system must keep track of</td></tr>
+      <tr><td><span class="word c2">People — object of sentences</span></td><td>Normally organisation employees or customers</td><td>The person something is done <b>for / to</b></td><td>“…for <u>the student</u>”</td><td>Whose data is stored (the people being served)</td></tr>
+      <tr><td><span class="word c3">People — subject of sentences</span></td><td>Normally the users of the system</td><td>The person <b>doing</b> the action — the start of the sentence</td><td>“<u>The librarian</u> scans…”</td><td>Who will actually use the screens</td></tr>
+      <tr><td><span class="word c4">Forms or journals</span></td><td>Things that keep track of information</td><td>Anything where things are <b>written down / recorded</b></td><td>loan register, fine receipt</td><td>The records the system must keep</td></tr>
+      <tr><td><span class="word c5">Abstract objects</span></td><td>Anything not included above</td><td>Important ideas you <b>can’t touch</b></td><td>loan, due date, fine</td><td>Ideas and rules the system must handle</td></tr>
     </table>
-    <div class="board"><span class="board-lbl">try it</span>
-      <p>Pick a colour, then click the words in the sentence:</p>
+    <div class="board"><span class="board-lbl">your turn</span>
+      <p><b>Now you try:</b> pick a colour, then click the words in the sentence.</p>
       <div class="seg" id="wordSeg"><button class="on" data-c="1">Concrete</button><button data-c="2">Person (object)</button><button data-c="3">Person (subject)</button><button data-c="4">Form/journal</button><button data-c="5">Abstract</button></div>
       <p style="font-size:17px;line-height:2.1;margin-top:10px" id="wordSentence"></p>
       <div class="btn-row"><button class="btn" id="wordCheck">Check my answers</button><button class="btn alt" id="wordNext">Next sentence</button><span id="wordMsg" style="align-self:center;font-size:13px;color:#475569"></span></div>
@@ -731,7 +740,21 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
       <li>Goal: present information efficiently, simply, clearly, concisely and appropriately; <b>remove all unnecessary elements</b>.</li>
       <li>A signal can <b>become noise</b> (and noise a signal) depending on what the user needs at that moment — so which is which should be immediately obvious.</li></ul>
     <h3>Organising elements clearly and meaningfully (slide 14)</h3>
-    <p><b>Visual clarity</b> comes from organising elements in meaningful, understandable, recognisable ways. It is influenced by: <b>consistency</b> in design, a <b>visually pleasing composition</b>, a <b>logical and sequential ordering</b>, the proper <b>amount</b> of information, <b>groupings</b> and <b>alignment</b>. Avoid visual clutter: indistinct elements, random placement, confusing patterns.</p>
+    <div class="oneliner"><b>In plain words:</b> <b>Visual clarity</b> means you look at the screen and <b>instantly see what matters</b>, and can <b>ignore the less important things</b>. You get it by organising elements so they are <b>meaningful, understandable and recognisable</b>.</div>
+    <div class="grid2">
+      <div class="mini good"><b>✔ Clarity comes from 6 things</b><ol style="padding-left:20px"><li><b>Consistency</b> in design</li><li>A visually pleasing <b>composition</b></li><li>A <b>logical and sequential ordering</b></li><li>The proper <b>amount</b> of information</li><li><b>Groupings</b></li><li><b>Alignment</b> of screen items</li></ol></div>
+      <div class="mini bad"><b>✘ Clutter comes from 3 things</b><ul><li><b>Indistinct elements</b> — everything looks the same, nothing stands out</li><li><b>Random placement</b> — items dropped anywhere</li><li><b>Confusing patterns</b> — styles and shapes that don’t make sense together</li></ul></div>
+    </div>
+    <div class="board"><span class="board-lbl">animation · from clutter to clarity</span>
+      <p class="hand" style="font-size:15px">A “Student Profile” screen. Fix it one factor at a time and watch it become clear:</p>
+      <div class="stage" id="clarStage" style="height:250px"></div>
+      <div class="timeline" id="clarTl" style="margin-top:6px">
+        <div class="ts"><div class="c">1</div><span>Consistency</span></div><div class="ts"><div class="c">2</div><span>Logical order</span></div><div class="ts"><div class="c">3</div><span>Proper amount</span></div><div class="ts"><div class="c">4</div><span>Alignment</span></div><div class="ts"><div class="c">5</div><span>Groupings</span></div><div class="ts"><div class="c">6</div><span>Pleasing composition</span></div>
+      </div>
+      <p id="clarText" style="text-align:center;font-size:14.5px;min-height:44px"></p>
+      <div style="text-align:center"><button class="btn" id="clarNext">▶ Fix factor 1</button> <button class="btn alt" id="clarAll">▶▶ Play all</button> <button class="btn alt" id="clarReset">↺ Reset</button></div>
+    </div>
+    <div class="hook"><span class="lbl">Memory hook</span><p>Clarity = “<b>C</b>lean <b>C</b>lear <b>L</b>ayouts <b>A</b>re <b>G</b>reat <b>A</b>lways” → <b>C</b>onsistency, <b>C</b>omposition, <b>L</b>ogical order, <b>A</b>mount, <b>G</b>roupings, <b>A</b>lignment. Clutter = <b>I-R-C</b>: Indistinct, Random, Confusing.</p></div>
     <div class="figure"><img src="img/slide12.jpg" alt="Slide 12 examples of bad UI"></div><div class="caption">Slide 12 — examples of bad UI: crowded pages, unclear lift buttons, cluttered toolbars.</div>
     <div class="more"><span class="lbl">Signal becomes noise — example</span><p>The “Boarding” banner is a <b>signal</b> while you wait at the airport. Once you’re on the plane, the same banner is <b>noise</b>. A good app hides it or makes it small after boarding.</p></div>
     <div class="hook"><span class="lbl">Memory hook</span><p><b>Signal = useful, Noise = useless.</b> Think of a radio 📻: turn the noise down, the music (signal) comes through.</p></div>
@@ -982,7 +1005,7 @@ svg .draw{stroke-dasharray:var(--len,1000);stroke-dashoffset:var(--len,1000)}
 <div class="layout">
 <aside class="side" data-side></aside>
 <main class="content">
-  <div class="page-title">Chapter 5 · Step 3 — Part 2: Web, Statistical Graphics, Technology &amp; Examples</div>
+  <div class="page-title">Chapter 5 · Step 3 — Part 2: Web, Graphics, Technology &amp; Examples 🎮</div>
   <div class="page-sub">Slides 57–87, continuing the flow after <b>l</b>. Big idea: <b>on the Web, content is king, people scan instead of read</b>, and your design is limited by the hardware, browsers and connection speed people actually have.</div>
 
   <div class="part-banner"><span class="pn">1)</span><div><b>Human considerations (continued) — Web sites &amp; Web pages</b><div class="muted" style="font-size:13px">slides 57–69 · the slide heading labels this part “j) The Web” (it is item j in the slide-6 overview)</div></div></div>
@@ -2495,5 +2518,236 @@ seg('headSeg', async b => {
 [['c5-j', () => $('#legPlay').click()],['c5-k', () => { $('#titlePlay').click(); setTimeout(() => $('#splitPlay').click(), 2600); setTimeout(() => $('#listBtn').click(), 4000); }],['w-char', () => { const b=$('#scanSeg button[data-m="scan"]'); b.click(); $('#scanPlay').click(); }],['w-search', () => $('#bsPlay').click()],['w-summary', () => $('#sumPlay').click()],['c5-l', () => setTimeout(() => $('#screenBtn').click(), 1200)],['w-graph', () => setTimeout(() => $('#distBtn').click(), 1200)],['w-eye', () => $('#eyePlay').click()],['c5-a', () => $('#doPlay').click()],['c5-k2', null]].forEach(([id,f]) => {
   if(!f || !document.getElementById(id)) return; const prev = AUTO[id]; AUTO[id] = () => { if(prev) prev(); setTimeout(f, 700); };
 });
+
+// =====================================================================
+// v4: slide 39 walkthrough, slide 14 clarity, Ch5 part 2 games
+// =====================================================================
+// ---- slide 39 walkthrough ----
+(function(){
+  const stage = $('#taxStage'); if(!stage) return;
+  const SENT = [[["The librarian",3]," scans the ",["book",1]," and records the ",["loan",5]," in the ",["loan register",4]," for the ",["student",2],"."],
+                [" If the book comes back after the ",["due date",5],", ",["the librarian",3]," gives the ",["student",2]," a ",["fine receipt",4],"."]];
+  const KIND = {1:['Concrete objects','#bfdbfe','The real items the system must keep track of → Book'],2:['People (object)','#fbcfe8','Whose data is stored → Student'],3:['People (subject)','#bbf7d0','Who will use the screens → Librarian'],4:['Forms / journals','#fde68a','Records the system must keep → Loan register, Fine receipt'],5:['Abstract objects','#ddd6fe','Ideas & rules to handle → Loan, Due date (and the fine)']};
+  const colourOf = {1:'c1',2:'c4',3:'c3',4:'c2',5:'c5'}; // match table colours
+  const steps = $$('#taxTl .ts'); let run = 0;
+  const tl = i => steps.forEach((s,k) => s.classList.toggle('on', k<=i));
+  const sentHtml = mark => SENT.map(S => S.map(p => typeof p === 'string' ? p : `<span class="word ${mark?colourOf[p[1]]:''}" style="${mark?'':'border-bottom-color:transparent'}">${p[0]}</span>`).join('')).join('');
+  async function play(){ const me = ++run;
+    tl(0); stage.innerHTML = `<div class="pop" style="color:#111">📝 ${sentHtml(false)}</div>`; $('#taxText').textContent = 'Step 1: the librarian describes her work. We write it down as plain sentences.'; await sleep(2600); if(me!==run) return;
+    tl(1); stage.innerHTML = `<div style="color:#111">📝 ${sentHtml(true)}</div>`; $$('.word', stage).forEach((w,i) => { w.style.opacity = 0; setTimeout(() => { w.style.opacity = 1; w.classList.add('pop'); }, i*260); }); $('#taxText').textContent = 'Step 2: we underline every important word — each one is a clue.'; await sleep(3600); if(me!==run) return;
+    tl(2); const words = {}; SENT.flat().forEach(p => { if(typeof p !== 'string'){ (words[p[1]] = words[p[1]] || new Set()).add(p[0].replace(/^the /i,'').replace(/^The /,'')); } });
+    stage.innerHTML = `<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">${[3,1,2,4,5].map(k => `<div style="background:${KIND[k][1]};border-radius:8px;padding:8px;min-height:120px;color:#111"><b style="font-size:12px">${KIND[k][0]}</b><div class="bucket" data-k="${k}" style="margin-top:6px;font-size:13px"></div></div>`).join('')}</div>`;
+    $('#taxText').textContent = 'Step 3: we sort the words into the 5 kinds from slide 39.';
+    for(const k of [3,1,2,4,5]){ for(const w of words[k]){ if(me!==run) return; const d = document.createElement('div'); d.className='pop'; d.style.cssText='background:#fff;border-radius:5px;padding:2px 6px;margin:3px 0'; d.textContent = w; $(`.bucket[data-k="${k}"]`, stage).appendChild(d); await sleep(380); } }
+    await sleep(1400); if(me!==run) return;
+    tl(3); stage.innerHTML = [3,1,2,4,5].map((k,i) => `<div class="pop" style="animation-delay:${i*.35}s;display:flex;gap:10px;align-items:center;margin:4px 0;color:#111"><span style="background:${KIND[k][1]};border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;min-width:130px">${KIND[k][0]}</span><span style="font-size:14px">${KIND[k][2]}</span></div>`).join('');
+    $('#taxText').textContent = 'Step 4: now the designer knows who uses the system, what it handles and what it must record → ready for defining objects (slide 43).'; }
+  stage.innerHTML = `<div style="color:#111">📝 ${sentHtml(false)}</div>`;
+  $('#taxPlay').onclick = play; const prev = AUTO['c4-objects5']; AUTO['c4-objects5'] = () => { if(prev) prev(); setTimeout(play, 800); };
+})();
+
+// ---- slide 14 clarity ----
+(function(){
+  const st = $('#clarStage'); if(!st) return;
+  const F = ['cons','order','amount','align','group','comp'];
+  const TXT = ['Consistency: every label now uses the same font and both buttons share one style. Fewer surprises for the eye.',
+               'Logical & sequential ordering: the title comes first, and the fields follow a sensible order (Name → ID → Major → Email).',
+               'Proper amount of information: weather, tips and “last login” are not needed for this task, so they go. Only the essentials stay.',
+               'Alignment: labels and fields line up in one column, so the eye moves straight down.',
+               'Groupings: a border shows that the details belong together; the buttons sit together.',
+               'Visually pleasing composition: details on the left, photo on the right — balanced. Now the essential elements stand out, and you can ignore the rest. ✨'];
+  const on = new Set(); let idx = 0;
+  const fields = ['Name','Student ID','Major','Email'];
+  const fonts = ['Georgia,serif',"'Comic Sans MS',cursive",'monospace','Impact,sans-serif'];
+  st.innerHTML = `<div class="gb" id="clGroup"><span>Student details</span></div>
+    <div class="el" id="clTitle" style="font-weight:800">Student Profile</div>
+    ${fields.map((f,i) => `<div class="el clF" data-i="${i}"><span class="lb">${f}:</span> <span class="bx" style="width:120px"></span></div>`).join('')}
+    <div class="el" id="clPhoto" style="background:#e2e8f0;border:1px solid #94a3b8;display:flex;align-items:center;justify-content:center;font-size:26px">👤</div>
+    <div class="el" id="clSave">Save</div><div class="el" id="clCancel">Cancel</div>
+    <div class="el clN" style="font-size:11px">🌤️ 32°C Dubai</div><div class="el clN" style="font-size:11px">💡 Tip: drink water!</div><div class="el clN" style="font-size:11px">🕒 Last login: 3 days ago</div>`;
+  function lay(){
+    const c = k => on.has(k);
+    const T = $('#clTitle', st); Object.assign(T.style, c('order') ? {left:'16px',top:'10px',fontSize:'17px',fontStyle:'normal'} : {left:'300px',top:'214px',fontSize:'13px',fontStyle:'italic'});
+    const order = c('order') ? [0,1,2,3] : [2,0,3,1];
+    const rx = [150,30,250,70], ry = [60,110,150,190];
+    $$('.clF', st).forEach(e => { const i = +e.dataset.i, pos = order.indexOf(i);
+      e.style.left = (c('align') ? 28 : rx[i]) + 'px'; e.style.top = (c('order') ? 60 + pos*36 : ry[pos]) + 'px';
+      const lb = $('.lb', e); lb.style.fontFamily = c('cons') ? 'inherit' : fonts[i]; lb.style.display = 'inline-block'; lb.style.width = c('align') ? '80px' : 'auto'; lb.style.textAlign = c('align') ? 'right' : 'left'; lb.style.color = c('cons') ? '#0f766e' : ['#b91c1c','#7c3aed','#0369a1','#ca8a04'][i]; });
+    const P = $('#clPhoto', st); Object.assign(P.style, c('comp') ? {left:'400px',top:'56px',width:'110px',height:'120px'} : {left:'230px',top:'14px',width:'46px',height:'46px'});
+    const btn = (e, good, x, y, bg, col, br, fs) => Object.assign(e.style, {left:x+'px',top:y+'px',background:bg,color:col,borderRadius:br,padding:'3px 12px',fontSize:fs,border:'1px solid #333'});
+    const S = $('#clSave', st), C = $('#clCancel', st);
+    if(c('cons')){ btn(S,1, c('group')?300:20, c('group')?204:20, '#2563eb','#fff','6px','13px'); btn(C,1, c('group')?370:420, c('group')?204:150, '#2563eb','#fff','6px','13px'); }
+    else { btn(S,0, c('group')?300:20, c('group')?204:20, '#16a34a','#fff','14px','15px'); btn(C,0, c('group')?370:420, c('group')?204:150, '#e5e7eb','#111','0','11px'); }
+    const np = [[330,20],[20,215],[380,110]]; $$('.clN', st).forEach((e,i) => { e.style.left = np[i][0]+'px'; e.style.top = np[i][1]+'px'; e.style.opacity = c('amount') ? 0 : 1; e.style.transform = c('amount') ? 'scale(.4)' : 'none'; e.style.background = '#fef9c3'; e.style.padding = '2px 6px'; e.style.borderRadius = '5px'; });
+    const G = $('#clGroup', st); Object.assign(G.style, {left:'12px',top:'46px',width:'250px',height:'150px',opacity: c('group') ? 1 : 0});
+    $$('#clTl .ts').forEach((s,k) => s.classList.toggle('on', k < idx));
+    $('#clarNext').textContent = idx < 6 ? `▶ Fix factor ${idx+1}` : '✔ All 6 fixed';
+  }
+  function next(){ if(idx >= 6) return; on.add(F[idx]); idx++; $('#clarText').innerHTML = `<b>${idx}.</b> ${TXT[idx-1]}`; lay(); }
+  function reset(){ on.clear(); idx = 0; $('#clarText').textContent = 'Cluttered: indistinct elements, random placement, confusing patterns (different fonts and colours, odd buttons).'; lay(); }
+  let run = 0;
+  async function all(){ const me = ++run; reset(); await sleep(1200); for(let i=0;i<6;i++){ if(me!==run) return; next(); await sleep(2300); } }
+  reset(); $('#clarNext').onclick = () => { run++; next(); }; $('#clarReset').onclick = () => { run++; reset(); }; $('#clarAll').onclick = all;
+})();
+
+// =====================================================================
+// Ch 5 part 2 — GAME MODE
+// =====================================================================
+let STARS = store.get('hci2_stars', {});
+const GAMES = {};
+function updateStars(){ const got = Object.values(STARS).reduce((a,b)=>a+b,0), tot = Object.values(GAMES).reduce((a,b)=>a+b,0);
+  const el = $('#xpBar'); if(!el) return; el.querySelector('b').textContent = got + ' / ' + tot; el.querySelector('.fill').style.width = (tot? got/tot*100 : 0) + '%';
+  el.querySelector('.rank').textContent = got >= tot ? '🏆 HCI Master!' : got >= tot*.66 ? '🥇 Web Wizard' : got >= tot*.33 ? '🥈 Rising Designer' : '🥉 Beginner'; }
+function award(id, n){ if((STARS[id]||0) < n){ STARS[id] = n; store.set('hci2_stars', STARS); } updateStars(); confetti(); }
+function confetti(){ const cols = ['#38bdf8','#a78bfa','#34d399','#fbbf24','#f472b6','#fb923c'];
+  for(let i=0;i<60;i++){ const d = document.createElement('div'); d.style.cssText = `position:fixed;top:-12px;left:${Math.random()*100}vw;width:9px;height:14px;background:${cols[i%6]};z-index:999;border-radius:2px;pointer-events:none;transition:transform ${1.6+Math.random()}s cubic-bezier(.2,.6,.4,1),opacity 2.4s;`; document.body.appendChild(d);
+    requestAnimationFrame(() => { d.style.transform = `translate(${(Math.random()-.5)*200}px, ${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; d.style.opacity = .9; }); setTimeout(() => d.remove(), 2800); } }
+function gameBox(topicId, level, title, inner, stars){
+  GAMES[topicId] = stars;
+  const t = document.getElementById(topicId); if(!t) return null;
+  const box = document.createElement('div'); box.className = 'board game st on'; box.style.borderTop = '6px solid #f59e0b';
+  box.innerHTML = `<span class="board-lbl">🎮 game · ${'⭐'.repeat(stars)}</span><div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><span style="background:#7c3aed;color:#fff;border-radius:99px;padding:3px 10px;font-size:11px;font-weight:800">LEVEL ${level}</span><b style="font-size:16px">${title}</b><span class="gstar" style="margin-left:auto;margin-right:90px;font-size:15px;font-weight:800;color:#b45309"></span></div>` + inner;
+  const anchor = $(':scope > .hook', t) || $(':scope > .mark', t); t.insertBefore(box, anchor);
+  const gs = $('.gstar', box); const refresh = () => gs.textContent = STARS[topicId] ? '⭐'.repeat(STARS[topicId]) + ' won!' : ''; refresh(); box._refresh = refresh;
+  return box;
+}
+function win(topicId, box, n, msg){ award(topicId, n); if(box && box._refresh) box._refresh(); }
+
+// generic sort game
+function sortGame2(box, items, bins, topicId, stars, hint){
+  const pool = document.createElement('div'); pool.className = 'sort-pool';
+  const grid = document.createElement('div'); grid.style.cssText = `display:grid;grid-template-columns:repeat(${Math.min(bins.length,4)},1fr);gap:8px;margin-top:8px`;
+  grid.innerHTML = bins.map(([k,label,col]) => `<div class="bin" data-bin="${k}" style="border-color:${col};background:#fff"><h5 style="color:${col}">${label}</h5><div class="sort-pool"></div></div>`).join('');
+  const msg = document.createElement('p'); msg.style.cssText = 'font-size:13px;margin-top:6px;color:#475569';
+  const again = document.createElement('button'); again.className = 'btn alt'; again.textContent = '↺ Play again'; again.style.marginTop = '6px';
+  box.append(pool, grid, msg, again);
+  let sel = null, done = 0, mistakes = 0;
+  function start(){ sel = null; done = 0; mistakes = 0; msg.textContent = 'Click a card, then click the box it belongs to.'; $$('.bin .sort-pool', grid).forEach(p => p.innerHTML = ''); pool.innerHTML = '';
+    [...items].sort(() => Math.random()-.5).forEach(([n,c]) => { const ch = document.createElement('span'); ch.className = 'chip'; ch.textContent = n; ch.dataset.c = c; ch.style.cssText = 'background:#fff;color:#1f2937;border-color:#cbd5e1';
+      ch.onclick = () => { $$('.chip', pool).forEach(x => x.style.outline = ''); sel = ch; ch.style.outline = '3px solid #38bdf8'; }; pool.appendChild(ch); }); }
+  $$('.bin', grid).forEach(bin => bin.onclick = () => {
+    if(!sel){ msg.textContent = 'First click a card above.'; return; }
+    if(sel.dataset.c === bin.dataset.bin){ sel.style.outline=''; sel.style.background='#dcfce7'; sel.style.borderColor='#16a34a'; sel.onclick = null; sel.classList.add('pop'); $('.sort-pool', bin).appendChild(sel); sel = null; done++;
+      if(done === items.length){ const n = mistakes === 0 ? stars : Math.max(1, stars-1); msg.innerHTML = `🎉 Done with ${mistakes} mistake${mistakes===1?'':'s'}! You earned ${'⭐'.repeat(n)}`; win(topicId, box, n); } else msg.textContent = '✔ Correct! Keep going…'; }
+    else { mistakes++; const s = sel; s.classList.add('no'); setTimeout(() => s.classList.remove('no'), 400); msg.textContent = '✘ Not that one. ' + (hint||''); } });
+  again.onclick = start; start();
+}
+
+// header bar for part 2
+(function(){
+  const sub = $('#c5b .page-sub'); if(!sub) return;
+  const bar = document.createElement('div'); bar.id = 'xpBar';
+  bar.style.cssText = 'background:linear-gradient(135deg,#2a1d52,#1b2236);border:1px solid #6d28d9;border-radius:14px;padding:12px 16px;margin-bottom:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap';
+  bar.innerHTML = `<span style="font-size:28px" class="floaty">🎮</span><div style="flex:1;min-width:200px"><div style="font-size:13px;color:var(--text2)">Game mode — every topic below has a mini-game. Win them all!</div><div class="meter" style="margin-top:6px;background:#312e81"><div class="fill" style="width:0;background:linear-gradient(90deg,#fbbf24,#f472b6)"></div></div></div><div style="text-align:right"><div style="font-size:20px">⭐ <b>0</b></div><div class="rank" style="font-size:12px;color:var(--yellow)"></div></div>`;
+  sub.after(bar);
+})();
+
+// L1 web user characteristics -> interaction styles sort
+(function(){ const b = gameBox('w-char', 1, 'Browse, find or gather?', '<p>Each person is using the Web in a different interaction style (slide 58). Sort them!</p>', 2); if(!b) return;
+  sortGame2(b, [["Scrolling a shopping site with no plan","browse"],["Looking around a museum website for fun","browse"],["Checking the opening time of one shop","find"],["Looking up the price of one specific phone","find"],["Collecting 10 articles for a research report","gather"],["Comparing 5 universities before applying","gather"]],
+    [["browse","🧭 Browsing","#2563eb"],["find","🎯 Information finding","#16a34a"],["gather","🧺 Information gathering","#d97706"]], 'w-char', 2, 'One specific thing = finding; many pieces collected = gathering; no plan = browsing.'); })();
+
+// L2 web experience match
+(function(){ const b = gameBox('w-exp', 2, 'Which part of the Web experience?', '<p>Match each statement to E · T · V · I (slide 59).</p>', 2); if(!b) return;
+  sortGame2(b, [["Navigation works the way users expect","E"],["Content is organised the way users expect","E"],["Task sequences are standardised","T"],["Tasks reflect users’ capabilities and limitations","T"],["The site looks attractive and consistent","V"],["The most important info is visible without scrolling","I"],["Content is updated frequently","I"]],
+    [["E","🎯 Expectations","#2563eb"],["T","✅ Tasks","#16a34a"],["V","🎨 Visual appearance","#db2777"],["I","📰 Information content","#d97706"]], 'w-exp', 2, 'Look again at the 4 boxes on slide 59.'); })();
+
+// L3 headings — fix the hierarchy (order game)
+(function(){ const b = gameBox('w-head', 3, 'Put the headings in order', '<p>Click the headings from <b>biggest level to smallest</b> (H1 → H2 → H3), without skipping a level (slide 60).</p><div id="hgPool" class="sort-pool"></div><div id="hgOut" style="background:#fff;border-radius:8px;padding:10px;min-height:60px;margin-top:6px"></div><p id="hgMsg" style="font-size:13px;color:#475569"></p><button class="btn alt" id="hgAgain">↺ Play again</button>', 2); if(!b) return;
+  const H = [['H1 · Admissions',1,22],['H2 · Undergraduate',2,17],['H3 · Requirements',3,14]]; let next = 1, mist = 0;
+  function start(){ next = 1; mist = 0; $('#hgOut').innerHTML = ''; $('#hgMsg').textContent = ''; $('#hgPool').innerHTML = ''; [...H].sort(() => Math.random()-.5).forEach(([t,l,fs]) => { const c = document.createElement('span'); c.className='chip'; c.textContent = t.split(' · ')[1]; c.style.cssText='background:#fff;color:#111;border-color:#cbd5e1';
+    c.onclick = () => { if(l === next){ c.remove(); $('#hgOut').insertAdjacentHTML('beforeend', `<div class="pop" style="margin-left:${(l-1)*24}px;font-size:${fs}px;font-weight:${900-l*150};color:#111"><span style="font-size:10px;color:#16a34a;font-family:monospace">H${l} </span>${t.split(' · ')[1]}</div>`); next++; if(next>3){ const n = mist?1:2; $('#hgMsg').innerHTML = `🎉 Clear hierarchy — no skipped levels! ${'⭐'.repeat(n)}`; win('w-head', b, n); } } else { mist++; c.classList.add('no'); setTimeout(() => c.classList.remove('no'), 400); $('#hgMsg').textContent = '✘ That would skip a level. Start with the biggest (most general) heading.'; } }; $('#hgPool').appendChild(c); }); }
+  $('#hgAgain').onclick = start; start(); })();
+
+// L4 home page builder -> stars
+(function(){ GAMES['w-home'] = 2; const t = $('#w-home'); const msg = $('#homeMsg'); if(!t || !msg) return;
+  const board = $('#homeChips').closest('.grid2'); const lab = document.createElement('div'); lab.innerHTML = '<span style="background:#7c3aed;color:#fff;border-radius:99px;padding:3px 10px;font-size:11px;font-weight:800">LEVEL 4 · 🎮 ⭐⭐</span> <b>Build the home page with all 7 elements</b>'; lab.style.margin = '6px 0'; board.before(lab);
+  new MutationObserver(() => { if(msg.textContent.startsWith('🎉')) award('w-home', 2); }).observe(msg, {childList:true, characterData:true, subtree:true}); })();
+
+// L5 browse vs search sort
+(function(){ const b = gameBox('w-search', 5, 'Browse or search?', '<p>Research on slide 64: searching is better for <b>specific, unique</b> items; browsing for items <b>not specific or unique</b>. What should each user do?</p>', 2); if(!b) return;
+  sortGame2(b, [["Find the book with ISBN 978-0-13-468599-1","search"],["Find the HCI exam on 14 Dec","search"],["Find flight EK201’s status","search"],["Get ideas for a birthday gift","browse"],["See what’s new in the shop today","browse"],["Look for an interesting article to read","browse"]],
+    [["search","🔎 Search","#2563eb"],["browse","🧭 Browse","#16a34a"]], 'w-search', 2, 'Is the item specific and unique? → search.'); })();
+
+// L6 intranet vs extranet
+(function(){ const b = gameBox('w-intranet', 6, 'Intranet or extranet guideline?', '<p>Sort each guideline from slides 67–68.</p>', 2); if(!b) return;
+  sortGame2(b, [["Single home page with a directory hierarchy","in"],["Home page has a search facility and current news","in"],["Layout: top bar, left column, middle area, right column","in"],["Visual style that is different, distinguishing, unified","in"],["Orient the website toward tasks","ex"],["Develop a strong navigational system","ex"],["Subtle difference in visual style & navigation from the Internet site","ex"],["Provide links to the public Internet site","ex"]],
+    [["in","🏢 Intranet (slide 67)","#2563eb"],["ex","🤝 Extranet (slide 68)","#d97706"]], 'w-intranet', 2, 'Slide 67 = the single home page and its layout; slide 68 = tasks, navigation, links to the public site.'); })();
+
+// L7 blog rater
+(function(){ const F = ['Author biography','Author photo','Easy scanning','Meaningful links','Link to past important content','Categorise postings','Publish regularly','Avoid mixing topics'];
+  const b = gameBox('w-blog', 7, 'Rate my blog', `<p>This blog is missing things. Switch on all 8 guidelines from slide 69 to get 5 stars from readers!</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start"><div id="blogTog"></div><div id="blogMock" style="background:#fff;border-radius:8px;padding:10px;font-size:12px;min-height:200px"></div></div>`, 2); if(!b) return;
+  const on = new Set();
+  function draw(){ const n = on.size, h = k => on.has(k);
+    $('#blogMock').innerHTML = `<div style="font-size:18px;color:#f59e0b">${'★'.repeat(Math.round(n/8*5))}<span style="color:#e5e7eb">${'★'.repeat(5-Math.round(n/8*5))}</span></div>
+      <div style="display:flex;gap:8px;align-items:center;margin:6px 0">${h(F[1])?'<span style="font-size:28px">👩‍🍳</span>':''}${h(F[0])?'<span style="color:#475569">Mariam — home cook for 10 years</span>':''}</div>
+      ${h(F[5])?'<div style="display:flex;gap:4px;margin-bottom:6px"><span style="background:#e0e7ff;padding:1px 6px;border-radius:4px">Breakfast</span><span style="background:#e0e7ff;padding:1px 6px;border-radius:4px">Desserts</span></div>':''}
+      <b style="font-size:14px">Easy Date Cake</b> ${h(F[6])?'<span style="color:#16a34a">· new post every Friday</span>':'<span style="color:#b91c1c">· last post 8 months ago</span>'}
+      <div style="margin-top:4px">${h(F[2])?'• 4 ingredients<br>• 20 minutes<br>• No oven needed':'Today I want to talk about many things, my week, the football match, the elections and also a cake recipe that you mix and then you bake it and…'}</div>
+      ${h(F[7])?'':'<div style="color:#b91c1c">⚽ …and here is my view on football!</div>'}
+      ${h(F[3])?'<div style="color:#1d4ed8;text-decoration:underline;margin-top:4px">See also: Date syrup sauce</div>':'<div style="color:#1d4ed8;text-decoration:underline;margin-top:4px">click here</div>'}
+      ${h(F[4])?'<div style="color:#1d4ed8;margin-top:2px">📌 Most popular: Kunafa in 10 minutes</div>':''}`; }
+  $('#blogTog').innerHTML = F.map(f => `<label style="display:flex;gap:6px;align-items:center;font-size:13px;margin:4px 0;cursor:pointer;color:#111"><input type="checkbox" value="${f}"> ${f}</label>`).join('');
+  $$('#blogTog input').forEach(i => i.onchange = () => { i.checked ? on.add(i.value) : on.delete(i.value); draw(); if(on.size === 8) win('w-blog', b, 2); });
+  draw(); })();
+
+// L8 liar chart detector
+(function(){ const b = gameBox('w-graph', 8, 'Spot the lying chart', '<p>All three charts show the <b>same data</b> (A = 90, B = 94). Which one breaks the rule “avoid distortions — tell the truth about the data” (slide 70)?</p><div id="liar" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div><p id="liarMsg" style="font-size:13px;color:#475569"></p><button class="btn alt" id="liarAgain">↺ New round</button>', 2); if(!b) return;
+  const chart = (lo, label) => { const H = 90, h = v => (v-lo)/(100-lo)*H; return `<svg viewBox="0 0 120 120" width="100%"><line x1="18" y1="100" x2="115" y2="100" stroke="#333"/><line x1="18" y1="8" x2="18" y2="100" stroke="#333"/><text x="15" y="103" font-size="8" text-anchor="end">${lo}</text><text x="15" y="12" font-size="8" text-anchor="end">100</text><rect x="35" y="${100-h(90)}" width="25" height="${h(90)}" fill="#2563eb"/><rect x="75" y="${100-h(94)}" width="25" height="${h(94)}" fill="#f97316"/><text x="47" y="112" font-size="8" text-anchor="middle">A</text><text x="87" y="112" font-size="8" text-anchor="middle">B</text></svg><div style="font-size:11px;text-align:center;color:#475569">${label}</div>`; };
+  let tries = 0;
+  function round(){ tries = 0; const opts = [[0,'Chart 1'],[0,'Chart 2'],[88,'Chart 3']].sort(() => Math.random()-.5); $('#liarMsg').textContent = '';
+    $('#liar').innerHTML = opts.map(([lo],i) => `<div class="lc" data-lie="${lo>0}" style="background:#fff;border:2px solid #e2e8f0;border-radius:8px;padding:6px;cursor:pointer">${chart(lo,'Chart '+(i+1))}</div>`).join('');
+    $$('#liar .lc').forEach(c => c.onclick = () => { tries++; if(c.dataset.lie === 'true'){ c.style.borderColor = '#dc2626'; $('#liarMsg').innerHTML = `🕵️ Caught it! The axis starts at 88, not 0, so B looks many times bigger. ${'⭐'.repeat(tries===1?2:1)}`; win('w-graph', b, tries===1?2:1); } else { c.style.borderColor = '#16a34a'; c.classList.add('no'); $('#liarMsg').textContent = '✘ That one is honest — look at where each y-axis starts.'; } }); }
+  $('#liarAgain').onclick = round; round(); })();
+
+// L9 build the platform stack
+(function(){ const L = ['Hardware','Operating System','Application software','User Interface'];
+  const b = gameBox('w-tech', 9, 'Build the platform stack', '<p>Click the layers in order <b>from the bottom up</b> (slide 74).</p><div id="stkPool" class="sort-pool"></div><div id="stkOut" style="display:flex;flex-direction:column-reverse;gap:4px;max-width:280px;margin:8px auto;min-height:40px"></div><p id="stkMsg" style="font-size:13px;color:#475569;text-align:center"></p><div style="text-align:center"><button class="btn alt" id="stkAgain">↺ Play again</button></div>', 2); if(!b) return;
+  const col = ['#e5e7eb','#ddd6fe','#c7d2fe','#bae6fd']; let next = 0, mist = 0;
+  function start(){ next = 0; mist = 0; $('#stkOut').innerHTML=''; $('#stkMsg').textContent=''; $('#stkPool').innerHTML=''; [...L].sort(() => Math.random()-.5).forEach(l => { const c = document.createElement('span'); c.className='chip'; c.textContent = l; c.style.cssText='background:#fff;color:#111;border-color:#cbd5e1';
+    c.onclick = () => { if(l === L[next]){ c.remove(); $('#stkOut').insertAdjacentHTML('beforeend', `<div class="pop" style="background:${col[next]};border:1px solid #475569;border-radius:6px;padding:8px;text-align:center;font-weight:700;color:#111">${l}${l==='Operating System'?' <span style="font-weight:400;font-size:11px">(Windows, UNIX, Linux, Mac OS X)</span>':''}</div>`); next++;
+      if(next === 4){ const n = mist?1:2; $('#stkMsg').innerHTML = `🏗️ Perfect stack! The platform = the OS and/or the computer architecture underneath. ${'⭐'.repeat(n)}`; win('w-tech', b, n); } }
+      else { mist++; c.classList.add('no'); setTimeout(() => c.classList.remove('no'), 400); $('#stkMsg').textContent = '✘ Not yet — what is at the very bottom, nearest to the machine?'; } }; $('#stkPool').appendChild(c); }); }
+  $('#stkAgain').onclick = start; start(); })();
+
+// L10 browsers true/false
+(function(){ const b = gameBox('w-browsers', 10, 'True or false — browser edition', '<p>Sort each statement using slides 75–77.</p>', 2); if(!b) return;
+  sortGame2(b, [["Design for the most common browsers","T"],["Always provide a text-only version of the site","T"],["A browser sniffer detects the user’s browser type and version","T"],["The Web-safe palette has 216 colours","T"],["Assume all users have the same browser","F"],["Design only for the fastest connection","F"],["Use any fancy font — every browser shows it","F"]],
+    [["T","✅ True","#16a34a"],["F","❌ False","#dc2626"]], 'w-browsers', 2, 'Think: would this work for most users?'); })();
+
+// L11 page diet
+(function(){ const items = [['📝 Page text',8,true],['🏷️ Logo',4,true],['🧭 Navigation links',3,true],['🖼️ 3 huge photos',60,false],['🎞️ Animated banner',35,false],['🌈 Excessive colour effects',12,false],['🪟 Extra frames',15,false],['📜 Very long page',25,false]];
+  const b = gameBox('w-download', 11, 'Put the page on a diet', `<p>At 28.8 Kbps the page must load in <b>no more than 8–10 seconds</b> (slide 78). Untick the things that cause long downloads — but keep the useful content!</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center"><div id="dietList"></div><div style="text-align:center"><div style="font-size:40px" id="dietFace">🐢</div><div style="font-size:26px;font-weight:900;color:#111" id="dietTime"></div><div class="meter" style="margin-top:6px"><div id="dietBar" style="width:100%"></div></div><p id="dietMsg" style="font-size:13px;margin-top:6px"></p></div></div>`, 2); if(!b) return;
+  $('#dietList').innerHTML = items.map(([n,kb],i) => `<label style="display:flex;gap:6px;align-items:center;font-size:13px;margin:4px 0;color:#111;cursor:pointer"><input type="checkbox" checked data-i="${i}"> ${n} <span style="color:#64748b">(${kb} KB)</span></label>`).join('');
+  function upd(){ let kb = 0, lostGood = false; $$('#dietList input').forEach(x => { const it = items[+x.dataset.i]; if(x.checked) kb += it[1]; else if(it[2]) lostGood = true; });
+    const t = kb*8/28.8; $('#dietTime').textContent = t.toFixed(1)+' s'; const ok = t <= 10;
+    $('#dietBar').style.width = Math.min(100, t/60*100)+'%'; $('#dietBar').style.background = ok ? '#10b981' : '#ef4444'; $('#dietFace').textContent = ok ? '🚀' : '🐢';
+    if(lostGood){ $('#dietMsg').innerHTML = '⚠️ Keep the text, logo and navigation — content is the most important Web commodity!'; return; }
+    $('#dietMsg').innerHTML = ok ? '🎉 Under 10 s with all the useful content! ⭐⭐' : 'Still too slow… what else causes long downloads?';
+    if(ok) win('w-download', b, 2); }
+  $$('#dietList input').forEach(x => x.onchange = upd); upd(); })();
+
+// L12 currency / printing / maintainability
+(function(){ const b = gameBox('w-currency', 12, 'Which consideration?', '<p>Sort each situation (slide 80).</p>', 2); if(!b) return;
+  sortGame2(b, [["A mall site still shows last year’s holiday hours","cur"],["Prices on the site are updated every week","cur"],["You can print one recipe without the whole site","print"],["You can print a group of related pages at once","print"],["Staff can update the site easily, so it stays current","maint"]],
+    [["cur","🕒 Currency","#2563eb"],["print","🖨️ Page printing","#16a34a"],["maint","🔧 Maintainability","#d97706"]], 'w-currency', 2, 'Currency = up to date; printing = print pages/sections; maintainability = easy to keep current.'); })();
+
+// L13 place the flashy ad
+(function(){ const b = gameBox('w-eye', 13, 'Where can the flashy ad go?', '<p>Slide 84: don’t put eye-catching objects where they pull the eye away. Click the <b>2 zones where a flashy ad must NOT go</b>.</p><svg viewBox="0 0 420 220" width="100%" id="adSvg" style="max-width:520px;display:block;margin:auto;background:#fff;border-radius:8px"></svg><p id="adMsg" style="font-size:13px;color:#475569;text-align:center"></p><div style="text-align:center"><button class="btn alt" id="adAgain">↺ Play again</button></div>', 2); if(!b) return;
+  const Z = [['TL',8,8,130,60,false],['TC',145,8,130,60,false],['TR',282,8,130,60,true],['ML',8,80,130,60,false],['MC',145,80,130,60,false],['MR',282,80,130,60,false],['BL',8,152,130,60,true],['BC',145,152,130,60,false],['BR',282,152,130,60,false]];
+  let found = 0, mist = 0;
+  function start(){ found = 0; mist = 0; $('#adMsg').textContent = '';
+    $('#adSvg').innerHTML = Z.map(([k,x,y,w,h]) => `<g class="az" data-k="${k}" style="cursor:pointer"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-dasharray="4"/><text x="${x+w/2}" y="${y+h/2+4}" text-anchor="middle" font-size="18">?</text></g>`).join('');
+    $$('#adSvg .az').forEach(g => g.onclick = () => { if(g.dataset.done) return; const z = Z.find(q => q[0] === g.dataset.k); g.dataset.done = 1;
+      if(z[5]){ found++; $('rect', g).setAttribute('fill', '#fecaca'); $('rect', g).setAttribute('stroke', '#dc2626'); $('text', g).textContent = '🚫'; if(found === 2){ const n = mist?1:2; $('#adMsg').innerHTML = `🎯 Right! Top-right and bottom-left pull the eye off the reading path. ${'⭐'.repeat(n)}`; win('w-eye', b, n); } else $('#adMsg').textContent = '✔ One found — one more!'; }
+      else { mist++; $('rect', g).setAttribute('fill', '#dcfce7'); $('text', g).textContent = '👌'; $('#adMsg').textContent = 'That zone is OK on the slide’s list. Find the two “danger” corners.'; } }); }
+  $('#adAgain').onclick = start; start(); })();
+
+// L14 final boss — which rule fixes it?
+(function(){ const b = gameBox('w-summary', 14, 'Final boss: which rule fixes it?', '<p>Each broken screen breaks one of the 4 summary rules (slide 87). Sort them to finish the game!</p>', 3); if(!b) return;
+  sortGame2(b, [["Related buttons are spread to all four corners","eye"],["The eye jumps from top-right to bottom-left to read one form","eye"],["Title, headings and text are all the same size","hier"],["Nothing tells you what is most important","hier"],["A giant decorative banner fills half the screen","cont"],["The article gets only a small box in the corner","cont"],["The logo is in the bottom-right corner","exp"],["The search box is hidden at the bottom of the page","exp"]],
+    [["eye","👀 Minimise eye movement","#2563eb"],["hier","📐 Visual hierarchy","#7c3aed"],["cont","📰 Most space to content","#16a34a"],["exp","📍 Where users expect","#d97706"]], 'w-summary', 3, 'Ask: is the problem distance, importance, space, or position?'); })();
+
+updateStars();
 </script>
 </body></html>
